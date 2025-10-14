@@ -4,9 +4,18 @@
   max-width: 100%;
   margin: 0;
   padding: 0;
+  overflow-x: hidden; /* IMPORTANTE: Previene scroll horizontal */
 }
 
-/* Carousel Section OPTIMIZADO */
+/* ELIMINA las definiciones duplicadas de .container y usa esta: */
+.container {
+  max-width: 100% !important; /* Fuerza ancho completo */
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Carousel Section - Asegurar ancho completo */
 .carousel-section {
   width: 100%;
   height: 70vh;
@@ -19,8 +28,8 @@
   width: 100%;
   height: 100%;
   position: relative;
-  max-width: 1400px;
-  margin: 0 auto;
+  max-width: 100% !important; /* Asegura ancho completo */
+  margin: 0;
 }
 
 .carousel-slide {
@@ -151,18 +160,12 @@
   color: #667eea;
 }
 
-/* Features Section */
+/* Features Section - Asegurar ancho completo */
 .features-section {
   padding: 4rem 2rem;
   background: #f8f9fa;
   width: 100%;
   max-width: 100%;
-}
-
-.container {
-  max-width: 100%;
-  margin: 0;
-  padding: 0 2rem;
 }
 
 .section-title {
@@ -176,7 +179,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 2rem;
-  max-width: 1200px;
+  max-width: 1200px; /* Este max-width solo afecta el grid interno */
   margin: 0 auto;
 }
 
@@ -209,36 +212,23 @@
   line-height: 1.6;
 }
 
-/* Categories Section */
+/* Categories Section - Asegurar ancho completo */
 .categories-section {
   padding: 4rem 2rem;
   width: 100%;
   max-width: 100%;
 }
 
-.container {
-  max-width: 100%;
-  margin: 0;
-  padding: 0 2rem;
-}
-
-.section-title {
-  text-align: center;
-  font-size: 2.5rem;
-  margin-bottom: 3rem;
-  color: #333;
-}
-
 .categories-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 2rem;
-  max-width: 1200px;
-  margin: 0 auto 3rem auto; /* Agregado margen inferior */
+  max-width: 1200px; /* Este max-width solo afecta el grid interno */
+  margin: 0 auto 3rem auto;
 }
 
 .categories-grid:last-child {
-  margin-bottom: 0; /* Quita el margen del último grid */
+  margin-bottom: 0;
 }
 
 .category-card {
@@ -256,7 +246,7 @@
 }
 
 .category-image {
-  height: 200px; /* Un poco más bajo para 6 categorías */
+  height: 200px;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -279,11 +269,11 @@
 }
 
 .category-card:hover .category-image::before {
-  background: rgba(0, 0, 0, 0.2); /* Más claro al hacer hover */
+  background: rgba(0, 0, 0, 0.2);
 }
 
 .category-label {
-  font-size: 1.6rem; /* Un poco más pequeño */
+  font-size: 1.6rem;
   font-weight: bold;
   color: white;
   z-index: 2;
@@ -300,27 +290,7 @@
   font-weight: 600;
 }
 
-/* Responsive para móviles */
-@media (max-width: 768px) {
-  .categories-grid {
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
-  }
-  
-  .category-image {
-    height: 180px;
-  }
-  
-  .category-label {
-    font-size: 1.4rem;
-  }
-  
-  .category-card h3 {
-    font-size: 1.1rem;
-    padding: 1rem;
-  }
-}
-/* Newsletter Section */
+/* Newsletter Section - Asegurar ancho completo */
 .newsletter-section {
   padding: 4rem 2rem;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -389,7 +359,27 @@
   .newsletter-form {
     flex-direction: column;
   }
-  /* Placeholders temporales */
+  
+  .categories-grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .category-image {
+    height: 180px;
+  }
+  
+  .category-label {
+    font-size: 1.4rem;
+  }
+  
+  .category-card h3 {
+    font-size: 1.1rem;
+    padding: 1rem;
+  }
+}
+
+/* ELIMINA estas clases placeholder si las tienes:
 .placeholder-oulet {
   background: linear-gradient(45deg, #ff6b6b, #ffa726);
 }
@@ -401,4 +391,4 @@
 .placeholder-mayorista {
   background: linear-gradient(45deg, #66bb6a, #26c6da);
 }
-}
+*/
