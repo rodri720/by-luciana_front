@@ -377,6 +377,19 @@
     font-size: 1.1rem;
     padding: 1rem;
   }
+  .product-price {
+  color: #ff6b6b;
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-top: 0.5rem;
+}
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.2rem;
+  color: #666;
+}
 }
 
 /* ELIMINA estas clases placeholder si las tienes:
