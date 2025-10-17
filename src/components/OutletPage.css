@@ -1,0 +1,150 @@
+.outlet-page {
+  min-height: 100vh;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(135deg, #ffd1dc 0%, #ffb6c1 100%); /* Rosa claro */
+  font-family: 'Arial', sans-serif;
+  overflow-x: hidden;
+}
+
+.outlet-header {
+  background: rgba(255, 255, 255, 0.3); /* Fondo más transparente para combinar con rosa */
+  backdrop-filter: blur(10px);
+  padding: 1.5rem 0;
+  border-bottom: 1px solid rgba(255, 182, 193, 0.3); /* Borde rosa claro */
+  width: 100%;
+  position: relative;
+}
+
+.outlet-header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  min-height: 80px;
+}
+
+.outlet-logo {
+  width: 120px;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Sombra más suave */
+}
+
+.outlet-title {
+  color: #8b4a65; /* Color rosa oscuro para buen contraste */
+  font-size: 2.5rem;
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5); /* Sombra blanca para destacar */
+  font-weight: bold;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+}
+
+.outlet-subtitle {
+  display: none;
+}
+
+.outlet-content {
+  padding: 3rem 0;
+  text-align: center;
+  color: #8b4a65; /* Mismo color rosa oscuro para el contenido */
+  min-height: 50vh;
+  width: 100%;
+}
+
+.outlet-products {
+  width: 100%;
+}
+
+.outlet-products h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+  color: #8b4a65;
+}
+
+.outlet-products p {
+  font-size: 1.1rem;
+  opacity: 0.8;
+  color: #8b4a65;
+}
+
+.outlet-footer {
+  padding: 2rem 0;
+  text-align: center;
+  background: rgba(255, 182, 193, 0.3); /* Fondo rosa muy suave */
+  width: 100%;
+  border-top: 1px solid rgba(255, 182, 193, 0.5);
+}
+
+.btn {
+  display: inline-block;
+  padding: 12px 30px;
+  background: #ff6b8b; /* Rosa más vibrante para el botón */
+  color: white;
+  text-decoration: none;
+  border-radius: 25px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.btn:hover {
+  background: #ff4d7a; /* Rosa más oscuro al hover */
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(255, 107, 139, 0.3);
+}
+
+.container {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 20px;
+  width: 100%;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .outlet-header {
+    padding: 1rem 0;
+  }
+  
+  .outlet-header .container {
+    min-height: 60px;
+  }
+  
+  .outlet-title {
+    font-size: 2rem;
+  }
+  
+  .outlet-logo {
+    width: 100px;
+  }
+  
+  .outlet-products h2 {
+    font-size: 2rem;
+  }
+  
+  .container {
+    padding: 0 15px;
+  }
+}
+
+/* Para pantallas muy pequeñas */
+@media (max-width: 480px) {
+  .outlet-header .container {
+    min-height: 50px;
+  }
+  
+  .outlet-logo {
+    width: 80px;
+  }
+  
+  .outlet-title {
+    font-size: 1.6rem;
+  }
+}

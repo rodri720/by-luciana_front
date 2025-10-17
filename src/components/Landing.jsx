@@ -82,21 +82,24 @@ function Landing() {
           
           {/* Primera fila - 3 categorías ORIGINALES */}
           <div className="categories-grid">
+            {/* Tarjeta de Outlet clickeable */}
             <div className="category-card">
-              <div 
-                className="category-image" 
-                style={{ backgroundImage: `url(${ouletImage})` }}
-              >
-                <span className="category-label">Oulet</span>
-              </div>
-              <h3>Oulet</h3>
-              {/* DATOS REALES: Muestra info de productos de outlet */}
-              {products.filter(p => p.category === 'oulet').slice(0, 1).map(product => (
-                <div key={product._id} className="product-info">
-                  <p className="product-example">{product.name}</p>
-                  <p className="product-price">Desde ${product.price}</p>
+              <Link to="/outlet" className="category-link">
+                <div 
+                  className="category-image" 
+                  style={{ backgroundImage: `url(${ouletImage})` }}
+                >
+                  <span className="category-label">Oulet</span>
                 </div>
-              ))}
+                <h3>Oulet</h3>
+                {/* DATOS REALES: Muestra info de productos de outlet */}
+                {products.filter(p => p.category === 'oulet').slice(0, 1).map(product => (
+                  <div key={product._id} className="product-info">
+                    <p className="product-example">{product.name}</p>
+                    <p className="product-price">Desde ${product.price}</p>
+                  </div>
+                ))}
+              </Link>
             </div>
             
             <div className="category-card">

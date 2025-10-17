@@ -5,7 +5,7 @@ import './App.css'
 import Navbar from './components/Navbar'
 import Landing from './components/Landing'
 import Footer from './components/Footer'
-
+import OutletPage from './components/OutletPage';
 function App() {
   return (
     <ProductProvider>
@@ -15,6 +15,7 @@ function App() {
             <Navbar />
             <Routes>
               <Route path="/" element={<Landing />} />
+              <Route path="/outlet" element={<OutletPage />} />
               {/* Agregaremos más rutas aquí */}
             </Routes>
             <Footer />
