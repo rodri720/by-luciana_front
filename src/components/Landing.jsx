@@ -46,6 +46,8 @@ function Landing() {
   }
 
   return (
+
+    
     <section className="landing">
       {/* Carousel con controles - MANTIENE TU DISEÑO ORIGINAL */}
       <div className="carousel-section">
@@ -74,6 +76,11 @@ function Landing() {
           <button className="carousel-btn carousel-next" onClick={nextSlide}>›</button>
         </div>
       </div>
+      
+<div className="carousel-buttons">
+ 
+  
+</div>
 
       {/* Categories Section - ESTRUCTURA ORIGINAL CON DATOS REALES */}
       <div className="categories-section">

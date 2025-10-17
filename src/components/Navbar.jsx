@@ -69,6 +69,7 @@ function Navbar() {
             <span className="icon">🛒</span>
             <span className="cart-count">0</span>
           </button>
+          <Link to="/admin" className="btn btn-admin">Panel Admin</Link>
         </div>
 
         {/* Menú hamburguesa para mobile */}

@@ -1,11 +1,14 @@
 ﻿﻿import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import { ProductProvider } from './context/ProductContext'
-import { CartProvider } from './context/CartContext'
+import { ProductProvider } from './context/ProductContext';
+import { CartProvider } from './context/CartContext';
 import './App.css'
-import Navbar from './components/Navbar'
-import Landing from './components/Landing'
-import Footer from './components/Footer'
+import Navbar from './components/Navbar';
+import Landing from './components/Landing';
+import Footer from './components/Footer';
 import OutletPage from './components/OutletPage';
+import AdminDashboard from './components/AdminDashboard';
+import AdminLogin from './components/AdminLogin';
+
 function App() {
   return (
     <ProductProvider>
@@ -16,6 +19,8 @@ function App() {
             <Routes>
               <Route path="/" element={<Landing />} />
               <Route path="/outlet" element={<OutletPage />} />
+              <Route path="/admin" element={<AdminDashboard />} />
+              <Route path="/admin-login" element={<AdminLogin />} />
               {/* Agregaremos más rutas aquí */}
             </Routes>
             <Footer />
