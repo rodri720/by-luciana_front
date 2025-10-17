@@ -33,4 +33,13 @@ export const categoryService = {
   getById: (id) => api.get(`/categories/${id}`),
 };
 
+// Add the missing cartService export
+export const cartService = {
+  getCart: () => api.get('/cart'),
+  addToCart: (productId, quantity = 1) => api.post('/cart', { productId, quantity }),
+  updateCartItem: (itemId, quantity) => api.put(`/cart/${itemId}`, { quantity }),
+  removeFromCart: (itemId) => api.delete(`/cart/${itemId}`),
+  clearCart: () => api.delete('/cart'),
+};
+
 export default api;

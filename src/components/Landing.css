@@ -390,6 +390,100 @@
   font-size: 1.2rem;
   color: #666;
 }
+/* ✅ NUEVOS ESTILOS PARA BOTÓN DE CARRITO */
+.btn-add-to-cart {
+  background: #ff6b6b;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 0.5rem;
+  width: 100%;
+}
+
+.btn-add-to-cart:hover {
+  background: #ff5252;
+  transform: translateY(-2px);
+}
+
+.btn-add-to-cart:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}
+.btn-add-to-cart {
+  background: #ff6b6b;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 0.5rem;
+  width: 100%;
+}
+
+.btn-add-to-cart:hover {
+  background: #ff5252;
+  transform: translateY(-2px);
+}
+
+.btn-add-to-cart:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.product-info {
+  padding: 0 1.2rem 1.2rem;
+  text-align: center;
+}
+
+.product-example {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.product-price {
+  color: #ff6b6b;
+  font-weight: bold;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+/* Estilos para la info de productos reales */
+.product-info {
+  padding: 0 1.2rem 1.2rem;
+}
+
+.product-example {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.product-price {
+  color: #ff6b6b;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.loading {
+  text-align: center;
+  padding: 4rem 2rem;
+  font-size: 1.2rem;
+  color: #666;
+}
 }
 
 /* ELIMINA estas clases placeholder si las tienes:
