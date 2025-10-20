@@ -1,0 +1,130 @@
+.ubicacion-container {
+  padding: 60px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.ubicacion-content h1 {
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.ubicacion-content > p {
+  color: #666;
+  margin-bottom: 40px;
+  font-size: 1.1rem;
+}
+
+.locations-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 40px;
+  margin-bottom: 50px;
+}
+
+.location-item {
+  background: #f8f9fa;
+  padding: 25px;
+  border-radius: 12px;
+  border-left: 4px solid #007bff;
+  text-align: center;
+}
+
+.location-item h3 {
+  color: #333;
+  margin-bottom: 10px;
+  font-size: 1.3rem;
+}
+
+.location-item > p {
+  color: #666;
+  margin-bottom: 20px;
+  font-style: italic;
+}
+
+.map-container {
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.location-info {
+  text-align: left;
+  background: white;
+  padding: 15px;
+  border-radius: 6px;
+  margin-top: 15px;
+}
+
+.location-info p {
+  margin-bottom: 8px;
+  color: #555;
+}
+
+.info-ubicacion {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  margin-top: 40px;
+}
+
+.info-item {
+  background: #f8f9fa;
+  padding: 25px;
+  border-radius: 10px;
+  border-left: 4px solid #28a745;
+  text-align: left;
+}
+
+.info-item h3 {
+  color: #333;
+  margin-bottom: 15px;
+  font-size: 1.2rem;
+}
+
+.info-item p {
+  margin-bottom: 8px;
+  color: #555;
+  line-height: 1.5;
+}
+
+.info-item strong {
+  color: #333;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .ubicacion-container {
+    padding: 40px 15px;
+  }
+  
+  .locations-grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  
+  .location-item {
+    padding: 20px;
+  }
+  
+  .info-ubicacion {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .info-item {
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .locations-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .location-item {
+    padding: 15px;
+  }
+}

@@ -8,7 +8,8 @@ import Footer from './components/Footer';
 import OutletPage from './components/OutletPage';
 import AdminDashboard from './components/AdminDashboard';
 import AdminLogin from './components/AdminLogin';
-
+import Nosotros from './components/Nosotros';
+import Ubicacion from './components/Ubicacion'; 
 function App() {
   return (
     <ProductProvider>
@@ -21,6 +22,8 @@ function App() {
               <Route path="/outlet" element={<OutletPage />} />
               <Route path="/admin" element={<AdminDashboard />} />
               <Route path="/admin-login" element={<AdminLogin />} />
+               <Route path="/nosotros" element={<Nosotros />} />
+               <Route path="/mujer" element={<Ubicacion />} /> 
               {/* Agregaremos más rutas aquí */}
             </Routes>
             <Footer />
