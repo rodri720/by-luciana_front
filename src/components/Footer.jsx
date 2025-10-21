@@ -15,10 +15,25 @@ function Footer() {
               Expresa tu estilo con nuestra colección exclusiva.
             </p>
             <div className="social-links">
-              <a href="#" className="social-link">📱 Instagram</a>
-              <a href="#" className="social-link">📘 Facebook</a>
-              <a href="#" className="social-link">🐦 Twitter</a>
-            </div>
+  <a 
+    href="https://www.instagram.com/luciana_aliendo/" 
+    className="social-link"
+    target="_blank" 
+    rel="noopener noreferrer"
+  >
+    <span className="social-icon">📱</span>
+    Instagram
+  </a>
+  <a 
+    href="https://www.facebook.com/profile.php?id=61582789674739" 
+    className="social-link"
+    target="_blank" 
+    rel="noopener noreferrer"
+  >
+    <span className="social-icon">📘</span>
+    Facebook
+  </a>
+</div>
           </div>
 
           {/* Quick Links */}
@@ -47,8 +62,8 @@ function Footer() {
           <div className="footer-section">
             <h4>Contacto</h4>
             <div className="contact-info">
-              <p>📧 info@byluciana.com</p>
-              <p>📞 +57 300 123 4567</p>
+              <p>📧 bylualiendo@gmail.com</p>
+              <p>📞 +54 351 8046979</p>
               <p>📍 Cordoba , Villa Allende</p>
             </div>
           </div>

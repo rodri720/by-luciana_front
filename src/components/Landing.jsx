@@ -20,6 +20,11 @@ function Landing() {
   const [currentSlide, setCurrentSlide] = useState(0)
   const { products, loading } = useProducts()
   
+  // Estados para el newsletter
+  const [email, setEmail] = useState('')
+  const [loadingNewsletter, setLoadingNewsletter] = useState(false)
+  const [message, setMessage] = useState('')
+  
   const carouselImages = [imagen1, imagen2, imagen3, imagen4, imagen5, imagen6]
 
   useEffect(() => {
@@ -37,6 +42,46 @@ function Landing() {
     setCurrentSlide((prev) => (prev - 1 + carouselImages.length) % carouselImages.length)
   }
 
+  // Función para manejar la suscripción al newsletter
+  const handleSubscribe = async (e) => {
+    e.preventDefault()
+    
+    if (!email) {
+      alert('Por favor ingresa tu email')
+      return
+    }
+
+    setLoadingNewsletter(true)
+
+    try {
+      const response = await fetch('http://localhost:5000/api/newsletter/subscribe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        // Alert de éxito
+        alert('¡Gracias por subscribirte a By Luciana Aliendo!')
+        setMessage('¡Gracias por suscribirte! Revisa tu email para más detalles.')
+        setEmail('')
+      } else {
+        alert(data.error || 'Error al suscribirse')
+        setMessage(data.error || 'Error al suscribirse')
+      }
+    } catch (error) {
+      console.error('Error:', error)
+      alert('Error de conexión')
+      setMessage('Error de conexión')
+    } finally {
+      setLoadingNewsletter(false)
+    }
+  }
+
   if (loading) {
     return (
       <section className="landing">
@@ -45,9 +90,7 @@ function Landing() {
     )
   }
 
-  return (
-
-    
+  return (  
     <section className="landing">
       {/* Carousel con controles - MANTIENE TU DISEÑO ORIGINAL */}
       <div className="carousel-section">
@@ -77,10 +120,9 @@ function Landing() {
         </div>
       </div>
       
-<div className="carousel-buttons">
- 
-  
-</div>
+      <div className="carousel-buttons">
+        {/* Espacio para botones adicionales si los necesitas */}
+      </div>
 
       {/* Categories Section - ESTRUCTURA ORIGINAL CON DATOS REALES */}
       <div className="categories-section">
@@ -222,20 +264,36 @@ function Landing() {
         </div>
       </div>
 
-      {/* Newsletter Section - MANTIENE ORIGINAL */}
+      {/* Newsletter Section - ACTUALIZADO CON LA FUNCIONALIDAD */}
       <div className="newsletter-section">
         <div className="container">
           <div className="newsletter-content">
             <h2>¡No te pierdas nuestras novedades!</h2>
             <p>Suscríbete y recibe un 10% de descuento en tu primera compra</p>
-            <div className="newsletter-form">
+            
+            <form onSubmit={handleSubscribe} className="newsletter-form">
               <input 
                 type="email" 
                 placeholder="Tu correo electrónico" 
                 className="newsletter-input"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
               />
-              <button className="btn btn-primary">Suscribirse</button>
-            </div>
+              <button 
+                type="submit" 
+                className="btn btn-primary"
+                disabled={loadingNewsletter}
+              >
+                {loadingNewsletter ? 'Suscribiendo...' : 'Suscribirse'}
+              </button>
+            </form>
+            
+            {message && (
+              <div className={`newsletter-message ${message.includes('Error') ? 'error' : 'success'}`}>
+                {message}
+              </div>
+            )}
           </div>
         </div>
       </div>
