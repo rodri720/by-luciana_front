@@ -1,257 +1,195 @@
-// src/components/AdminDashboard.jsx
-import React, { useState, useEffect } from 'react';
+// src/pages/AdminDashboard.jsx
+import { useState } from 'react';
+import { useProducts } from '../context/ProductContext';
+import ProductForm from '../components/ProductForm/ProductForm';
 import './AdminDashboard.css';
 
-const AdminDashboard = () => {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [showForm, setShowForm] = useState(false);
+function AdminDashboard() {
+  const { products, createProduct, updateProduct, deleteProduct, loading } = useProducts();
   const [editingProduct, setEditingProduct] = useState(null);
-  
-  const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-    price: '',
-    category: '',
-    featured: false,
-    stock: '0'
-  });
+  const [showForm, setShowForm] = useState(false);
 
-  useEffect(() => {
-    setLoading(true);
-    const sampleProducts = [
-      {
-        _id: '1',
-        name: 'Vestido Floral',
-        description: 'Hermoso vestido con estampado floral',
-        price: 29900,
-        category: 'novedades',
-        stock: 10,
-        featured: true
-      },
-      {
-        _id: '2',
-        name: 'Zapatos de Tacón',
-        description: 'Zapatos elegantes para ocasiones especiales',
-        price: 19900,
-        category: 'calzados',
-        stock: 5,
-        featured: false
-      }
-    ];
-    setProducts(sampleProducts);
-    setLoading(false);
-  }, []);
-
-  const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }));
+  // Función para obtener productos por categoría (la que ya tenías)
+  const getProductsByCategory = (category) => {
+    return products.filter(product => product.category === category);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setLoading(true);
-
-    setTimeout(() => {
-      const newProduct = {
-        _id: Date.now().toString(),
-        ...formData,
-        price: parseFloat(formData.price),
-        stock: parseInt(formData.stock)
-      };
-
-      if (editingProduct) {
-        setProducts(prev => prev.map(p => p._id === editingProduct._id ? newProduct : p));
-      } else {
-        setProducts(prev => [...prev, newProduct]);
-      }
-
-      resetForm();
-      setLoading(false);
-    }, 1000);
+  const handleCreateProduct = async (productData) => {
+    try {
+      await createProduct(productData);
+      setShowForm(false);
+      alert('✅ Producto creado correctamente');
+    } catch (error) {
+      alert('❌ Error creando producto');
+    }
   };
 
-  const resetForm = () => {
-    setFormData({
-      name: '',
-      description: '',
-      price: '',
-      category: '',
-      featured: false,
-      stock: '0'
-    });
-    setEditingProduct(null);
-    setShowForm(false);
+  const handleUpdateProduct = async (productData) => {
+    try {
+      await updateProduct(editingProduct._id, productData);
+      setEditingProduct(null);
+      alert('✅ Producto actualizado correctamente');
+    } catch (error) {
+      alert('❌ Error actualizando producto');
+    }
+  };
+
+  const handleDeleteProduct = async (productId) => {
+    if (confirm('¿Estás seguro de eliminar este producto?')) {
+      try {
+        await deleteProduct(productId);
+        alert('🗑️ Producto eliminado');
+      } catch (error) {
+        alert('❌ Error eliminando producto');
+      }
+    }
   };
 
   const handleEdit = (product) => {
-    setFormData({
-      name: product.name,
-      description: product.description,
-      price: product.price.toString(),
-      category: product.category,
-      featured: product.featured,
-      stock: product.stock.toString()
-    });
     setEditingProduct(product);
     setShowForm(true);
   };
 
-  const handleDelete = (productId) => {
-    if (window.confirm('¿Estás seguro de eliminar este producto?')) {
-      setProducts(prev => prev.filter(p => p._id !== productId));
-    }
+  const resetForm = () => {
+    setShowForm(false);
+    setEditingProduct(null);
   };
 
   return (
     <div className="admin-dashboard">
+      {/* Header con estadísticas - MANTENIENDO TU DISEÑO */}
       <header className="dashboard-header">
-        <h1>Panel de Administración - By Luciana</h1>
-        <button 
-          className="btn btn-primary"
-          onClick={() => setShowForm(true)}
-        >
-          + Nuevo Producto
-        </button>
+        <h1>🎯 Panel de Administración - By Luciana</h1>
+        <div className="header-info">
+          <span className="backend-status">
+            {process.env.NODE_ENV === 'development' ? '🔴 Modo Local' : '🟢 Conectado'}
+          </span>
+          <button 
+            className="btn btn-primary"
+            onClick={() => setShowForm(true)}
+          >
+            📦 + Nuevo Producto
+          </button>
+        </div>
       </header>
 
-      {showForm && (
-        <div className="form-overlay">
-          <div className="form-container">
-            <h2>{editingProduct ? 'Editar' : 'Crear'} Producto</h2>
-            <form onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label>Nombre:</label>
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
+      {/* Estadísticas - MANTENIENDO TU DISEÑO */}
+      <div className="dashboard-stats">
+        <div className="stat-card">
+          <h3>Total Productos</h3>
+          <span className="stat-number">{products.length}</span>
+        </div>
+        <div className="stat-card">
+          <h3>En Outlet</h3>
+          <span className="stat-number">{getProductsByCategory('outlet').length}</span>
+        </div>
+        <div className="stat-card">
+          <h3>Destacados</h3>
+          <span className="stat-number">{products.filter(p => p.featured).length}</span>
+        </div>
+        <div className="stat-card">
+          <h3>Mayorista</h3>
+          <span className="stat-number">{getProductsByCategory('mayorista').length}</span>
+        </div>
+      </div>
 
-              <div className="form-group">
-                <label>Descripción:</label>
-                <textarea
-                  name="description"
-                  value={formData.description}
-                  onChange={handleInputChange}
-                  rows="3"
-                />
-              </div>
-
-              <div className="form-row">
-                <div className="form-group">
-                  <label>Precio:</label>
-                  <input
-                    type="number"
-                    name="price"
-                    value={formData.price}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label>Categoría:</label>
-                  <select
-                    name="category"
-                    value={formData.category}
-                    onChange={handleInputChange}
-                    required
-                  >
-                    <option value="">Seleccionar</option>
-                    <option value="novedades">Novedades</option>
-                    <option value="oulet">Outlet</option>
-                    <option value="mayorista">Mayorista</option>
-                    <option value="accesorios">Accesorios</option>
-                    <option value="calzados">Calzados</option>
-                    <option value="bodys">Bodys</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="form-row">
-                <div className="form-group">
-                  <label>Stock:</label>
-                  <input
-                    type="number"
-                    name="stock"
-                    value={formData.stock}
-                    onChange={handleInputChange}
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="featured"
-                      checked={formData.featured}
-                      onChange={handleInputChange}
-                    />
-                    Destacado
-                  </label>
-                </div>
-              </div>
-
-              <div className="form-actions">
-                <button type="submit">
-                  {loading ? 'Guardando...' : 'Guardar'}
-                </button>
-                <button type="button" onClick={resetForm}>
-                  Cancelar
-                </button>
-              </div>
-            </form>
+      {/* Formulario modal - NUEVA ESTRUCTURA */}
+      {(showForm || editingProduct) && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <div className="form-header">
+              <h2>{editingProduct ? '✏️ Editar Producto' : '🆕 Crear Producto'}</h2>
+              <button 
+                type="button" 
+                onClick={resetForm}
+                className="form-close-btn"
+                title="Cerrar formulario"
+              >
+                ×
+              </button>
+            </div>
+            
+            <ProductForm
+              product={editingProduct}
+              onSave={editingProduct ? handleUpdateProduct : handleCreateProduct}
+              onCancel={resetForm}
+            />
           </div>
         </div>
       )}
 
+      {/* Lista de productos - MANTENIENDO TU DISEÑO CON MEJORAS */}
       <div className="products-section">
-        <h2>Productos ({products.length})</h2>
+        <div className="section-header">
+          <h2>📦 Gestión de Productos ({products.length})</h2>
+        </div>
         
         {loading ? (
-          <div className="loading">Cargando...</div>
+          <div className="loading">⏳ Cargando productos...</div>
         ) : (
           <div className="products-grid">
             {products.map(product => (
               <div key={product._id} className="product-card">
                 <div className="product-image">
+                  {product.image ? (
+                    <img 
+                      src={product.image.startsWith('http') ? product.image : `http://localhost:5000${product.image}`} 
+                      alt={product.name}
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                        e.target.nextSibling.style.display = 'block';
+                      }}
+                    />
+                  ) : null}
                   <div className="image-placeholder">📷</div>
+                  <div className="product-category-badge">{product.category}</div>
+                  {product.featured && <div className="featured-badge">⭐</div>}
                 </div>
+                
                 <div className="product-info">
                   <h3>{product.name}</h3>
-                  <p className="category">{product.category}</p>
-                  <p className="price">${product.price}</p>
-                  <p className="stock">Stock: {product.stock}</p>
-                  {product.featured && <span className="badge">Destacado</span>}
+                  <p className="description">{product.description}</p>
+                  <div className="product-details">
+                    <span className="price">${product.price?.toLocaleString()}</span>
+                    <span className="stock">Stock: {product.stock}</span>
+                  </div>
                 </div>
+
                 <div className="product-actions">
                   <button 
                     className="edit-btn"
                     onClick={() => handleEdit(product)}
                   >
-                    Editar
+                    ✏️ Editar
                   </button>
                   <button 
                     className="delete-btn"
-                    onClick={() => handleDelete(product._id)}
+                    onClick={() => handleDeleteProduct(product._id)}
                   >
-                    Eliminar
+                    🗑️ Eliminar
                   </button>
                 </div>
               </div>
             ))}
           </div>
         )}
+
+        {products.length === 0 && !loading && (
+          <div className="no-products">
+            <div className="no-products-icon">📦</div>
+            <h3>No hay productos</h3>
+            <p>Crea tu primer producto para comenzar</p>
+            <button 
+              onClick={() => setShowForm(true)}
+              className="btn btn-primary"
+            >
+              📦 Crear Primer Producto
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
-};
+}
 
 export default AdminDashboard;

@@ -341,4 +341,21 @@
   .logo-text {
     font-size: 1.1rem;
   }
+/* Si tienes una navbar, agrega esto a su CSS */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000; /* Menor que el form-overlay */
+  background: white;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+/* Ajusta el padding del admin-dashboard si hay navbar */
+.admin-dashboard {
+  padding-top: 80px; /* Ajusta según la altura de tu navbar */
+  min-height: calc(100vh - 80px);
+}
+  
 }

@@ -134,6 +134,7 @@ function Landing() {
             {/* Tarjeta de Outlet clickeable */}
             <div className="category-card">
               <Link to="/outlet" className="category-link">
+              
                 <div 
                   className="category-image" 
                   style={{ backgroundImage: `url(${ouletImage})` }}
@@ -167,20 +168,22 @@ function Landing() {
               ))}
             </div>
             
+            {/* Tarjeta de Mayorista clickeable - CORREGIDA */}
             <div className="category-card">
-              <div 
-                className="category-image" 
-                style={{ backgroundImage: `url(${mayoristaImage})` }}
-              >
-                <span className="category-label">Mayorista</span>
-              </div>
-              <h3>Mayorista</h3>
-              {products.filter(p => p.category === 'mayorista').slice(0, 1).map(product => (
-                <div key={product._id} className="product-info">
-                  <p className="product-example">{product.name}</p>
-                  <p className="product-price">Desde ${product.price}</p>
+              <Link to="/mayorista" className="category-link">
+                <div 
+                  className="category-image" 
+                  style={{ backgroundImage: `url(${mayoristaImage})` }}
+                >
+                  <span className="category-label">Mayorista</span>
                 </div>
-              ))}
+                <h3>Mayorista</h3>
+               {products.filter(p => p.category === 'oulet').slice(0, 1).map(product => (
+                  <div key={product._id} className="product-info">
+                    
+                  </div>
+                ))}
+              </Link>
             </div>
           </div>
 
