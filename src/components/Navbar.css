@@ -3,7 +3,7 @@
   background: #fff;
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   padding: 0;
-  height: 90px; /* Aumentado de ~70px a 90px */
+  height: 90px;
   position: fixed;
   top: 0;
   width: 100%;
@@ -17,7 +17,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 2rem;
-  height: 100%; /* Asegura que ocupe toda la altura */
+  height: 100%;
 }
 
 /* Logo más grande para compensar */
@@ -29,7 +29,7 @@
 }
 
 .logo-image {
-  height: 50px; /* Un poco más grande */
+  height: 50px;
   width: auto;
 }
 
@@ -81,7 +81,7 @@
   padding: 20px;
   box-shadow: 0 8px 25px rgba(0,0,0,0.15);
   z-index: 1000;
-  min-width: 350px; /* Más ancho */
+  min-width: 350px;
   display: flex;
   align-items: center;
   gap: 15px;
@@ -312,50 +312,166 @@
   justify-content: center;
 }
 
+/* MENÚ HAMBURGUESA - NUEVO */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 25px;
+  height: 20px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.hamburger span {
+  display: block;
+  height: 3px;
+  width: 100%;
+  background: #333;
+  border-radius: 3px;
+  transition: all 0.3s ease;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .navbar {
-    height: 80px;
+    height: 70px; /* Reducido ligeramente en móvil */
   }
   
   .nav-container {
     padding: 0 1rem;
+    position: relative;
   }
   
-  .search-panel {
+  /* Ocultar menú normal en móvil */
+  .nav-menu {
     position: fixed;
-    top: 80px;
-    left: 20px;
-    right: 20px;
-    min-width: auto;
+    top: 70px;
+    left: -100%;
+    width: 80%;
+    height: calc(100vh - 70px);
+    background: white;
+    flex-direction: column;
+    gap: 0;
+    align-items: flex-start;
+    padding: 2rem 1rem;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    transition: left 0.3s ease;
+    z-index: 999;
   }
   
-  .login-panel {
-    position: fixed;
-    top: 80px;
-    left: 20px;
-    right: 20px;
-    min-width: auto;
+  .nav-menu.active {
+    left: 0;
+  }
+  
+  .nav-item {
+    height: auto;
+    width: 100%;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .nav-link {
+    height: 50px;
+    width: 100%;
+    padding: 0 1rem;
+  }
+  
+  /* Mostrar hamburguesa en móvil */
+  .hamburger {
+    display: flex;
+  }
+  
+  /* Ajustar logo en móvil */
+  .logo-image {
+    height: 40px;
   }
   
   .logo-text {
     font-size: 1.1rem;
   }
-/* Si tienes una navbar, agrega esto a su CSS */
-.navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000; /* Menor que el form-overlay */
-  background: white;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  
+  /* Paneles adaptados a móvil */
+  .search-panel {
+    position: fixed;
+    top: 70px;
+    left: 10px;
+    right: 10px;
+    min-width: auto;
+    padding: 15px;
+  }
+  
+  .login-panel {
+    position: fixed;
+    top: 70px;
+    left: 10px;
+    right: 10px;
+    min-width: auto;
+    padding: 20px;
+  }
+  
+  .search-input,
+  .login-input,
+  .login-btn,
+  .google-login-btn {
+    height: 44px;
+    font-size: 16px; /* Mejor para iOS */
+  }
+  
+  /* Reducir espacio entre iconos en móvil */
+  .nav-actions {
+    gap: 8px;
+  }
+  
+  .nav-icon {
+    padding: 8px;
+    font-size: 1.1rem;
+  }
 }
 
-/* Ajusta el padding del admin-dashboard si hay navbar */
-.admin-dashboard {
-  padding-top: 80px; /* Ajusta según la altura de tu navbar */
-  min-height: calc(100vh - 80px);
-}
+/* Para pantallas muy pequeñas */
+@media (max-width: 480px) {
+  .nav-container {
+    padding: 0 0.5rem;
+  }
   
+  .logo-text {
+    font-size: 1rem;
+  }
+  
+  .search-panel,
+  .login-panel {
+    left: 5px;
+    right: 5px;
+  }
+}
+
+/* Overlay para cuando el menú está abierto */
+.menu-overlay {
+  display: none;
+  position: fixed;
+  top: 70px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 998;
+}
+
+.menu-overlay.active {
+  display: block;
+}
+
+/* Ajuste para el contenido principal */
+.admin-dashboard {
+  padding-top: 90px; /* Para desktop */
+  min-height: calc(100vh - 90px);
+}
+
+@media (max-width: 768px) {
+  .admin-dashboard {
+    padding-top: 70px; /* Para móvil */
+    min-height: calc(100vh - 70px);
+  }
 }

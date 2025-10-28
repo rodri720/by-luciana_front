@@ -1,16 +1,17 @@
 ﻿﻿import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import { ProductProvider } from './context/ProductContext'; // ✅ Usa solo este
+import { ProductProvider } from './context/ProductContext';
 import { CartProvider } from './context/CartContext';
 import './App.css'
 import Navbar from './components/Navbar';
 import Landing from './components/Landing';
 import Footer from './components/Footer';
 import OutletPage from './components/OutletPage';
-import AdminDashboard from './components/AdminDashboard';
+import PanelAdmin from "./components/PanelAdmin/PanelAdmin"
 import AdminLogin from './components/AdminLogin';
 import Nosotros from './components/Nosotros';
 import Ubicacion from './components/Ubicacion'; 
 import Mayorista from './components/Mayorista';
+import ErrorBoundary from './components/ErrorBoundary';
 
 function App() {
   return (
@@ -19,16 +20,18 @@ function App() {
         <Router>
           <div className="App">
             <Navbar />
-            <Routes>
-              <Route path="/" element={<Landing />} />
-              <Route path="/outlet" element={<OutletPage />} />
-              <Route path="/admin" element={<AdminDashboard />} />
-              <Route path="/admin-login" element={<AdminLogin />} />
-              <Route path="/nosotros" element={<Nosotros />} />
-              <Route path="/mujer" element={<Ubicacion />} /> 
-              <Route path="/mujer" element={<Ubicacion />} /> 
-              <Route path="/mayorista" element={<Mayorista />} />
-            </Routes>
+            <ErrorBoundary> {/* ✅ CORRECTO: ErrorBoundary envuelve el contenido */}
+              <Routes>
+                <Route path="/" element={<Landing />} />
+                <Route path="/outlet" element={<OutletPage />} />
+                <Route path="/admin" element={<PanelAdmin />} />
+                <Route path="/admin-login" element={<AdminLogin />} />
+                <Route path="/nosotros" element={<Nosotros />} />
+                <Route path="/mujer" element={<Ubicacion />} />
+                <Route path="/mayorista" element={<Mayorista />} />
+                {/* ❌ ELIMINADO: <ErrorBoundary componentName="AdminDashboard"></ErrorBoundary> */}
+              </Routes>
+            </ErrorBoundary>
             <Footer />
           </div>
         </Router>

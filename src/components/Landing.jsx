@@ -42,6 +42,12 @@ function Landing() {
     setCurrentSlide((prev) => (prev - 1 + carouselImages.length) % carouselImages.length)
   }
 
+  // Función SEGURA para filtrar productos por categoría
+  const getProductsByCategory = (category) => {
+    if (!products || !Array.isArray(products)) return []
+    return products.filter(product => product && product.category === category)
+  }
+
   // Función para manejar la suscripción al newsletter
   const handleSubscribe = async (e) => {
     e.preventDefault()
@@ -124,31 +130,36 @@ function Landing() {
         {/* Espacio para botones adicionales si los necesitas */}
       </div>
 
-      {/* Categories Section - ESTRUCTURA ORIGINAL CON DATOS REALES */}
+      {/* Categories Section - CORREGIDA CON VERIFICACIONES SEGURAS */}
       <div className="categories-section">
         <div className="container">
           <h2 className="section-title">Nuestras Categorías</h2>
           
-          {/* Primera fila - 3 categorías ORIGINALES */}
+          {/* Primera fila - 3 categorías CORREGIDAS */}
           <div className="categories-grid">
             {/* Tarjeta de Outlet clickeable */}
             <div className="category-card">
               <Link to="/outlet" className="category-link">
-              
                 <div 
                   className="category-image" 
                   style={{ backgroundImage: `url(${ouletImage})` }}
                 >
-                  <span className="category-label">Oulet</span>
+                  <span className="category-label">Outlet</span>
                 </div>
-                <h3>Oulet</h3>
-                {/* DATOS REALES: Muestra info de productos de outlet */}
-                {products.filter(p => p.category === 'oulet').slice(0, 1).map(product => (
+                <h3>Outlet</h3>
+                {/* DATOS REALES SEGUROS */}
+                {getProductsByCategory('outlet').slice(0, 1).map(product => (
                   <div key={product._id} className="product-info">
                     <p className="product-example">{product.name}</p>
                     <p className="product-price">Desde ${product.price}</p>
                   </div>
                 ))}
+                {getProductsByCategory('outlet').length === 0 && (
+                  <div className="product-info">
+                    <p className="product-example">Próximamente</p>
+                    <p className="product-price">Productos en oferta</p>
+                  </div>
+                )}
               </Link>
             </div>
             
@@ -160,12 +171,18 @@ function Landing() {
                 <span className="category-label">Novedades</span>
               </div>
               <h3>Nuevos Ingresos</h3>
-              {products.filter(p => p.category === 'novedades').slice(0, 1).map(product => (
+              {getProductsByCategory('novedades').slice(0, 1).map(product => (
                 <div key={product._id} className="product-info">
                   <p className="product-example">{product.name}</p>
                   <p className="product-price">Desde ${product.price}</p>
                 </div>
               ))}
+              {getProductsByCategory('novedades').length === 0 && (
+                <div className="product-info">
+                  <p className="product-example">Nuevos productos</p>
+                  <p className="product-price">Próximamente</p>
+                </div>
+              )}
             </div>
             
             {/* Tarjeta de Mayorista clickeable - CORREGIDA */}
@@ -178,16 +195,23 @@ function Landing() {
                   <span className="category-label">Mayorista</span>
                 </div>
                 <h3>Mayorista</h3>
-               {products.filter(p => p.category === 'oulet').slice(0, 1).map(product => (
+                {getProductsByCategory('mayorista').slice(0, 1).map(product => (
                   <div key={product._id} className="product-info">
-                    
+                    <p className="product-example">{product.name}</p>
+                    <p className="product-price">Desde ${product.price}</p>
                   </div>
                 ))}
+                {getProductsByCategory('mayorista').length === 0 && (
+                  <div className="product-info">
+                    <p className="product-example">Precios mayoristas</p>
+                    <p className="product-price">Consultar</p>
+                  </div>
+                )}
               </Link>
             </div>
           </div>
 
-          {/* Segunda fila - 3 categorías nuevas ORIGINALES */}
+          {/* Segunda fila - 3 categorías nuevas CORREGIDAS */}
           <div className="categories-grid">
             <div className="category-card">
               <div 
@@ -197,12 +221,18 @@ function Landing() {
                 <span className="category-label">Accesorios</span>
               </div>
               <h3>Accesorios</h3>
-              {products.filter(p => p.category === 'accesorios').slice(0, 1).map(product => (
+              {getProductsByCategory('accesorios').slice(0, 1).map(product => (
                 <div key={product._id} className="product-info">
                   <p className="product-example">{product.name}</p>
                   <p className="product-price">Desde ${product.price}</p>
                 </div>
               ))}
+              {getProductsByCategory('accesorios').length === 0 && (
+                <div className="product-info">
+                  <p className="product-example">Accesorios únicos</p>
+                  <p className="product-price">Próximamente</p>
+                </div>
+              )}
             </div>
             
             <div className="category-card">
@@ -213,12 +243,18 @@ function Landing() {
                 <span className="category-label">Calzados</span>
               </div>
               <h3>Calzados</h3>
-              {products.filter(p => p.category === 'calzados').slice(0, 1).map(product => (
+              {getProductsByCategory('calzados').slice(0, 1).map(product => (
                 <div key={product._id} className="product-info">
                   <p className="product-example">{product.name}</p>
                   <p className="product-price">Desde ${product.price}</p>
                 </div>
               ))}
+              {getProductsByCategory('calzados').length === 0 && (
+                <div className="product-info">
+                  <p className="product-example">Calzados de moda</p>
+                  <p className="product-price">Próximamente</p>
+                </div>
+              )}
             </div>
             
             <div className="category-card">
@@ -229,12 +265,18 @@ function Landing() {
                 <span className="category-label">Bodys</span>
               </div>
               <h3>Bodys</h3>
-              {products.filter(p => p.category === 'bodys').slice(0, 1).map(product => (
+              {getProductsByCategory('bodys').slice(0, 1).map(product => (
                 <div key={product._id} className="product-info">
                   <p className="product-example">{product.name}</p>
                   <p className="product-price">Desde ${product.price}</p>
                 </div>
               ))}
+              {getProductsByCategory('bodys').length === 0 && (
+                <div className="product-info">
+                  <p className="product-example">Bodys cómodos</p>
+                  <p className="product-price">Próximamente</p>
+                </div>
+              )}
             </div>
           </div>
         </div>

@@ -5,7 +5,8 @@ import { useProducts } from '../../context/ProductContext';
 import './ProductForm.css';
 
 function ProductForm({ product, onSave, onCancel }) {
-  const { uploadProductImage } = useProducts();
+  const { createProduct, updateProduct, uploadProductImage } = useProducts();
+  
   const [formData, setFormData] = useState({
     name: product?.name || '',
     description: product?.description || '',
@@ -15,9 +16,52 @@ function ProductForm({ product, onSave, onCancel }) {
     featured: product?.featured || false
   });
 
-  const handleSubmit = (e) => {
+  const [uploadedImages, setUploadedImages] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onSave(formData);
+    setLoading(true);
+    
+    console.log('=== 🚨 DEBUG MANUAL EXTREMO 🚨 ===');
+    console.log('📝 Datos del formulario:', formData);
+    console.log('🖼️ Imágenes para subir:', uploadedImages);
+    console.log('📊 Número de imágenes:', uploadedImages.length);
+    
+    try {
+      // Preparar datos finales
+      const productData = {
+        ...formData,
+        price: parseFloat(formData.price),
+        stock: parseInt(formData.stock),
+        images: uploadedImages
+      };
+
+      console.log('📦 Datos finales para enviar:', productData);
+
+      if (product) {
+        // ✅ MODO EDICIÓN
+        console.log('🔄 Actualizando producto existente...');
+        await updateProduct(product._id, productData);
+      } else {
+        // ✅ MODO CREACIÓN - usar createProduct del contexto
+        console.log('🔄 Creando nuevo producto...');
+        await createProduct(productData);
+      }
+
+      console.log('✅ Operación completada');
+      
+      // Llamar onSave si existe (para cerrar modal, etc.)
+      if (onSave && typeof onSave === 'function') {
+        onSave();
+      }
+      
+    } catch (error) {
+      console.error('❌ Error en submit:', error);
+      alert('Error: ' + error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleChange = (e) => {
@@ -26,6 +70,39 @@ function ProductForm({ product, onSave, onCancel }) {
       ...prev,
       [name]: type === 'checkbox' ? checked : value
     }));
+  };
+
+  // ✅ Manejar imagen subida - PARA CREACIÓN
+  const handleImageUploaded = (imageData) => {
+    console.log('🔄 ProductForm - Imagen recibida:', imageData);
+    
+    if (imageData && imageData.length > 0 && imageData[0] instanceof File) {
+      console.log('📁 Es File object?: true');
+      console.log('✅ Imagen lista para crear producto:', imageData[0]);
+      
+      // imageData es un array de Files directamente
+      setUploadedImages(imageData);
+      console.log('📊 Total imágenes listas:', imageData.length);
+    } else {
+      console.log('❌ No se recibieron imágenes válidas');
+      console.log('📁 Tipo recibido:', typeof imageData);
+      console.log('📁 Es array?:', Array.isArray(imageData));
+      if (imageData && imageData[0]) {
+        console.log('📁 Primer elemento:', imageData[0]);
+        console.log('📁 Es File?:', imageData[0] instanceof File);
+      }
+    }
+  };
+
+  // ✅ Manejar imagen subida - PARA EDICIÓN
+  const handleImageUpload = async (productId, formData) => {
+    try {
+      const result = await uploadProductImage(productId, formData);
+      return result;
+    } catch (error) {
+      console.error('Error subiendo imagen:', error);
+      throw error;
+    }
   };
 
   return (
@@ -49,6 +126,8 @@ function ProductForm({ product, onSave, onCancel }) {
             name="price"
             value={formData.price}
             onChange={handleChange}
+            step="0.01"
+            min="0"
             required
           />
         </div>
@@ -61,13 +140,14 @@ function ProductForm({ product, onSave, onCancel }) {
           value={formData.description}
           onChange={handleChange}
           rows="3"
+          required
         />
       </div>
 
       <div className="form-row">
         <div className="form-group">
           <label>Categoría</label>
-          <select name="category" value={formData.category} onChange={handleChange}>
+          <select name="category" value={formData.category} onChange={handleChange} required>
             <option value="">Seleccionar categoría</option>
             <option value="novedades">Novedades</option>
             <option value="outlet">Outlet</option>
@@ -85,6 +165,8 @@ function ProductForm({ product, onSave, onCancel }) {
             name="stock"
             value={formData.stock}
             onChange={handleChange}
+            min="0"
+            required
           />
         </div>
       </div>
@@ -101,24 +183,66 @@ function ProductForm({ product, onSave, onCancel }) {
         </label>
       </div>
 
-      {/* Componente de upload de imagen */}
-      {product && (
-        <div className="image-upload-section">
-          <label>Imagen del producto</label>
-          <ImageUpload
-            productId={product._id}
-            existingImage={product.image}
-            onImageUpload={uploadProductImage}
-          />
+      {/* ImageUpload SIEMPRE visible */}
+      <div className="image-upload-section">
+        <label>Imagen del producto</label>
+        <ImageUpload
+          productId={product?._id}
+          existingImage={product?.image || product?.images?.[0]}
+          onImageUpload={product ? handleImageUpload : handleImageUploaded}
+          isCreating={!product}
+        />
+        
+        {/* DEBUG TEMPORAL */}
+        <div style={{
+          background: '#e7f3ff', 
+          padding: '10px', 
+          margin: '10px 0', 
+          borderRadius: '5px',
+          fontSize: '12px'
+        }}>
+          <strong>🔧 DEBUG ProductForm:</strong><br/>
+          - Modo: {product ? 'EDICIÓN' : 'CREACIÓN'}<br/>
+          - Imágenes listas: {uploadedImages.length}<br/>
+          - Product ID: {product?._id || 'NUEVO'}<br/>
+          - Loading: {loading ? '✅ SÍ' : '❌ NO'}
         </div>
-      )}
+
+        {/* Mostrar imágenes subidas en creación */}
+        {!product && uploadedImages.length > 0 && (
+          <div className="uploaded-images-preview">
+            <p>✅ Imágenes listas para guardar: {uploadedImages.length}</p>
+            <div className="images-grid">
+              {uploadedImages.map((img, index) => (
+                <div key={index} className="preview-item">
+                  <img 
+                    src={URL.createObjectURL(img)} 
+                    alt={`Preview ${index}`} 
+                    className="preview-thumb" 
+                  />
+                  <small>{img.name}</small>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
 
       <div className="form-actions">
-        <button type="button" onClick={onCancel} className="btn btn-secondary">
+        <button 
+          type="button" 
+          onClick={onCancel} 
+          className="btn btn-secondary"
+          disabled={loading}
+        >
           Cancelar
         </button>
-        <button type="submit" className="btn btn-primary">
-          {product ? 'Actualizar' : 'Crear'} Producto
+        <button 
+          type="submit" 
+          className="btn btn-primary"
+          disabled={loading}
+        >
+          {loading ? '⏳ Procesando...' : (product ? 'Actualizar' : 'Crear') + ' Producto'}
         </button>
       </div>
     </form>
