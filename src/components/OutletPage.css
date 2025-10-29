@@ -147,4 +147,20 @@
   .outlet-title {
     font-size: 1.6rem;
   }
+
+  /* Agrega esto a tu OutletPage.css */
+.reload-btn {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 10px;
+  font-size: 14px;
+}
+
+.reload-btn:hover {
+  background: #218838;
+}
 }

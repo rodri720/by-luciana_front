@@ -12,9 +12,11 @@ import Nosotros from './components/Nosotros';
 import Ubicacion from './components/Ubicacion'; 
 import Mayorista from './components/Mayorista';
 import ErrorBoundary from './components/ErrorBoundary';
-
+import { AuthProvider } from './context/AuthContext';
+import AdminAuth from './components/AdminAuth/AdminAuth';
 function App() {
   return (
+    <AuthProvider>
     <ProductProvider>
       <CartProvider>
         <Router>
@@ -29,6 +31,7 @@ function App() {
                 <Route path="/nosotros" element={<Nosotros />} />
                 <Route path="/mujer" element={<Ubicacion />} />
                 <Route path="/mayorista" element={<Mayorista />} />
+                <Route path="/admin-auth" element={<AdminAuth />} />
                 {/* ❌ ELIMINADO: <ErrorBoundary componentName="AdminDashboard"></ErrorBoundary> */}
               </Routes>
             </ErrorBoundary>
@@ -37,6 +40,7 @@ function App() {
         </Router>
       </CartProvider>
     </ProductProvider>
+    </AuthProvider>
   )
 }
 

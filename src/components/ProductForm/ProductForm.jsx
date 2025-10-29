@@ -34,26 +34,28 @@ function ProductForm({ product, onSave, onCancel }) {
         ...formData,
         price: parseFloat(formData.price),
         stock: parseInt(formData.stock),
+        featured: formData.featured === true || formData.featured === 'true',
         images: uploadedImages
       };
 
       console.log('📦 Datos finales para enviar:', productData);
 
+      let result;
       if (product) {
         // ✅ MODO EDICIÓN
         console.log('🔄 Actualizando producto existente...');
-        await updateProduct(product._id, productData);
+        result = await updateProduct(product._id, productData);
       } else {
-        // ✅ MODO CREACIÓN - usar createProduct del contexto
+        // ✅ MODO CREACIÓN
         console.log('🔄 Creando nuevo producto...');
-        await createProduct(productData);
+        result = await createProduct(productData);
       }
 
       console.log('✅ Operación completada');
       
-      // Llamar onSave si existe (para cerrar modal, etc.)
+      // SOLO UNA LLAMADA - pasar el resultado a onSave si existe
       if (onSave && typeof onSave === 'function') {
-        onSave();
+        onSave(result);
       }
       
     } catch (error) {

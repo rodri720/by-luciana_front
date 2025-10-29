@@ -1,121 +1,42 @@
-/* src/components/PanelAdmin/PanelAdmin.css */
-.panel-admin {
-  min-height: 100vh;
-  background: #f8f9fa;
-}
-
-.panel-header {
-  background: white;
-  padding: 20px 30px;
-  border-bottom: 1px solid #e9ecef;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.panel-header h1 {
-  margin: 0;
-  color: #333;
-  font-size: 24px;
-}
-
-.header-actions {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 10px;
-}
-
-.backend-status {
-  font-size: 14px;
-  color: #6c757d;
-}
-
-.panel-nav {
-  background: white;
-  padding: 0 30px;
-  border-bottom: 1px solid #e9ecef;
-  display: flex;
-  gap: 10px;
-}
-
-.nav-btn {
-  padding: 12px 20px;
-  border: none;
-  background: none;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  color: #6c757d;
-  border-bottom: 3px solid transparent;
-  transition: all 0.3s ease;
-}
-
-.nav-btn:hover {
-  color: #007bff;
-  background: #f8f9fa;
-}
-
-.nav-btn.active {
-  color: #007bff;
-  border-bottom-color: #007bff;
-  background: #f8f9fa;
-}
-
-.nav-btn.primary {
-  background: #007bff;
-  color: white;
-  border-radius: 6px;
-  margin-left: auto;
-}
-
-.nav-btn.primary:hover {
-  background: #0056b3;
-}
-
-.panel-main {
-  padding: 30px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-/* Form Section */
-.form-section {
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  overflow: hidden;
-}
-
-.form-header {
-  padding: 20px 30px;
-  border-bottom: 1px solid #e9ecef;
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-.form-header h2 {
-  margin: 0;
-  color: #333;
-}
-
-.back-btn {
-  background: #6c757d;
+/* Agrega esto al final de tu PanelAdmin.css existente */
+.logout-btn {
+  background: #dc3545;
   color: white;
   border: none;
   padding: 8px 16px;
   border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
+  margin-left: 10px;
 }
 
-.back-btn:hover {
-  background: #5a6268;
+.logout-btn:hover {
+  background: #c82333;
+}
+.logout-btn {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-left: 10px;
 }
 
-/* Loading States */
-.loading {
-  text-align: center;
-  padding: 40px;
-  font-size: 18px;
-  color: #6c757d;
+.logout-btn:hover {
+  background: #c82333;
+}
+/* Agrega esto al final de tu PanelAdmin.css */
+.logout-nav-btn {
+  background: #dc3545 !important;
+  color: white !important;
+  border-radius: 6px !important;
+  margin-left: auto !important;
+  border: none !important;
+}
+
+.logout-nav-btn:hover {
+  background: #c82333 !important;
+  color: white !important;
 }
