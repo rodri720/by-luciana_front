@@ -1,14 +1,14 @@
-// src/pages/OutletPage.jsx
+// src/pages/Bodys.jsx
 import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useProducts } from '../context/ProductContext'
-import './OutletPage.css'
+import './Bodys.css'
 import logo from '../assets/imagenes/logolu.png'
 import { useCart } from '../context/CartContext';
 
-function OutletPage() {
+function Bodys() {
   const { products, loading: productsLoading } = useProducts()
-  const [outletProducts, setOutletProducts] = useState([])
+  const [bodysProducts, setBodysProducts] = useState([])
   const [loading, setLoading] = useState(true)
   const { addToCart } = useCart();
 
@@ -20,36 +20,35 @@ function OutletPage() {
     if (!productsLoading && products.length > 0) {
       console.log('📦 Products disponibles:', products);
       
-      const outletItems = products.filter(product => {
+      const bodysItems = products.filter(product => {
         if (!product || !product.category) return false;
         
         const categoryLower = product.category.toLowerCase();
-        return categoryLower === 'outlet' || 
-               categoryLower.includes('outlet');
+        return categoryLower === 'bodys' || 
+               categoryLower === 'body' ||
+               categoryLower.includes('bodys');
       });
       
-      console.log('🔥 Productos outlet filtrados:', outletItems);
-      setOutletProducts(outletItems);
+      console.log('👕 Productos bodys filtrados:', bodysItems);
+      setBodysProducts(bodysItems);
       setLoading(false);
     } else if (!productsLoading) {
-      setOutletProducts([]);
+      setBodysProducts([]);
       setLoading(false);
     }
   }, [products, productsLoading]);
 
-  // Función para abrir imagen en modal
+  // Funciones para el modal
   const openImageModal = (product, index = 0) => {
     setSelectedImage(product);
     setCurrentImageIndex(index);
   };
 
-  // Función para cerrar modal
   const closeImageModal = () => {
     setSelectedImage(null);
     setCurrentImageIndex(0);
   };
 
-  // Navegar entre imágenes del mismo producto
   const goToNextImage = () => {
     if (selectedImage && selectedImage.images) {
       setCurrentImageIndex((prev) => 
@@ -76,7 +75,7 @@ function OutletPage() {
 
     if (selectedImage) {
       document.addEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = 'hidden'; // Prevenir scroll
+      document.body.style.overflow = 'hidden';
     }
 
     return () => {
@@ -87,20 +86,21 @@ function OutletPage() {
 
   if (loading || productsLoading) {
     return (
-      <div className="outlet-page">
-        <div className="loading">🔄 Cargando productos de outlet...</div>
+      <div className="bodys-page">
+        <div className="loading">🔄 Cargando productos bodys...</div>
       </div>
     )
   }
 
   return (
-    <div className="outlet-page">
-      <header className="outlet-header">
+    <div className="bodys-page">
+      <header className="bodys-header">
         <div className="container">
-          <img src={logo} alt="By Luciana" className="outlet-logo" />
-          <h1 className="outlet-title">🔥 Outlet</h1>
-          <p className="outlet-subtitle">Ofertas especiales y precios increíbles</p>
+          <img src={logo} alt="By Luciana" className="bodys-logo" />
+          <h1 className="bodys-title">👕 Bodys</h1>
+          <p className="bodys-subtitle">Encuentra los bodys más cómodos y elegantes</p>
           
+          {/* Botón de recarga */}
           <button 
             onClick={() => window.location.reload()} 
             className="reload-btn"
@@ -110,13 +110,13 @@ function OutletPage() {
         </div>
       </header>
 
-      <main className="outlet-content">
+      <main className="bodys-content">
         <div className="container">
-          {outletProducts.length === 0 ? (
+          {bodysProducts.length === 0 ? (
             <div className="no-products">
-              <div className="no-products-icon">📦</div>
-              <h3>No hay productos en outlet</h3>
-              <p>Los productos que agregues en la categoría "Outlet" aparecerán aquí</p>
+              <div className="no-products-icon">👕</div>
+              <h3>No hay productos de bodys</h3>
+              <p>Los productos que agregues en la categoría "Bodys" aparecerán aquí</p>
               
               <div style={{background: '#e7f3ff', padding: '15px', borderRadius: '8px', margin: '15px 0', border: '1px solid #b3d9ff'}}>
                 <h4 style={{margin: '0 0 10px 0', color: '#0066cc'}}>💡 Información del Sistema:</h4>
@@ -125,7 +125,7 @@ function OutletPage() {
                   <strong>Categorías encontradas:</strong> {[...new Set(products.map(p => p?.category))].join(', ')}
                 </p>
                 <p style={{margin: '5px 0', fontSize: '12px', color: '#666'}}>
-                  <em>¿Falta algún producto? Revisa que la categoría sea exactamente "outlet"</em>
+                  <em>¿Falta algún producto? Revisa que la categoría sea exactamente "bodys"</em>
                 </p>
               </div>
               
@@ -135,13 +135,13 @@ function OutletPage() {
             </div>
           ) : (
             <>
-              <div className="outlet-stats">
-                <p>🎯 {outletProducts.length} producto(s) disponibles en outlet</p>
+              <div className="bodys-stats">
+                <p>📊 {bodysProducts.length} producto(s) de bodys disponibles</p>
               </div>
               
-              <div className="outlet-products-grid">
-                {outletProducts.map(product => (
-                  <div key={product._id} className="outlet-product-card">
+              <div className="bodys-products-grid">
+                {bodysProducts.map(product => (
+                  <div key={product._id} className="bodys-product-card">
                     <div 
                       className="product-image"
                       onClick={() => openImageModal(product, 0)}
@@ -171,7 +171,7 @@ function OutletPage() {
                           <small>Sin imagen</small>
                         </div>
                       )}
-                      <div className="outlet-badge">OUTLET</div>
+                      <div className="bodys-badge">BODYS</div>
                       {product.featured && <div className="featured-badge">⭐ Destacado</div>}
                     </div>
                     
@@ -182,9 +182,8 @@ function OutletPage() {
                       <div className="price-section">
                         <span className="current-price">${product.price?.toLocaleString()}</span>
                         <span className="original-price">
-                          ${Math.round((product.price || 0) * 1.3).toLocaleString()}
+                          {product.originalPrice && `$${product.originalPrice.toLocaleString()}`}
                         </span>
-                        <span className="discount">30% OFF</span>
                       </div>
                       
                       <div className="product-meta">
@@ -250,7 +249,7 @@ function OutletPage() {
         </div>
       )}
 
-      <footer className="outlet-footer">
+      <footer className="bodys-footer">
         <div className="container">
           <Link to="/" className="btn btn-secondary">
             ← Volver a la Página Principal
@@ -261,4 +260,4 @@ function OutletPage() {
   )
 }
 
-export default OutletPage;
+export default Bodys;

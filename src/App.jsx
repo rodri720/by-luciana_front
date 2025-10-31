@@ -3,6 +3,7 @@ import { ProductProvider } from './context/ProductContext';
 import { CartProvider } from './context/CartContext';
 import './App.css'
 import Navbar from './components/Navbar';
+// Vuelve a:
 import Landing from './components/Landing';
 import Footer from './components/Footer';
 import OutletPage from './components/OutletPage';
@@ -14,6 +15,10 @@ import Mayorista from './components/Mayorista';
 import ErrorBoundary from './components/ErrorBoundary';
 import { AuthProvider } from './context/AuthContext';
 import AdminAuth from './components/AdminAuth/AdminAuth';
+import Novedades from './components/Novedades';
+import Bodys from './components/Bodys';
+import Feriantes from './components/Feriantes';
+import Calzados from './components/Calzados';
 function App() {
   return (
     <AuthProvider>
@@ -32,6 +37,10 @@ function App() {
                 <Route path="/mujer" element={<Ubicacion />} />
                 <Route path="/mayorista" element={<Mayorista />} />
                 <Route path="/admin-auth" element={<AdminAuth />} />
+                <Route path="/novedades" element={<Novedades />} />
+                <Route path="/bodys" element={<Bodys />} />
+                <Route path="/feriantes" element={<Feriantes />} />
+                <Route path="/calzados" element={<Calzados />} />
                 {/* ❌ ELIMINADO: <ErrorBoundary componentName="AdminDashboard"></ErrorBoundary> */}
               </Routes>
             </ErrorBoundary>

@@ -17,9 +17,9 @@ function CategoryPage() {
   // Mapeo de nombres de categoría a títulos display
   const categoryTitles = {
     'oulet': 'Oulet - Productos en Oferta',
-    'novedades': 'Nuevos Ingresos', 
+    'novedades': 'Novedades', 
     'mayorista': 'Mayorista',
-    'accesorios': 'Accesorios',
+    'feriantes': 'Feriantes',
     'calzados': 'Calzados',
     'bodys': 'Bodys'
   }

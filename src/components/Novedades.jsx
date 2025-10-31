@@ -1,14 +1,13 @@
-// src/pages/OutletPage.jsx
 import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useProducts } from '../context/ProductContext'
-import './OutletPage.css'
+import './Novedades.css'
 import logo from '../assets/imagenes/logolu.png'
 import { useCart } from '../context/CartContext';
 
-function OutletPage() {
+function Novedades() {
   const { products, loading: productsLoading } = useProducts()
-  const [outletProducts, setOutletProducts] = useState([])
+  const [novedadesProducts, setNovedadesProducts] = useState([])
   const [loading, setLoading] = useState(true)
   const { addToCart } = useCart();
 
@@ -20,36 +19,35 @@ function OutletPage() {
     if (!productsLoading && products.length > 0) {
       console.log('📦 Products disponibles:', products);
       
-      const outletItems = products.filter(product => {
+      // ✅ FILTRO PARA NOVEDADES
+      const novedadesItems = products.filter(product => {
         if (!product || !product.category) return false;
         
         const categoryLower = product.category.toLowerCase();
-        return categoryLower === 'outlet' || 
-               categoryLower.includes('outlet');
+        return categoryLower === 'novedades' || 
+               categoryLower.includes('nuevo') ||
+               categoryLower.includes('novedad');
       });
       
-      console.log('🔥 Productos outlet filtrados:', outletItems);
-      setOutletProducts(outletItems);
+      console.log('🆕 Productos novedades filtrados:', novedadesItems);
+      setNovedadesProducts(novedadesItems);
       setLoading(false);
     } else if (!productsLoading) {
-      setOutletProducts([]);
+      setNovedadesProducts([]);
       setLoading(false);
     }
   }, [products, productsLoading]);
 
-  // Función para abrir imagen en modal
-  const openImageModal = (product, index = 0) => {
+  // ✅ FUNCIONES PARA EL MODAL CON CONSOLE.LOG PARA DEBUG
+   const openImageModal = (product, index = 0) => {
     setSelectedImage(product);
     setCurrentImageIndex(index);
   };
 
-  // Función para cerrar modal
   const closeImageModal = () => {
     setSelectedImage(null);
     setCurrentImageIndex(0);
   };
-
-  // Navegar entre imágenes del mismo producto
   const goToNextImage = () => {
     if (selectedImage && selectedImage.images) {
       setCurrentImageIndex((prev) => 
@@ -76,7 +74,7 @@ function OutletPage() {
 
     if (selectedImage) {
       document.addEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = 'hidden'; // Prevenir scroll
+      document.body.style.overflow = 'hidden';
     }
 
     return () => {
@@ -87,19 +85,19 @@ function OutletPage() {
 
   if (loading || productsLoading) {
     return (
-      <div className="outlet-page">
-        <div className="loading">🔄 Cargando productos de outlet...</div>
+      <div className="novedades-page">
+        <div className="loading">🔄 Cargando novedades...</div>
       </div>
     )
   }
 
   return (
-    <div className="outlet-page">
-      <header className="outlet-header">
+    <div className="novedades-page">
+      <header className="novedades-header">
         <div className="container">
-          <img src={logo} alt="By Luciana" className="outlet-logo" />
-          <h1 className="outlet-title">🔥 Outlet</h1>
-          <p className="outlet-subtitle">Ofertas especiales y precios increíbles</p>
+          <img src={logo} alt="By Luciana" className="novedades-logo" />
+          <h1 className="novedades-title">🆕 Novedades</h1>
+          <p className="novedades-subtitle">Descubre nuestros últimos ingresos</p>
           
           <button 
             onClick={() => window.location.reload()} 
@@ -110,13 +108,13 @@ function OutletPage() {
         </div>
       </header>
 
-      <main className="outlet-content">
+      <main className="novedades-content">
         <div className="container">
-          {outletProducts.length === 0 ? (
+          {novedadesProducts.length === 0 ? (
             <div className="no-products">
               <div className="no-products-icon">📦</div>
-              <h3>No hay productos en outlet</h3>
-              <p>Los productos que agregues en la categoría "Outlet" aparecerán aquí</p>
+              <h3>No hay novedades</h3>
+              <p>Los productos que agregues en la categoría "Novedades" aparecerán aquí</p>
               
               <div style={{background: '#e7f3ff', padding: '15px', borderRadius: '8px', margin: '15px 0', border: '1px solid #b3d9ff'}}>
                 <h4 style={{margin: '0 0 10px 0', color: '#0066cc'}}>💡 Información del Sistema:</h4>
@@ -125,7 +123,7 @@ function OutletPage() {
                   <strong>Categorías encontradas:</strong> {[...new Set(products.map(p => p?.category))].join(', ')}
                 </p>
                 <p style={{margin: '5px 0', fontSize: '12px', color: '#666'}}>
-                  <em>¿Falta algún producto? Revisa que la categoría sea exactamente "outlet"</em>
+                  <em>¿Falta algún producto? Revisa que la categoría sea "novedades"</em>
                 </p>
               </div>
               
@@ -135,13 +133,14 @@ function OutletPage() {
             </div>
           ) : (
             <>
-              <div className="outlet-stats">
-                <p>🎯 {outletProducts.length} producto(s) disponibles en outlet</p>
+              <div className="novedades-stats">
+                <p>📊 {novedadesProducts.length} producto(s) disponibles para mayorista</p>
               </div>
               
-              <div className="outlet-products-grid">
-                {outletProducts.map(product => (
-                  <div key={product._id} className="outlet-product-card">
+              
+              <div className="novedades-products-grid">
+                {novedadesProducts.map(product => (
+                  <div key={product._id} className="novedades-product-card">
                     <div 
                       className="product-image"
                       onClick={() => openImageModal(product, 0)}
@@ -153,7 +152,7 @@ function OutletPage() {
                               ? product.images[0] 
                               : `http://localhost:5000${product.images[0]}`
                           } 
-                          alt={product.name}
+                           alt={product.name}
                           onError={(e) => {
                             console.log('❌ Error cargando imagen:', product.images[0]);
                             e.target.style.display = 'none';
@@ -171,7 +170,7 @@ function OutletPage() {
                           <small>Sin imagen</small>
                         </div>
                       )}
-                      <div className="outlet-badge">OUTLET</div>
+                      <div className="novedades-badge">NOVEDADES</div>
                       {product.featured && <div className="featured-badge">⭐ Destacado</div>}
                     </div>
                     
@@ -181,10 +180,7 @@ function OutletPage() {
                       
                       <div className="price-section">
                         <span className="current-price">${product.price?.toLocaleString()}</span>
-                        <span className="original-price">
-                          ${Math.round((product.price || 0) * 1.3).toLocaleString()}
-                        </span>
-                        <span className="discount">30% OFF</span>
+                        <span className="mayorista-price">Precio mayorista</span>
                       </div>
                       
                       <div className="product-meta">
@@ -250,7 +246,7 @@ function OutletPage() {
         </div>
       )}
 
-      <footer className="outlet-footer">
+      <footer className="novedades-footer">
         <div className="container">
           <Link to="/" className="btn btn-secondary">
             ← Volver a la Página Principal
@@ -261,4 +257,4 @@ function OutletPage() {
   )
 }
 
-export default OutletPage;
+export default Novedades;

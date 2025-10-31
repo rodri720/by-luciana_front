@@ -1,5 +1,5 @@
-/* OutletPage.css - VERSIÓN ANCHO COMPLETO */
-.outlet-page {
+/* Mayorista.css - VERSIÓN ANCHO COMPLETO */
+.novedades-page {
   width: 100vw;
   min-height: 100vh;
   background: #f8f9fa;
@@ -9,7 +9,7 @@
 }
 
 /* Header que ocupa todo el ancho */
-.outlet-header {
+.novedades-header {
   width: 100%;
   background: white;
   padding: 30px 0;
@@ -18,7 +18,7 @@
   margin: 0;
 }
 
-.outlet-header .container {
+.novedades-header .container {
   width: 95%;
   max-width: none;
   margin: 0 auto;
@@ -31,13 +31,13 @@
 }
 
 /* Contenido principal que ocupa todo el ancho */
-.outlet-content {
+.novedades-content {
   width: 100%;
   padding: 40px 0;
   margin: 0;
 }
 
-.outlet-content .container {
+.novedades-content .container {
   width: 95%;
   max-width: none;
   margin: 0 auto;
@@ -45,7 +45,7 @@
 }
 
 /* Footer que ocupa todo el ancho */
-.outlet-footer {
+.novedades-footer {
   width: 100%;
   background: white;
   padding: 30px 0;
@@ -53,7 +53,7 @@
   margin-top: auto;
 }
 
-.outlet-footer .container {
+.novedades-footer .container {
   width: 95%;
   max-width: none;
   margin: 0 auto;
@@ -62,7 +62,7 @@
 }
 
 /* Grid que ocupa todo el ancho */
-.outlet-products-grid {
+.novedades-products-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 20px;
@@ -72,7 +72,7 @@
   padding: 0;
 }
 
-.outlet-product-card {
+.novedades-product-card {
   background: white;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
@@ -84,7 +84,7 @@
   margin: 0;
 }
 
-.outlet-product-card:hover {
+.novedades-product-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 20px rgba(0,0,0,0.15);
 }
@@ -109,7 +109,7 @@
   transition: transform 0.3s ease;
 }
 
-.outlet-product-card:hover .product-image img {
+.novedades-product-card:hover .product-image img {
   transform: scale(1.05);
 }
 
@@ -127,11 +127,11 @@
 }
 
 /* Badges */
-.outlet-badge {
+.novedades-badge {
   position: absolute;
   top: 10px;
   left: 10px;
-  background: #ff4444;
+  background: #2196f3;
   color: white;
   padding: 4px 8px;
   border-radius: 4px;
@@ -184,20 +184,13 @@
 .current-price {
   font-size: 18px;
   font-weight: bold;
-  color: #dc3545;
+  color: #2196f3;
   margin-right: 8px;
 }
 
-.original-price {
-  font-size: 14px;
-  color: #999;
-  text-decoration: line-through;
-  margin-right: 8px;
-}
-
-.discount {
+.novedades-price {
   font-size: 12px;
-  background: #28a745;
+  background: #2196f3;
   color: white;
   padding: 2px 6px;
   border-radius: 4px;
@@ -344,19 +337,19 @@
 
 /* Responsive */
 @media (max-width: 1200px) {
-  .outlet-products-grid {
+  .novedades-products-grid {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
 @media (max-width: 1024px) {
-  .outlet-products-grid {
+  .novedades-products-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 768px) {
-  .outlet-products-grid {
+  .novedades-products-grid {
     grid-template-columns: 1fr;
   }
   
@@ -418,7 +411,7 @@
   width: 100%;
 }
 
-.outlet-stats {
+.novedades-stats {
   text-align: center;
   margin-bottom: 30px;
   font-size: 18px;
@@ -426,17 +419,17 @@
   width: 100%;
 }
 
-.outlet-logo {
+.novedades-logo {
   height: 50px;
 }
 
-.outlet-title {
+.novedades-title {
   font-size: 2.5rem;
   margin: 0;
   color: #333;
 }
 
-.outlet-subtitle {
+.novedades-subtitle {
   font-size: 1.2rem;
   color: #666;
   margin: 10px 0 0 0;
