@@ -17,8 +17,9 @@ import { AuthProvider } from './context/AuthContext';
 import AdminAuth from './components/AdminAuth/AdminAuth';
 import Novedades from './components/Novedades';
 import Bodys from './components/Bodys';
-import Feriantes from './components/Feriantes';
 import Calzados from './components/Calzados';
+import Productos from './components/Productos';
+import VentaSalPorMayor from './components/VentaSalPorMayor';
 function App() {
   return (
     <AuthProvider>
@@ -39,8 +40,9 @@ function App() {
                 <Route path="/admin-auth" element={<AdminAuth />} />
                 <Route path="/novedades" element={<Novedades />} />
                 <Route path="/bodys" element={<Bodys />} />
-                <Route path="/feriantes" element={<Feriantes />} />
                 <Route path="/calzados" element={<Calzados />} />
+                <Route path="/productos" element={<Productos />} />
+                <Route path="/ventasalpormayor" element={<VentaSalPorMayor />} />
                 {/* ❌ ELIMINADO: <ErrorBoundary componentName="AdminDashboard"></ErrorBoundary> */}
               </Routes>
             </ErrorBoundary>

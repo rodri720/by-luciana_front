@@ -14,7 +14,7 @@ import novedadesImage from '../assets/imagenes/novedades.jpg'
 import mayoristaImage from '../assets/imagenes/mayorista.jpg'
 import calzadosImage from '../assets/imagenes/calzados.jpg'
 import bodysImage from '../assets/imagenes/bodys.jpg'
-import feriantesImage from '../assets/imagenes/feriantes.jpg'
+
 
 function Landing() {
   const [currentSlide, setCurrentSlide] = useState(0)
@@ -105,14 +105,14 @@ function Landing() {
                 <div className="image-wrapper">
                   <img src={image} alt={`Moda By Luciana ${index + 1}`} className="carousel-image" />
                 </div>
-                <div className="carousel-overlay">
-                  <h1 className="carousel-title">By Luciana</h1>
-                  <p className="carousel-subtitle">Moda que expresa tu estilo único</p>
-                  <div className="carousel-buttons">
+               <div className="carousel-overlay">
+  <h1 className="carousel-title">By Luciana</h1>
+  <p className="carousel-subtitle">Moda que expresa tu estilo único</p>
+    <div className="carousel-buttons">
                     <Link to="/productos" className="btn btn-primary">Ver Colección</Link>
-                    <Link to="/nosotros" className="btn btn-secondary">Conocer Más</Link>
+                     <Link to="/ventasalpormayor" className="btn btn-secondary">Ventas al por mayor</Link>
                               </div>
-                </div>
+</div>
               </div>
             ))}
           </div>
@@ -126,30 +126,7 @@ function Landing() {
           <h2 className="section-title">Nuestras Categorías</h2>
           
           <div className="categories-grid">
-           {/* Outlet */}
-            <div className="category-card">
-              <Link to="/outlet" className="category-link">
-                <div 
-                  className="category-image" 
-                  style={{ backgroundImage: `url(${ouletImage})` }}
-                >
-                  <span className="category-label">Outlet</span>
-                </div>
-                <h3>Outlet</h3>
-                {getProductsByCategory('outlet').slice(0, 1).map(product => (
-                  <div key={product._id} className="product-info">
-                    <p className="product-example">{product.name}</p>
-                    <p className="product-price">Desde ${product.price}</p>
-                  </div>
-                ))}
-                {getProductsByCategory('outlet').length === 0 && (
-                  <div className="product-info">
-                    <p className="product-example">Precios mayoristas</p>
-                    <p className="product-price">Consultar</p>
-                  </div>
-                )}
-              </Link>
-            </div>
+           
             
            {/* Novedades */}
            <div className="category-card">
@@ -203,30 +180,7 @@ function Landing() {
           </div>
 
           <div className="categories-grid">
-            {/* Accesorios */}
-            <div className="category-card">
-              <Link to="/feriantes" className="category-link">
-                <div 
-                  className="category-image" 
-                  style={{ backgroundImage: `url(${feriantesImage})` }}
-                >
-                  <span className="category-label">Feriantes</span>
-                </div>
-                <h3>Feriantes</h3>
-                {getProductsByCategory('feriantes').slice(0, 1).map(product => (
-                  <div key={product._id} className="product-info">
-                    <p className="product-example">{product.name}</p>
-                    <p className="product-price">Desde ${product.price}</p>
-                  </div>
-                ))}
-                {getProductsByCategory('feriantes').length === 0 && (
-                  <div className="product-info">
-                    <p className="product-example">Precios mayoristas</p>
-                    <p className="product-price">Consultar</p>
-                  </div>
-                )}
-              </Link>
-            </div>
+           
             
             {/* Calzados */}
             <div className="category-card">
@@ -277,7 +231,34 @@ function Landing() {
                 )}
               </Link>
             </div>
+            
           </div>
+         
+   {/* Outlet */}
+            <div className="category-card">
+              <Link to="/outlet" className="category-link">
+                <div 
+                  className="category-image" 
+                  style={{ backgroundImage: `url(${ouletImage})` }}
+                >
+                  <span className="category-label">Outlet</span>
+                </div>
+                <h3>Outlet</h3>
+                {getProductsByCategory('outlet').slice(0, 1).map(product => (
+                  <div key={product._id} className="product-info">
+                    <p className="product-example">{product.name}</p>
+                    <p className="product-price">Desde ${product.price}</p>
+                  </div>
+                ))}
+                {getProductsByCategory('outlet').length === 0 && (
+                  <div className="product-info">
+                    <p className="product-example">Precios mayoristas</p>
+                    <p className="product-price">Consultar</p>
+                  </div>
+                )}
+              </Link>
+            </div>
+            
         </div>
       </div>
 

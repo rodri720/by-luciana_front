@@ -1,14 +1,14 @@
-// src/pages/Feriantes.jsx
+// src/pages/VentaSalPorMayor.jsx
 import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useProducts } from '../context/ProductContext'
-import './Feriantes.css'
+import './VentaSalPorMayor.css'
 import logo from '../assets/imagenes/logolu.png'
 import { useCart } from '../context/CartContext';
 
-function Feriantes() {
+function VentaSalPorMayor() {
   const { products, loading: productsLoading } = useProducts()
-  const [feriantesProducts, setFeriantesProducts] = useState([])
+  const [ventaSalPorMayorProducts, setVentaSalPorMayorProducts] = useState([])
   const [loading, setLoading] = useState(true)
   const { addToCart } = useCart();
 
@@ -20,20 +20,21 @@ function Feriantes() {
     if (!productsLoading && products.length > 0) {
       console.log('📦 Products disponibles:', products);
       
-      const feriantesItems = products.filter(product => {
+      const ventaSalPorMayorItems = products.filter(product => {
         if (!product || !product.category) return false;
         
         const categoryLower = product.category.toLowerCase();
-        return categoryLower === 'feriantes' || 
-               categoryLower === 'feriante' ||
-               categoryLower.includes('feriantes');
+        return categoryLower === 'ventasalpormayor' || 
+               categoryLower === 'venta sal por mayor' ||
+               categoryLower.includes('ventasalpormayor') ||
+               categoryLower.includes('sal por mayor');
       });
       
-      console.log('🎪 Productos feriantes filtrados:', feriantesItems);
-      setFeriantesProducts(feriantesItems);
+      console.log('🏢 Productos venta sal por mayor filtrados:', ventaSalPorMayorItems);
+      setVentaSalPorMayorProducts(ventaSalPorMayorItems);
       setLoading(false);
     } else if (!productsLoading) {
-      setFeriantesProducts([]);
+      setVentaSalPorMayorProducts([]);
       setLoading(false);
     }
   }, [products, productsLoading]);
@@ -86,37 +87,31 @@ function Feriantes() {
 
   if (loading || productsLoading) {
     return (
-      <div className="feriantes-page">
-        <div className="loading">🔄 Cargando productos feriantes...</div>
+      <div className="ventasalpormayor-page">
+        <div className="loading">🔄 Cargando productos venta sal por mayor...</div>
       </div>
     )
   }
 
   return (
-    <div className="feriantes-page">
-      <header className="feriantes-header">
+    <div className="ventasalpormayor-page">
+      <header className="ventasalpormayor-header">
         <div className="container">
-          <img src={logo} alt="By Luciana" className="feriantes-logo" />
-          <h1 className="feriantes-title">🎪 Feriantes</h1>
-          <p className="feriantes-subtitle">Productos especiales para ferias y eventos</p>
+          <img src={logo} alt="By Luciana" className="ventasalpormayor-logo" />
           
-          {/* Botón de recarga */}
-          <button 
-            onClick={() => window.location.reload()} 
-            className="reload-btn"
-          >
-            🔄 Recargar
-          </button>
+          <p className="ventasalpormayor-subtitle">Precios especiales para compras al por mayor</p>
+          
+         
         </div>
       </header>
 
-      <main className="feriantes-content">
+      <main className="ventasalpormayor-content">
         <div className="container">
-          {feriantesProducts.length === 0 ? (
+          {ventaSalPorMayorProducts.length === 0 ? (
             <div className="no-products">
-              <div className="no-products-icon">🎪</div>
-              <h3>No hay productos feriantes</h3>
-              <p>Los productos que agregues en la categoría "Feriantes" aparecerán aquí</p>
+              <div className="no-products-icon">📦</div>
+              <h3>No hay productos ventas al por mayor</h3>
+              <p>Los productos que agregues en la categoría "VentaSalPorMayor" aparecerán aquí</p>
               
               <div style={{background: '#e7f3ff', padding: '15px', borderRadius: '8px', margin: '15px 0', border: '1px solid #b3d9ff'}}>
                 <h4 style={{margin: '0 0 10px 0', color: '#0066cc'}}>💡 Información del Sistema:</h4>
@@ -125,7 +120,7 @@ function Feriantes() {
                   <strong>Categorías encontradas:</strong> {[...new Set(products.map(p => p?.category))].join(', ')}
                 </p>
                 <p style={{margin: '5px 0', fontSize: '12px', color: '#666'}}>
-                  <em>¿Falta algún producto? Revisa que la categoría sea exactamente "feriantes"</em>
+                  <em>¿Falta algún producto? Revisa que la categoría sea "VentaSalPorMayor"</em>
                 </p>
               </div>
               
@@ -135,13 +130,13 @@ function Feriantes() {
             </div>
           ) : (
             <>
-              <div className="feriantes-stats">
-                <p>📊 {feriantesProducts.length} producto(s) feriantes disponibles</p>
+              <div className="ventasalpormayor-stats">
+                <p>📊 {ventaSalPorMayorProducts.length} producto(s) disponibles para ventas al por mayor</p>
               </div>
               
-              <div className="feriantes-products-grid">
-                {feriantesProducts.map(product => (
-                  <div key={product._id} className="feriantes-product-card">
+              <div className="ventasalpormayor-products-grid">
+                {ventaSalPorMayorProducts.map(product => (
+                  <div key={product._id} className="ventasalpormayor-product-card">
                     <div 
                       className="product-image"
                       onClick={() => openImageModal(product, 0)}
@@ -171,7 +166,7 @@ function Feriantes() {
                           <small>Sin imagen</small>
                         </div>
                       )}
-                      <div className="feriantes-badge">FERIANTES</div>
+                      <div className="ventasalpormayor-badge"></div>
                       {product.featured && <div className="featured-badge">⭐ Destacado</div>}
                     </div>
                     
@@ -181,9 +176,7 @@ function Feriantes() {
                       
                       <div className="price-section">
                         <span className="current-price">${product.price?.toLocaleString()}</span>
-                        <span className="original-price">
-                          {product.originalPrice && `$${product.originalPrice.toLocaleString()}`}
-                        </span>
+                        <span className="ventasalpormayor-price">Precio venta sal por mayor</span>
                       </div>
                       
                       <div className="product-meta">
@@ -249,7 +242,7 @@ function Feriantes() {
         </div>
       )}
 
-      <footer className="feriantes-footer">
+      <footer className="ventasalpormayor-footer">
         <div className="container">
           <Link to="/" className="btn btn-secondary">
             ← Volver a la Página Principal
@@ -260,4 +253,4 @@ function Feriantes() {
   )
 }
 
-export default Feriantes;
+export default VentaSalPorMayor;

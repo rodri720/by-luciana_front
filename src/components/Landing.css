@@ -208,7 +208,7 @@
 }
 
 .feature-card p {
-  color: #666;
+  color: #1619d8;
   line-height: 1.6;
 }
 
@@ -327,6 +327,154 @@
   font-size: 1rem;
 }
 
+/* Botón Outlet Especial - FUERA del media query */
+.btn-outlet-large {
+  padding: 24px 48px;
+  border: none;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  display: inline-block;
+  background: #9C4A5F !important; /* Rosa oscuro intenso */
+  color: white !important;
+  font-size: 1.3rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 15px rgba(156, 74, 95, 0.5);
+  position: relative;
+  overflow: hidden;
+  border: 2px solid transparent;
+}
+
+.btn-outlet-large:hover {
+  background: #8A3950 !important; /* Rosa más oscuro */
+  color: white !important;
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 25px rgba(156, 74, 95, 0.7);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Estilos para productos */
+.product-price {
+  color: #ff6b6b;
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-top: 0.5rem;
+}
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.2rem;
+  color: #666;
+}
+
+/* ✅ NUEVOS ESTILOS PARA BOTÓN DE CARRITO */
+.btn-add-to-cart {
+  background: #ff6b6b;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 0.5rem;
+  width: 100%;
+}
+
+.btn-add-to-cart:hover {
+  background: #ff5252;
+  transform: translateY(-2px);
+}
+
+.btn-add-to-cart:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.product-info {
+  padding: 0 1.2rem 1.2rem;
+  text-align: center;
+}
+
+.product-example {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.product-price {
+  color: #ff6b6b;
+  font-weight: bold;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Estilos para la info de productos reales */
+.product-info {
+  padding: 0 1.2rem 1.2rem;
+}
+
+.product-example {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.product-price {
+  color: #ff6b6b;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.loading {
+  text-align: center;
+  padding: 4rem 2rem;
+  font-size: 1.2rem;
+  color: #666;
+}
+
+.category-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.category-link:hover {
+  transform: translateY(-5px);
+}
+
+.newsletter-message {
+  margin-top: 15px;
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.newsletter-message.success {
+  background: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.newsletter-message.error {
+  background: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .carousel-section {
@@ -377,143 +525,16 @@
     font-size: 1.1rem;
     padding: 1rem;
   }
-  .product-price {
-  color: #ff6b6b;
-  font-weight: bold;
-  font-size: 1.1rem;
-  margin-top: 0.5rem;
-}
-
-.loading {
-  text-align: center;
-  padding: 2rem;
-  font-size: 1.2rem;
-  color: #666;
-}
-/* ✅ NUEVOS ESTILOS PARA BOTÓN DE CARRITO */
-.btn-add-to-cart {
-  background: #ff6b6b;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 6px;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin-top: 0.5rem;
-  width: 100%;
-}
-
-.btn-add-to-cart:hover {
-  background: #ff5252;
-  transform: translateY(-2px);
-}
-
-.btn-add-to-cart:disabled {
-  background: #ccc;
-  cursor: not-allowed;
-  transform: none;
-}
-.btn-add-to-cart {
-  background: #ff6b6b;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 6px;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin-top: 0.5rem;
-  width: 100%;
-}
-
-.btn-add-to-cart:hover {
-  background: #ff5252;
-  transform: translateY(-2px);
-}
-
-.btn-add-to-cart:disabled {
-  background: #ccc;
-  cursor: not-allowed;
-  transform: none;
-}
-
-.product-info {
-  padding: 0 1.2rem 1.2rem;
-  text-align: center;
-}
-
-.product-example {
-  color: #666;
-  font-size: 0.9rem;
-  margin-bottom: 0.5rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.product-price {
-  color: #ff6b6b;
-  font-weight: bold;
-  font-size: 1rem;
-  margin-bottom: 0.5rem;
-}
-/* Estilos para la info de productos reales */
-.product-info {
-  padding: 0 1.2rem 1.2rem;
-}
-
-.product-example {
-  color: #666;
-  font-size: 0.9rem;
-  margin-bottom: 0.5rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.product-price {
-  color: #ff6b6b;
-  font-weight: bold;
-  font-size: 1rem;
-}
-
-.loading {
-  text-align: center;
-  padding: 4rem 2rem;
-  font-size: 1.2rem;
-  color: #666;
-}
-.category-link {
-  text-decoration: none;
-  color: inherit;
-  display: block;
-  transition: transform 0.3s ease;
-}
-
-.category-link:hover {
-  transform: translateY(-5px);
-}
-
-.newsletter-message {
-  margin-top: 15px;
-  padding: 10px;
-  border-radius: 5px;
-  text-align: center;
-  font-weight: 500;
-}
-
-.newsletter-message.success {
-  background: #d4edda;
-  color: #155724;
-  border: 1px solid #c3e6cb;
-}
-
-.newsletter-message.error {
-  background: #f8d7da;
-  color: #721c24;
-  border: 1px solid #f5c6cb;
-}
+  
+  .btn-outlet-large {
+    padding: 18px 36px; /* Un poco más pequeño en móviles */
+    font-size: 1.1rem;
+  }
+  
+  .carousel-buttons {
+    flex-direction: column;
+    gap: 1rem;
+  }
 }
 
 /* ELIMINA estas clases placeholder si las tienes:

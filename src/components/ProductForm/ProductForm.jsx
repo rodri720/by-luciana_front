@@ -157,6 +157,7 @@ function ProductForm({ product, onSave, onCancel }) {
             <option value="feriantes">Feriantes</option>
             <option value="calzados">Calzados</option>
             <option value="bodys">Bodys</option>
+            <option value="ventasalpormayor">Venta Sal por Mayor</option>
           </select>
         </div>
         
