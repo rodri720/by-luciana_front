@@ -1,34 +1,36 @@
-.landing {
+/* src/components/Landing.css */
+.landing-page {
   min-height: 100vh;
   width: 100%;
   max-width: 100%;
   margin: 0;
   padding: 0;
-  overflow-x: hidden; /* IMPORTANTE: Previene scroll horizontal */
+  overflow-x: hidden;
+  transition: all 0.3s ease;
 }
 
-/* ELIMINA las definiciones duplicadas de .container y usa esta: */
 .container {
-  max-width: 100% !important; /* Fuerza ancho completo */
+  max-width: 100% !important;
   width: 100% !important;
   margin: 0 !important;
   padding: 0 !important;
 }
 
-/* Carousel Section - Asegurar ancho completo */
+/* Carousel Section */
 .carousel-section {
   width: 100%;
-  height: 70vh;
+  height: 70vh; /* MANTENIDO - Altura original */
   position: relative;
   overflow: hidden;
   background: #f8f9fa;
+  transition: all 0.3s ease;
 }
 
 .carousel-container {
   width: 100%;
   height: 100%;
   position: relative;
-  max-width: 100% !important; /* Asegura ancho completo */
+  max-width: 100% !important;
   margin: 0;
 }
 
@@ -96,7 +98,6 @@
   gap: 1rem;
 }
 
-/* Botones de control del carousel */
 .carousel-btn {
   position: absolute;
   top: 50%;
@@ -160,12 +161,13 @@
   color: #667eea;
 }
 
-/* Features Section - Asegurar ancho completo */
-.features-section {
+/* Categories Section */
+.categories-section {
   padding: 4rem 2rem;
-  background: #f8f9fa;
   width: 100%;
   max-width: 100%;
+  background: #f8f9fa;
+  transition: all 0.3s ease;
 }
 
 .section-title {
@@ -173,87 +175,49 @@
   font-size: 2.5rem;
   margin-bottom: 3rem;
   color: #333;
-}
-
-.features-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2rem;
-  max-width: 1200px; /* Este max-width solo afecta el grid interno */
-  margin: 0 auto;
-}
-
-.feature-card {
-  text-align: center;
-  padding: 2rem;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
-}
-
-.feature-card:hover {
-  transform: translateY(-5px);
-}
-
-.feature-icon {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-}
-
-.feature-card h3 {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-  color: #333;
-}
-
-.feature-card p {
-  color: #1619d8;
-  line-height: 1.6;
-}
-
-/* Categories Section - Asegurar ancho completo */
-.categories-section {
-  padding: 4rem 2rem;
-  width: 100%;
-  max-width: 100%;
+  transition: color 0.3s ease;
 }
 
 .categories-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
-  max-width: 1200px; /* Este max-width solo afecta el grid interno */
-  margin: 0 auto 3rem auto;
-}
-
-.categories-grid:last-child {
-  margin-bottom: 0;
+  gap: 60px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .category-card {
-  text-align: center;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
   background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  height: 100%;
+  margin-bottom: 2rem;
 }
 
 .category-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.category-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  height: 100%;
 }
 
 .category-image {
-  height: 200px;
+  position: relative;
+  height: 220px;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding: 1rem;
 }
 
 .category-image::before {
@@ -273,24 +237,87 @@
 }
 
 .category-label {
-  font-size: 1.6rem;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
   font-weight: bold;
-  color: white;
+  color: #333;
+  font-size: 0.9rem;
   z-index: 2;
   position: relative;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
-.category-card h3 {
-  padding: 1.2rem;
-  background: white;
-  margin: 0;
+.category-content {
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.category-content h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.3rem;
   color: #333;
-  font-size: 1.2rem;
   font-weight: 600;
+  transition: color 0.3s ease;
 }
 
-/* Newsletter Section - Asegurar ancho completo */
+.consultar-text {
+  color: #ff0000;
+  font-weight: bold;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+
+
+/* Features Section */
+.features-section {
+  padding: 4rem 2rem;
+  background: white;
+  width: 100%;
+  max-width: 100%;
+  transition: all 0.3s ease;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.feature-card {
+  text-align: center;
+  padding: 2rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+}
+
+.feature-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.feature-card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #333;
+  transition: color 0.3s ease;
+}
+
+.feature-card p {
+  color: #666;
+  line-height: 1.6;
+  transition: color 0.3s ease;
+}
+
+/* Newsletter Section */
 .newsletter-section {
   padding: 4rem 2rem;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -298,6 +325,7 @@
   text-align: center;
   width: 100%;
   max-width: 100%;
+  transition: all 0.3s ease;
 }
 
 .newsletter-content h2 {
@@ -327,134 +355,6 @@
   font-size: 1rem;
 }
 
-/* Botón Outlet Especial - FUERA del media query */
-.btn-outlet-large {
-  padding: 24px 48px;
-  border: none;
-  border-radius: 12px;
-  text-decoration: none;
-  font-weight: bold;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  display: inline-block;
-  background: #9C4A5F !important; /* Rosa oscuro intenso */
-  color: white !important;
-  font-size: 1.3rem;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  box-shadow: 0 4px 15px rgba(156, 74, 95, 0.5);
-  position: relative;
-  overflow: hidden;
-  border: 2px solid transparent;
-}
-
-.btn-outlet-large:hover {
-  background: #8A3950 !important; /* Rosa más oscuro */
-  color: white !important;
-  transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 8px 25px rgba(156, 74, 95, 0.7);
-  border: 2px solid rgba(255, 255, 255, 0.3);
-}
-
-/* Estilos para productos */
-.product-price {
-  color: #ff6b6b;
-  font-weight: bold;
-  font-size: 1.1rem;
-  margin-top: 0.5rem;
-}
-
-.loading {
-  text-align: center;
-  padding: 2rem;
-  font-size: 1.2rem;
-  color: #666;
-}
-
-/* ✅ NUEVOS ESTILOS PARA BOTÓN DE CARRITO */
-.btn-add-to-cart {
-  background: #ff6b6b;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 6px;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin-top: 0.5rem;
-  width: 100%;
-}
-
-.btn-add-to-cart:hover {
-  background: #ff5252;
-  transform: translateY(-2px);
-}
-
-.btn-add-to-cart:disabled {
-  background: #ccc;
-  cursor: not-allowed;
-  transform: none;
-}
-
-.product-info {
-  padding: 0 1.2rem 1.2rem;
-  text-align: center;
-}
-
-.product-example {
-  color: #666;
-  font-size: 0.9rem;
-  margin-bottom: 0.5rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.product-price {
-  color: #ff6b6b;
-  font-weight: bold;
-  font-size: 1rem;
-  margin-bottom: 0.5rem;
-}
-
-/* Estilos para la info de productos reales */
-.product-info {
-  padding: 0 1.2rem 1.2rem;
-}
-
-.product-example {
-  color: #666;
-  font-size: 0.9rem;
-  margin-bottom: 0.5rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.product-price {
-  color: #ff6b6b;
-  font-weight: bold;
-  font-size: 1rem;
-}
-
-.loading {
-  text-align: center;
-  padding: 4rem 2rem;
-  font-size: 1.2rem;
-  color: #666;
-}
-
-.category-link {
-  text-decoration: none;
-  color: inherit;
-  display: block;
-  transition: transform 0.3s ease;
-}
-
-.category-link:hover {
-  transform: translateY(-5px);
-}
-
 .newsletter-message {
   margin-top: 15px;
   padding: 10px;
@@ -475,10 +375,118 @@
   border: 1px solid #f5c6cb;
 }
 
+/* Loading */
+.loading {
+  text-align: center;
+  padding: 4rem 2rem;
+  font-size: 1.2rem;
+  color: #666;
+  transition: color 0.3s ease;
+}
+
+/* ===== ESTILOS PARA MODO OSCURO ===== */
+
+/* Landing Page - Modo Oscuro */
+body.dark-mode .landing-page {
+  background: #1a1a1a;
+  color: #e0e0e0;
+}
+
+/* Carousel - Modo Oscuro */
+body.dark-mode .carousel-section {
+  background: #2d2d2d;
+}
+
+/* Categories Section - Modo Oscuro */
+body.dark-mode .categories-section {
+  background: #2d2d2d;
+}
+
+body.dark-mode .section-title {
+  color: #ffffff;
+}
+
+body.dark-mode .category-card {
+  background: #363636;
+  border: 1px solid #444;
+}
+
+body.dark-mode .category-content h3 {
+  color: #ffffff;
+}
+
+body.dark-mode .category-label {
+  background: rgba(255, 255, 255, 0.9);
+  color: #333;
+}
+
+body.dark-mode .consultar-text {
+  color: #ff6b6b;
+}
+
+/* Features Section - Modo Oscuro */
+body.dark-mode .features-section {
+  background: #2d2d2d;
+}
+
+body.dark-mode .feature-card {
+  background: #363636;
+  border: 1px solid #444;
+}
+
+body.dark-mode .feature-card h3 {
+  color: #ffffff;
+}
+
+body.dark-mode .feature-card p {
+  color: #b0b0b0;
+}
+
+/* Newsletter Section - Modo Oscuro */
+body.dark-mode .newsletter-section {
+  background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+}
+
+body.dark-mode .newsletter-input {
+  background: #1a1a1a;
+  color: #ffffff;
+  border: 1px solid #444;
+}
+
+body.dark-mode .newsletter-input::placeholder {
+  color: #888;
+}
+
+/* Loading - Modo Oscuro */
+body.dark-mode .loading {
+  color: #b0b0b0;
+}
+
+/* Botones - Modo Oscuro */
+body.dark-mode .btn-primary {
+  background: #667eea;
+  color: white;
+}
+
+body.dark-mode .btn-primary:hover {
+  background: #5a6fd8;
+}
+
+body.dark-mode .btn-secondary {
+  background: transparent;
+  color: white;
+  border: 2px solid white;
+}
+
+body.dark-mode .btn-secondary:hover {
+  background: white;
+  color: #1a1a1a;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .carousel-section {
-    height: 50vh;
+    height: 50vh; /* MANTENIDO - Altura original para móviles */
   }
   
   .carousel-title {
@@ -518,16 +526,10 @@
   }
   
   .category-label {
-    font-size: 1.4rem;
+    font-size: 0.8rem;
   }
   
-  .category-card h3 {
-    font-size: 1.1rem;
-    padding: 1rem;
-  }
-  
-  .btn-outlet-large {
-    padding: 18px 36px; /* Un poco más pequeño en móviles */
+  .category-content h3 {
     font-size: 1.1rem;
   }
   
@@ -537,16 +539,37 @@
   }
 }
 
-/* ELIMINA estas clases placeholder si las tienes:
-.placeholder-oulet {
-  background: linear-gradient(45deg, #ff6b6b, #ffa726);
+@media (max-width: 480px) {
+  .categories-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .category-image {
+    height: 160px;
+  }
+  
+  .category-content {
+    padding: 1rem;
+  }
+  
+  .category-content h3 {
+    font-size: 1.2rem;
+  }
+  
+  .section-title {
+    font-size: 2rem;
+  }
+  
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .feature-card {
+    padding: 1.5rem;
+  }
 }
 
-.placeholder-novedades {
-  background: linear-gradient(45deg, #42a5f5, #7e57c2);
+/* Transiciones suaves para todos los elementos */
+body.dark-mode .landing-page * {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
-
-.placeholder-mayorista {
-  background: linear-gradient(45deg, #66bb6a, #26c6da);
-}
-*/

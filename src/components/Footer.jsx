@@ -15,35 +15,36 @@ function Footer() {
               Expresa tu estilo con nuestra colección exclusiva.
             </p>
             <div className="social-links">
-  <a 
-    href="https://www.instagram.com/luciana_aliendo/" 
-    className="social-link"
-    target="_blank" 
-    rel="noopener noreferrer"
-  >
-    <span className="social-icon">📱</span>
-    Instagram
-  </a>
-  <a 
-    href="https://www.facebook.com/profile.php?id=61582789674739" 
-    className="social-link"
-    target="_blank" 
-    rel="noopener noreferrer"
-  >
-    <span className="social-icon">📘</span>
-    Facebook
-  </a>
-</div>
+              <a 
+                href="https://www.instagram.com/luciana_aliendo/" 
+                className="social-link"
+                target="_blank" 
+                rel="noopener noreferrer"
+              >
+                <span className="social-icon">📱</span>
+                Instagram
+              </a>
+              <a 
+                href="https://www.facebook.com/profile.php?id=61582789674739" 
+                className="social-link"
+                target="_blank" 
+                rel="noopener noreferrer"
+              >
+                <span className="social-icon">📘</span>
+                Facebook
+              </a>
+            </div>
           </div>
 
           {/* Quick Links */}
           <div className="footer-section">
-            <h4>Enlaces Rápidos</h4>
+            <h4>Acerca De</h4>
             <ul className="footer-links">
-              <li><Link to="/">Inicio</Link></li>
-              <li><Link to="/productos">Productos</Link></li>
+              <li><Link to="/about">by_lu_Aliendo</Link></li>
               <li><Link to="/nosotros">Nosotros</Link></li>
-              <li><Link to="/contacto">Contacto</Link></li>
+              <li><Link to="/preguntas-frecuentes">Preguntas Frecuentes</Link></li>
+              <li><Link to="/nosotros">Terminos y Condiciones</Link></li>
+              <li><Link to="/contacto">Politica de privacidad</Link></li>
             </ul>
           </div>
 
@@ -51,10 +52,11 @@ function Footer() {
           <div className="footer-section">
             <h4>Categorías</h4>
             <ul className="footer-links">
-              <li><a href="#">Ropa Mujer</a></li>
-              <li><a href="#">Ropa Hombre</a></li>
-              <li><a href="#">Accesorios</a></li>
-              <li><a href="#">Nueva Colección</a></li>
+              <li><a href="#">Mayorista</a></li>
+              <li><a href="#">Oulet</a></li>
+              <li><a href="#">Novedades</a></li>
+              <li><a href="#">Parte Superior</a></li>
+              <li><a href="#">Parte Inferior</a></li>
             </ul>
           </div>
 

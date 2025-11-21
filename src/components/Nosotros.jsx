@@ -1,41 +1,32 @@
+// components/Nosotros.jsx
 import React from 'react';
-import './Nosotros.css';
+
 
 const Nosotros = () => {
   return (
-    <div className="nosotros-container">
-      <div className="nosotros-content">
-        <h1>Sobre Nosotros</h1>
-        <div className="nosotros-text">
-          <p>
-            <strong>Somos distribuidores mayoristas de moda integral</strong>, 
-            especializados en ropa y accesorios para todo tipo de negocio. 
-            Contamos con una línea dedicada a la moda circular sostenible, 
-            comprometidos con un futuro más responsable en la industria de la moda.
-          </p>
-          
-          <h3>Nuestros Servicios</h3>
-          <ul>
-            <li>✅ <strong>Ropa mayorista</strong> para dama, bodys , remeras , jeans ,vestidos ,camperas y toda la gama de moda</li>
+    <div style={{ padding: '2rem', minHeight: '50vh' }}>
+      <h1>Términos y Condiciones</h1>
 
-            <li>✅ <strong>Accesorios y complementos</strong> de moda</li>
+      <p>Al utilizar la plataforma de by_lu_Aliendo, el usuario acepta que by_lu_Aliendo actúa como intermediario digital entre tiendas y compradores mayoristas.
 
-            <li>✅ <strong>Línea de moda circular</strong> y sostenible</li>
+ 
+by_lu_Aliendo no participa en la compraventa ni en la gestión logística de los pedidos.
 
-            <li>✅ <strong>Envíos a todo el país</strong> con cobertura nacional</li>
+Las condiciones comerciales, precios y políticas de envío son responsabilidad exclusiva de cada tienda.
+La empresa se reserva el derecho de actualizar estos términos conforme evolucione el modelo de visibilidad publicitaria.</p>
+<h1>¿Cómo comprar?</h1>
+<p>podés comprar directamente a las tiendas mayoristas más reconocidas del país desde una sola plataforma.
 
-            <li>✅ <strong>Precios competitivos</strong> para emprendedores y negocios</li>
+Iniciá sesión o registrate gratuitamente.
 
-            <li>✅ <strong>Asesoramiento personalizado</strong> para tu negocio</li>
-          </ul>
+ 
 
-          <p>
-            Trabajamos con emprendedores, minoristas y negocios de todo el país, 
-            ofreciendo productos de calidad y un servicio confiable que impulse 
-            el crecimiento de tu negocio de moda.
-          </p>
-        </div>
-      </div>
+Explorá las categorías o buscá por tienda o producto.
+Agregá los artículos al carrito y confirmá el pedido.
+Coordiná el envío directamente con la tienda vendedora.
+Cada tienda gestiona sus propias condiciones de entrega, medios de pago y tiempos de despacho.
+
+ </p>
     </div>
   );
 };

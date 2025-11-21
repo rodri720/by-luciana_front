@@ -475,3 +475,361 @@
     min-height: calc(100vh - 70px);
   }
 }
+
+/* ========================================================================== */
+/* ESTILOS DEL MENÚ DESPLEGABLE DE CATEGORÍAS - FUERA DEL MEDIA QUERY */
+/* ========================================================================== */
+
+/* Estilos para el menú desplegable de categorías */
+.categories-item {
+  position: relative;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.categories-link {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  color: #333;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.8rem 1rem;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.categories-link::after {
+  content: '▼';
+  font-size: 10px;
+  margin-left: 8px;
+  color: #666;
+}
+
+.categories-link:hover {
+  background: #f8f9fa;
+  color: #007bff;
+}
+
+.categories-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #ffffff; /* FONDO BLANCO SÓLIDO */
+  min-width: 220px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  padding: 15px 0;
+  z-index: 1001; /* Alto z-index para que esté sobre el carousel */
+  list-style: none;
+  margin: 0;
+  border: 1px solid #ddd;
+}
+
+.dropdown-item {
+  margin: 0;
+}
+
+.dropdown-link {
+  display: block;
+  padding: 12px 20px;
+  color: #333 !important; /* LETRA NEGRA - importante para forzar el color */
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-size: 14px;
+  font-weight: 500;
+  background: #ffffff !important; /* FONDO BLANCO */
+}
+
+.dropdown-link:hover {
+  background-color: #f8f9fa !important;
+  color: #007bff !important;
+}
+
+/* Flecha triangular del dropdown */
+.categories-dropdown::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 20px;
+  width: 16px;
+  height: 16px;
+  background: white;
+  transform: rotate(45deg);
+  border-top: 1px solid #ddd;
+  border-left: 1px solid #ddd;
+  z-index: -1;
+}
+
+/* Para mobile - esto SÍ va dentro del media query */
+@media (max-width: 768px) {
+  .categories-item {
+    position: static;
+    width: 100%;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .categories-link {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .categories-link::after {
+    content: '▶';
+  }
+  
+  .categories-dropdown {
+    position: static;
+    box-shadow: none;
+    background: transparent;
+    padding-left: 20px;
+    border: none;
+    border-radius: 0;
+    width: 100%;
+    min-width: auto;
+  }
+  
+  .categories-dropdown::before {
+    display: none;
+  }
+  
+  .dropdown-link {
+    padding: 10px 0;
+    color: #666 !important;
+    background: transparent !important;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  
+  .dropdown-link:last-child {
+    border-bottom: none;
+  }
+  
+  .dropdown-link:hover {
+    background: transparent !important;
+    color: #007bff !important;
+  }
+}
+
+/* Asegurar que el z-index sea mayor que otros elementos */
+.navbar {
+  z-index: 1000;
+}
+
+.categories-dropdown {
+  z-index: 1001; /* Mayor que el navbar */
+}
+
+/* src/components/Navbar/Navbar.css - AGREGA AL FINAL */
+
+/* Estilos para el botón de modo oscuro */
+.dark-mode-toggle {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  font-size: 1.2rem;
+}
+
+.dark-mode-toggle:hover {
+  background: rgba(0, 0, 0, 0.1);
+  transform: scale(1.1);
+}
+
+/* Estilos globales para modo oscuro */
+body.dark-mode {
+  background-color: #1a1a1a;
+  color: #ffffff;
+}
+
+body.dark-mode .navbar {
+  background: rgba(26, 26, 26, 0.95);
+  border-bottom: 1px solid #333;
+}
+
+body.dark-mode .nav-link,
+body.dark-mode .logo-text {
+  color: #ffffff;
+}
+
+body.dark-mode .nav-link:hover {
+  color: #667eea;
+}
+
+body.dark-mode .categories-dropdown {
+  background: #2d2d2d;
+  border: 1px solid #444;
+}
+
+body.dark-mode .dropdown-link {
+  color: #ffffff;
+}
+
+body.dark-mode .dropdown-link:hover {
+  background: #3d3d3d;
+  color: #667eea;
+}
+
+body.dark-mode .search-panel,
+body.dark-mode .login-panel {
+  background: #2d2d2d;
+  border: 1px solid #444;
+  color: #ffffff;
+}
+
+body.dark-mode .search-input,
+body.dark-mode .login-input {
+  background: #1a1a1a;
+  color: #ffffff;
+  border: 1px solid #444;
+}
+
+body.dark-mode .search-input::placeholder,
+body.dark-mode .login-input::placeholder {
+  color: #888;
+}
+
+body.dark-mode .google-login-btn {
+  background: #333;
+  color: #fff;
+  border: 1px solid #555;
+}
+
+body.dark-mode .google-login-btn:hover {
+  background: #444;
+}
+
+body.dark-mode .login-divider span {
+  background: #2d2d2d;
+  color: #888;
+}
+
+body.dark-mode .login-links a {
+  color: #667eea;
+}
+
+body.dark-mode .login-btn {
+  background: #667eea;
+  color: white;
+}
+
+body.dark-mode .login-btn:hover {
+  background: #5a6fd8;
+}
+
+/* Estilos para modo oscuro en las páginas de categoría */
+body.dark-mode .categoria-page {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+}
+
+body.dark-mode .categoria-header {
+  background: rgba(45, 45, 45, 0.95);
+  color: #ffffff;
+}
+
+body.dark-mode .categoria-title,
+body.dark-mode .categoria-subtitle {
+  color: #ffffff;
+}
+
+body.dark-mode .categoria-product-card {
+  background: #2d2d2d;
+  color: #ffffff;
+  border: 1px solid #444;
+}
+
+body.dark-mode .product-name,
+body.dark-mode .product-description,
+body.dark-mode .product-meta {
+  color: #ffffff;
+}
+
+body.dark-mode .image-placeholder {
+  background: #3d3d3d;
+  color: #888;
+}
+
+body.dark-mode .categoria-footer {
+  background: rgba(45, 45, 45, 0.95);
+  color: #ffffff;
+}
+
+body.dark-mode .debug-info {
+  background: rgba(45, 45, 45, 0.9);
+  color: #ffffff;
+}
+
+body.dark-mode .similar-products {
+  background: #3d3d3d;
+  border-left: 4px solid #ffc107;
+}
+
+body.dark-mode .similar-product {
+  background: #2d2d2d;
+  border: 1px solid #555;
+  color: #ffffff;
+}
+
+/* Asegurar que los botones se vean bien en modo oscuro */
+body.dark-mode .btn-primary {
+  background: #667eea;
+  color: white;
+}
+
+body.dark-mode .btn-secondary {
+  background: #555;
+  color: white;
+}
+
+body.dark-mode .btn-secondary:hover {
+  background: #666;
+}
+
+body.dark-mode .reload-btn {
+  background: #28a745;
+  color: white;
+}
+
+body.dark-mode .reload-btn:hover {
+  background: #218838;
+}
+
+body.dark-mode .btn-admin {
+  background: #6c757d;
+  color: white;
+}
+
+body.dark-mode .btn-admin:hover {
+  background: #5a6268;
+}
+
+/* Estilos para el modal en modo oscuro */
+body.dark-mode .image-modal {
+  background: rgba(0, 0, 0, 0.95);
+}
+
+body.dark-mode .modal-close,
+body.dark-mode .modal-nav {
+  color: #ffffff;
+}
+
+body.dark-mode .modal-info {
+  color: #ffffff;
+}
+
+/* Transición suave para el cambio de modo */
+body, .navbar, .categoria-page, .categoria-product-card,
+.nav-link, .logo-text, .search-panel, .login-panel {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Mejoras para el botón de modo oscuro en móviles */
+@media (max-width: 768px) {
+  .dark-mode-toggle {
+    padding: 6px;
+    font-size: 1.1rem;
+  }
+}

@@ -1,37 +1,12 @@
-/* src/App.css */
-/* Reset básico */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: 'Arial', sans-serif;
-  line-height: 1.6;
-  color: #333;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.App {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-/* Para que el contenido principal ocupe el espacio restante */
-main {
-  flex: 1;
-}
-
-/* ===== ESTILOS GLOBALES PARA MODO OSCURO ===== */
+/* src/styles/global.css */
+/* Estilos globales para modo oscuro */
 
 body.dark-mode {
   background-color: #1a1a1a;
   color: #e0e0e0;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Navbar - Modo Oscuro */
 body.dark-mode .navbar {
   background: rgba(26, 26, 26, 0.95);
   border-bottom: 1px solid #333;
@@ -134,7 +109,6 @@ body.dark-mode .footer a:hover {
 body.dark-mode .footer-bottom {
   background: #1a1a1a;
   border-top: 1px solid #444;
-  color: #e0e0e0;
 }
 
 /* Páginas de Categoría - Modo Oscuro */
@@ -296,58 +270,8 @@ body.dark-mode .login-btn:hover {
   background: #5a6fd8;
 }
 
-/* Otras páginas - Modo Oscuro */
-body.dark-mode .outlet-page,
-body.dark-mode .novedades-page,
-body.dark-mode .mayorista-page,
-body.dark-mode .productos-page,
-body.dark-mode .ventasalpormayor-page,
-body.dark-mode .nosotros-page,
-body.dark-mode .ubicacion-page {
-  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-  color: #e0e0e0;
-}
-
-body.dark-mode .admin-panel {
-  background: #1a1a1a;
-  color: #e0e0e0;
-}
-
-body.dark-mode .admin-login {
-  background: #2d2d2d;
-  color: #e0e0e0;
-}
-
-/* Transiciones suaves para todos los elementos */
+/* Transiciones suaves */
 body.dark-mode * {
   transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
-/* Estilos base para el Footer (modo claro) */
-.footer {
-  background: #f8f9fa;
-  padding: 3rem 0 0;
-  margin-top: auto;
-  transition: all 0.3s ease;
-}
-
-.footer-bottom {
-  background: #e9ecef;
-  padding: 1rem 0;
-  text-align: center;
-  margin-top: 2rem;
-  transition: all 0.3s ease;
-}
-
-/* Estilos base para la Landing (modo claro) */
-.landing-page {
-  min-height: 100vh;
-  transition: all 0.3s ease;
-}
-
-.hero-section {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  padding: 4rem 0;
-  transition: all 0.3s ease;
-}

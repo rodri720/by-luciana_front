@@ -462,3 +462,15 @@
 .btn-secondary:hover {
   background: #545b62;
 }
+
+/* Agrega al Calzados.css */
+.category-keywords {
+  margin-top: 0.5rem;
+  color: #888;
+  font-size: 0.8rem;
+}
+
+.category-keywords small {
+  font-style: italic;
+}
+

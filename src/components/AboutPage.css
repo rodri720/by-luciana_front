@@ -1,0 +1,127 @@
+/* components/AboutPage.css */
+.about-page {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #1a1a1a; /* Fondo gris oscuro */
+  color: #e0e0e0; /* Texto blanco */
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+.about-page .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.about-header {
+  background: linear-gradient(135deg, #b87d8c 0%, #b87d8c 100%); /* Rosa viejo */
+  color: white;
+  padding: 60px 20px;
+  text-align: center;
+  border-radius: 0 0 20px 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  margin-bottom: 40px;
+}
+
+.about-header .logo {
+  font-size: 3.5rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  letter-spacing: 2px;
+}
+
+.about-header .tagline {
+  font-size: 1.2rem;
+  opacity: 0.9;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.content-section {
+  background: #2d2d2d; /* Fondo gris oscuro */
+  border-radius: 12px;
+  padding: 30px;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.content-section:hover {
+  transform: translateY(-5px);
+}
+
+.about-page h2 {
+  color: #d4a5ad; /* Rosa viejo más claro */
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #404040; /* Borde gris */
+}
+
+.about-page h3 {
+  color: #d4a5ad; /* Rosa viejo */
+  margin: 25px 0 15px;
+}
+
+.about-page p {
+  margin-bottom: 15px;
+  font-size: 1.05rem;
+}
+
+.highlight {
+  background-color: #2a1f23; /* Fondo rosa oscuro/marrón */
+  padding: 20px;
+  border-left: 4px solid #d4a5ad; /* Borde rosa viejo */
+  margin: 20px 0;
+  border-radius: 0 8px 8px 0;
+}
+
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.value-card {
+  background: #2a1f23; /* Fondo rosa oscuro/marrón */
+  padding: 20px;
+  border-radius: 8px;
+  border-top: 4px solid #d4a5ad; /* Borde superior rosa viejo */
+}
+
+.value-card h4 {
+  color: #d4a5ad; /* Rosa viejo */
+  margin-bottom: 10px;
+}
+
+.btn-back {
+  display: inline-block;
+  background: linear-gradient(135deg, #b87d8c 0%, #d4a5ad 100%); /* Rosa viejo */
+  color: white;
+  padding: 12px 25px;
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: 600;
+  margin-top: 20px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(184, 125, 140, 0.3);
+}
+
+.btn-back:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(184, 125, 140, 0.4);
+}
+
+@media (max-width: 768px) {
+  .about-header .logo {
+    font-size: 2.5rem;
+  }
+  
+  .content-section {
+    padding: 20px;
+  }
+  
+  .values-grid {
+    grid-template-columns: 1fr;
+  }
+}

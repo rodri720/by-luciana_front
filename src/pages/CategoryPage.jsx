@@ -21,7 +21,8 @@ function CategoryPage() {
     'mayorista': 'Mayorista',
     'feriantes': 'Feriantes',
     'calzados': 'Calzados',
-    'bodys': 'Bodys'
+    'bodys': 'Bodys',
+    'accesorios': 'Accesorios'
   }
 
   const displayTitle = categoryTitles[categoryName] || categoryName

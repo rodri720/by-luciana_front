@@ -1,18 +1,36 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import './Navbar.css'
-// Importa tu logo - ajusta la ruta según tu archivo
 import logo from '../assets/imagenes/logolu.png'
+import { useCart } from '../context/CartContext' // ← Agregar esta importación
+import CartWidget from './CartWidget' // ← Agregar esta importación
 
 function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [isLoginOpen, setIsLoginOpen] = useState(false)
+  const [isCategoriesOpen, setIsCategoriesOpen] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
   const [loginData, setLoginData] = useState({
     email: '',
     password: ''
   })
+  const [darkMode, setDarkMode] = useState(false)
+
+  // Cargar el modo oscuro desde localStorage al iniciar
+  useEffect(() => {
+    const savedDarkMode = localStorage.getItem('darkMode') === 'true'
+    setDarkMode(savedDarkMode)
+    document.body.classList.toggle('dark-mode', savedDarkMode)
+  }, [])
+
+  // Función para alternar modo oscuro/claro
+  const toggleDarkMode = () => {
+    const newDarkMode = !darkMode
+    setDarkMode(newDarkMode)
+    localStorage.setItem('darkMode', newDarkMode.toString())
+    document.body.classList.toggle('dark-mode', newDarkMode)
+  }
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
@@ -32,13 +50,14 @@ function Navbar() {
     if (isSearchOpen) setIsSearchOpen(false)
   }
 
+  const toggleCategories = () => {
+    setIsCategoriesOpen(!isCategoriesOpen)
+  }
+
   const handleSearch = (e) => {
     if (e.key === 'Enter' && searchTerm.trim()) {
       e.preventDefault()
-      // Aquí implementas la búsqueda
       console.log('Buscando:', searchTerm)
-      // Ejemplo: redirigir a página de resultados
-      // navigate(`/search?q=${encodeURIComponent(searchTerm)}`)
       setIsSearchOpen(false)
       setSearchTerm('')
     }
@@ -46,24 +65,33 @@ function Navbar() {
 
   const handleLogin = (e) => {
     e.preventDefault()
-    // Aquí implementas el login
     console.log('Login data:', loginData)
-    // Ejemplo: llamar a API de autenticación
     setIsLoginOpen(false)
     setLoginData({ email: '', password: '' })
   }
 
   const handleGoogleLogin = () => {
-    // Aquí implementas el login con Google
     console.log('Login con Google')
-    // Ejemplo: window.location.href = 'tu-backend/auth/google'
   }
 
   const handleLogout = () => {
-    // Aquí implementas el logout
     console.log('Cerrando sesión')
     setIsLoginOpen(false)
   }
+
+  // Categorías disponibles
+  const categories = [
+    { name: 'Remeras', path: '/categoria/remeras' },
+    { name: 'Buzos', path: '/categoria/buzos' },
+    { name: 'Suéters', path: '/categoria/sueters' },
+    { name: 'Bodys', path: '/categoria/bodys' },
+    { name: 'Jeans', path: '/categoria/jeans' },
+    { name: 'Shorts', path: '/categoria/shorts' },
+    { name: 'Vestidos', path: '/categoria/vestidos' },
+    { name: 'Calzados', path: '/categoria/calzados' },
+    { name: 'accesorios', path: '/categoria/accesorios' }
+
+  ]
 
   return (
     <nav className="navbar">
@@ -90,15 +118,49 @@ function Navbar() {
               Ubicacion
             </Link>
           </li>
-          <li className="nav-item">
-            <Link to="/nosotros" className="nav-link" onClick={closeMenu}>
-              Nosotros
-            </Link>
+          
+          <li 
+            className="nav-item categories-item"
+            onMouseEnter={() => setIsCategoriesOpen(true)}
+            onMouseLeave={() => setIsCategoriesOpen(false)}
+          >
+            <span className="nav-link categories-link">
+              Categorías
+            </span>
+            {isCategoriesOpen && (
+              <ul className="categories-dropdown">
+                {categories.map((category, index) => (
+                  <li key={index} className="dropdown-item">
+                    <Link 
+                      to={category.path} 
+                      className="dropdown-link"
+                      onClick={() => {
+                        closeMenu()
+                        setIsCategoriesOpen(false)
+                      }}
+                    >
+                      {category.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            )}
           </li>
         </ul>
 
         {/* Iconos de acción */}
         <div className="nav-actions">
+          {/* Botón Modo Oscuro/Claro */}
+          <button 
+            className="nav-icon dark-mode-toggle"
+            onClick={toggleDarkMode}
+            title={darkMode ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
+          >
+            <span className="icon">
+              {darkMode ? '☀️' : '🌙'}
+            </span>
+          </button>
+
           {/* Search Button & Panel */}
           <div className="search-container">
             <button className="nav-icon" onClick={toggleSearch}>
@@ -179,10 +241,9 @@ function Navbar() {
             )}
           </div>
 
-          <button className="nav-icon">
-            <span className="icon">🛒</span>
-            <span className="cart-count">0</span>
-          </button>
+          {/* CARRITO REAL - Reemplazar el botón falso por CartWidget */}
+          <CartWidget />
+
           <Link to="/admin" className="btn btn-admin">Panel Admin</Link>
         </div>
 

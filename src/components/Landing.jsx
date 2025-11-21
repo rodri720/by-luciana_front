@@ -14,7 +14,7 @@ import novedadesImage from '../assets/imagenes/novedades.jpg'
 import mayoristaImage from '../assets/imagenes/mayorista.jpg'
 import calzadosImage from '../assets/imagenes/calzados.jpg'
 import bodysImage from '../assets/imagenes/bodys.jpg'
-
+import accesoriosImage from '../assets/imagenes/accesorios.jpg' // Asegúrate de tener esta imagen
 
 function Landing() {
   const [currentSlide, setCurrentSlide] = useState(0)
@@ -39,11 +39,6 @@ function Landing() {
 
   const prevSlide = () => {
     setCurrentSlide((prev) => (prev - 1 + carouselImages.length) % carouselImages.length)
-  }
-
-  const getProductsByCategory = (category) => {
-    if (!products || !Array.isArray(products)) return []
-    return products.filter(product => product && product.category === category)
   }
 
   const handleSubscribe = async (e) => {
@@ -86,15 +81,16 @@ function Landing() {
 
   if (loading) {
     return (
-      <section className="landing">
+      <div className="landing-page">
         <div className="loading">Cargando productos...</div>
-      </section>
+      </div>
     )
   }
 
   return (  
-    <section className="landing">
-      <div className="carousel-section">
+    <div className="landing-page">
+      {/* Hero Section - Carousel */}
+      <section className="carousel-section">
         <div className="carousel-container">
           <div 
             className="carousel-slide" 
@@ -105,31 +101,31 @@ function Landing() {
                 <div className="image-wrapper">
                   <img src={image} alt={`Moda By Luciana ${index + 1}`} className="carousel-image" />
                 </div>
-               <div className="carousel-overlay">
-  <h1 className="carousel-title">By Luciana</h1>
-  <p className="carousel-subtitle">Moda que expresa tu estilo único</p>
-    <div className="carousel-buttons">
+                <div className="carousel-overlay">
+                  <h1 className="carousel-title">By Luciana</h1>
+                  <p className="carousel-subtitle">Moda que expresa tu estilo único</p>
+                  <div className="carousel-buttons">
                     <Link to="/productos" className="btn btn-primary">Ver Colección</Link>
-                     <Link to="/ventasalpormayor" className="btn btn-secondary">Ventas al por mayor</Link>
-                              </div>
-</div>
+                    <Link to="/ventasalpormayor" className="btn btn-secondary">Para Comerciantes</Link>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
           <button className="carousel-btn carousel-prev" onClick={prevSlide}>‹</button>
           <button className="carousel-btn carousel-next" onClick={nextSlide}>›</button>
         </div>
-      </div>
+      </section>
 
-      <div className="categories-section">
+      {/* Categories Section - CORREGIDO */}
+      <section className="categories-section">
         <div className="container">
           <h2 className="section-title">Nuestras Categorías</h2>
           
+          {/* UN SOLO GRID PARA TODAS LAS CATEGORÍAS */}
           <div className="categories-grid">
-           
-            
-           {/* Novedades */}
-           <div className="category-card">
+            {/* Novedades */}
+            <div className="category-card">
               <Link to="/novedades" className="category-link">
                 <div 
                   className="category-image" 
@@ -137,19 +133,6 @@ function Landing() {
                 >
                   <span className="category-label">Novedades</span>
                 </div>
-                <h3>Novedades</h3>
-                {getProductsByCategory('novedades').slice(0, 1).map(product => (
-                  <div key={product._id} className="product-info">
-                    <p className="product-example">{product.name}</p>
-                    <p className="product-price">Desde ${product.price}</p>
-                  </div>
-                ))}
-                {getProductsByCategory('novedades').length === 0 && (
-                  <div className="product-info">
-                    <p className="product-example">Precios mayoristas</p>
-                    <p className="product-price">Consultar</p>
-                  </div>
-                )}
               </Link>
             </div>
             
@@ -162,26 +145,9 @@ function Landing() {
                 >
                   <span className="category-label">Mayorista</span>
                 </div>
-                <h3>Mayorista</h3>
-                {getProductsByCategory('mayorista').slice(0, 1).map(product => (
-                  <div key={product._id} className="product-info">
-                    <p className="product-example">{product.name}</p>
-                    <p className="product-price">Desde ${product.price}</p>
-                  </div>
-                ))}
-                {getProductsByCategory('mayorista').length === 0 && (
-                  <div className="product-info">
-                    <p className="product-example">Precios mayoristas</p>
-                    <p className="product-price">Consultar</p>
-                  </div>
-                )}
               </Link>
             </div>
-          </div>
 
-          <div className="categories-grid">
-           
-            
             {/* Calzados */}
             <div className="category-card">
               <Link to="/calzados" className="category-link">
@@ -189,21 +155,8 @@ function Landing() {
                   className="category-image" 
                   style={{ backgroundImage: `url(${calzadosImage})` }}
                 >
-                  <span className="category-label">Calzados</span>
+                  <span className="category-label">Parte Inferior</span>
                 </div>
-                <h3>Calzados</h3>
-                {getProductsByCategory('calzados').slice(0, 1).map(product => (
-                  <div key={product._id} className="product-info">
-                    <p className="product-example">{product.name}</p>
-                    <p className="product-price">Desde ${product.price}</p>
-                  </div>
-                ))}
-                {getProductsByCategory('calzados').length === 0 && (
-                  <div className="product-info">
-                    <p className="product-example">Precios mayoristas</p>
-                    <p className="product-price">Consultar</p>
-                  </div>
-                )}
               </Link>
             </div>
             
@@ -214,27 +167,12 @@ function Landing() {
                   className="category-image" 
                   style={{ backgroundImage: `url(${bodysImage})` }}
                 >
-                  <span className="category-label">Bodys</span>
+                  <span className="category-label">Parte Superior</span>
                 </div>
-                <h3>Bodys</h3>
-                {getProductsByCategory('bodys').slice(0, 1).map(product => (
-                  <div key={product._id} className="product-info">
-                    <p className="product-example">{product.name}</p>
-                    <p className="product-price">Desde ${product.price}</p>
-                  </div>
-                ))}
-                {getProductsByCategory('bodys').length === 0 && (
-                  <div className="product-info">
-                    <p className="product-example">Precios mayoristas</p>
-                    <p className="product-price">Consultar</p>
-                  </div>
-                )}
               </Link>
             </div>
-            
-          </div>
-         
-   {/* Outlet */}
+
+            {/* Outlet */}
             <div className="category-card">
               <Link to="/outlet" className="category-link">
                 <div 
@@ -243,52 +181,55 @@ function Landing() {
                 >
                   <span className="category-label">Outlet</span>
                 </div>
-                <h3>Outlet</h3>
-                {getProductsByCategory('outlet').slice(0, 1).map(product => (
-                  <div key={product._id} className="product-info">
-                    <p className="product-example">{product.name}</p>
-                    <p className="product-price">Desde ${product.price}</p>
-                  </div>
-                ))}
-                {getProductsByCategory('outlet').length === 0 && (
-                  <div className="product-info">
-                    <p className="product-example">Precios mayoristas</p>
-                    <p className="product-price">Consultar</p>
-                  </div>
-                )}
               </Link>
             </div>
-            
-        </div>
-      </div>
 
-      <div className="features-section">
-        <h2 className="section-title">¿Por qué elegirnos?</h2>
-        <div className="features-grid">
-          <div className="feature-card">
-            <div className="feature-icon">🚚</div>
-            <h3>Envío Gratis</h3>
-            <p>En compras mayores a $50.000</p>
-          </div>
-          <div className="feature-card">
-            <div className="feature-icon">↩️</div>
-            <h3>Devoluciones</h3>
-            <p>30 días para cambiar tu producto</p>
-          </div>
-          <div className="feature-card">
-            <div className="feature-icon">💳</div>
-            <h3>Pago Seguro</h3>
-            <p>Transacciones 100% protegidas</p>
-          </div>
-          <div className="feature-card">
-            <div className="feature-icon">⭐</div>
-            <h3>Calidad Premium</h3>
-            <p>Materiales de primera calidad</p>
+            {/* Accesorios */}
+            <div className="category-card">
+              <Link to="/accesorios" className="category-link">
+                <div 
+                  className="category-image" 
+                  style={{ backgroundImage: `url(${accesoriosImage})` }}
+                >
+                  <span className="category-label">Accesorios</span>
+                </div>
+              </Link>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div className="newsletter-section">
+      {/* Features Section */}
+      <section className="features-section">
+        <div className="container">
+          <h2 className="section-title">¿Por qué elegirnos?</h2>
+          <div className="features-grid">
+            <div className="feature-card">
+              <div className="feature-icon">🚚</div>
+              <h3>Envíos a todo el pais</h3>
+              <p></p>
+            </div>
+            <div className="feature-card">
+              <div className="feature-icon">↩️</div>
+              <h3>Devoluciones</h3>
+              <p>30 días para cambiar tu producto</p>
+            </div>
+            <div className="feature-card">
+              <div className="feature-icon">💳</div>
+              <h3>Pago Seguro</h3>
+              <p>Transacciones 100% protegidas</p>
+            </div>
+            <div className="feature-card">
+              <div className="feature-icon">⭐</div>
+              <h3>Calidad Premium</h3>
+              <p>Materiales de primera calidad</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Newsletter Section */}
+      <section className="newsletter-section">
         <div className="container">
           <div className="newsletter-content">
             <h2>¡No te pierdas nuestras novedades!</h2>
@@ -319,8 +260,8 @@ function Landing() {
             )}
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
   )
 }
 

@@ -200,4 +200,28 @@
 .social-icon {
   font-size: 1.2rem;
 }
+
+/* Estilos del Footer */
+.footer {
+  background: #f8f9fa;
+  padding: 3rem 0 0;
+  margin-top: auto;
+}
+
+.footer-bottom {
+  background: #e9ecef;
+  padding: 1rem 0;
+  text-align: center;
+  margin-top: 2rem;
+}
+
+body.dark-mode .footer {
+  background: #2d2d2d;
+  color: #e0e0e0;
+}
+
+body.dark-mode .footer-bottom {
+  background: #1a1a1a;
+  color: #e0e0e0;
+}
 }
