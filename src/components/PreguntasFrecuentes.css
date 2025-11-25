@@ -1,8 +1,8 @@
 /* components/PreguntasFrecuentes.css */
 .preguntas-frecuentes {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #1a1a1a; /* Fondo gris oscuro siempre */
-  color: #e0e0e0; /* Texto blanco siempre */
+  background-color: #f5f5f5; /* Fondo gris claro */
+  color: #666666; /* Texto gris oscuro */
   line-height: 1.6;
   min-height: 100vh;
 }
@@ -19,7 +19,7 @@
   padding: 50px 20px;
   text-align: center;
   border-radius: 0 0 20px 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   margin-bottom: 40px;
 }
 
@@ -28,6 +28,7 @@
   font-weight: 700;
   margin-bottom: 10px;
   letter-spacing: 2px;
+  color: #000000; /* Título negro */
 }
 
 .faq-tagline {
@@ -35,6 +36,7 @@
   opacity: 0.9;
   max-width: 600px;
   margin: 0 auto;
+  color: #ffffff; /* Mantener blanco para contraste en el header */
 }
 
 /* Navegación Rápida */
@@ -43,7 +45,7 @@
 }
 
 .quick-links-section h2 {
-  color: #d4a5ad; /* Rosa viejo más claro */
+  color: #000000; /* Título negro */
   margin-bottom: 1.5rem;
   text-align: center;
 }
@@ -56,12 +58,12 @@
 }
 
 .quick-link-card {
-  background: #2d2d2d; /* Fondo gris oscuro */
+  background: #e8e8e8; /* Fondo gris más claro */
   padding: 1.5rem;
   border-radius: 12px;
   text-decoration: none;
-  color: #e0e0e0; /* Texto blanco */
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  color: #666666; /* Texto gris oscuro */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
@@ -71,8 +73,8 @@
 
 .quick-link-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-  border-color: #d4a5ad; /* Borde rosa viejo al hover */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  border-color: #b87d8c; /* Borde rosa viejo al hover */
 }
 
 .quick-link-icon {
@@ -81,24 +83,24 @@
 
 /* Sección de Preguntas Frecuentes */
 .faq-section {
-  background: #2d2d2d; /* Fondo gris oscuro */
+  background: #ffffff; /* Fondo blanco para las secciones */
   border-radius: 12px;
   padding: 2.5rem;
   margin-bottom: 2rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .faq-section h2 {
-  color: #d4a5ad; /* Rosa viejo más claro */
+  color: #000000; /* Título negro */
   margin-bottom: 2rem;
   text-align: center;
-  border-bottom: 2px solid #404040; /* Borde gris */
+  border-bottom: 2px solid #dddddd; /* Borde gris claro */
   padding-bottom: 1rem;
 }
 
 .faq-item {
   margin-bottom: 2rem;
-  border-bottom: 1px solid #404040; /* Borde gris */
+  border-bottom: 1px solid #eeeeee; /* Borde gris muy claro */
   padding-bottom: 1.5rem;
 }
 
@@ -108,16 +110,17 @@
 }
 
 .faq-item h3 {
-  color: #d4a5ad; /* Rosa viejo */
+  color: #000000; /* Título negro */
   margin-bottom: 1rem;
   font-size: 1.1rem;
 }
 
 .faq-answer {
-  background: #2a1f23; /* Fondo rosa oscuro/marrón */
+  background: #f9f9f9; /* Fondo gris muy claro */
   padding: 1.5rem;
   border-radius: 8px;
-  border-left: 4px solid #d4a5ad; /* Borde rosa viejo */
+  border-left: 4px solid #b87d8c; /* Borde rosa viejo */
+  color: #666666; /* Texto gris oscuro */
 }
 
 .faq-answer p {
@@ -129,20 +132,22 @@
 }
 
 .process-section {
-  background: #252525; /* Fondo gris más oscuro */
+  background: #f0f0f0; /* Fondo gris claro */
   padding: 1.5rem;
   border-radius: 8px;
   margin-top: 1rem;
-  border: 1px solid #404040; /* Borde gris */
+  border: 1px solid #dddddd; /* Borde gris claro */
+  color: #666666; /* Texto gris oscuro */
 }
 
 .process-section h4 {
-  color: #d4a5ad; /* Rosa viejo */
+  color: #000000; /* Título negro */
   margin-bottom: 1rem;
 }
 
 .process-steps {
   padding-left: 1.5rem;
+  color: #666666; /* Texto gris oscuro */
 }
 
 .process-steps li {
@@ -152,21 +157,22 @@
 
 /* Sección de Contacto */
 .contact-section {
-  background: #2d2d2d; /* Fondo gris oscuro */
+  background: #ffffff; /* Fondo blanco */
   border-radius: 12px;
   padding: 2.5rem;
   text-align: center;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .contact-section h2 {
-  color: #d4a5ad; /* Rosa viejo */
+  color: #000000; /* Título negro */
   margin-bottom: 1rem;
 }
 
 .contact-section p {
   margin-bottom: 2rem;
   opacity: 0.8;
+  color: #666666; /* Texto gris oscuro */
 }
 
 .contact-options {
@@ -181,9 +187,10 @@
   align-items: center;
   gap: 1rem;
   padding: 1rem;
-  background: #2a1f23; /* Fondo rosa oscuro/marrón */
+  background: #f9f9f9; /* Fondo gris muy claro */
   border-radius: 8px;
   text-align: left;
+  color: #666666; /* Texto gris oscuro */
 }
 
 .contact-icon {
@@ -192,13 +199,14 @@
 
 .contact-option strong {
   display: block;
-  color: #d4a5ad; /* Rosa viejo */
+  color: #000000; /* Título negro */
   margin-bottom: 0.25rem;
 }
 
 .contact-option p {
   margin: 0;
   opacity: 0.8;
+  color: #666666; /* Texto gris oscuro */
 }
 
 /* Botón Volver */

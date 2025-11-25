@@ -47,7 +47,7 @@ function AdminAuth() {
         </form>
 
         <div className="auth-hint">
-          <p>💡 Contraseña: <strong>admin123</strong></p>
+          <p>💡 Contraseña: <strong>.....</strong></p>
         </div>
       </div>
     </div>

@@ -7,11 +7,15 @@ export const ProductContext = createContext();
 export function ProductProvider({ children }) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null); // ✅ AGREGAR ESTADO DE ERROR
 
   // Cargar productos
   const loadProducts = async () => {
     try {
       console.log('🔄 Cargando productos...');
+      setError(null); // ✅ LIMPIAR ERRORES ANTERIORES
+      setLoading(true);
+      
       const res = await fetch('http://localhost:5000/api/products/all');
       
       if (!res.ok) {
@@ -23,6 +27,7 @@ export function ProductProvider({ children }) {
       setProducts(data);
     } catch (error) {
       console.error('❌ Error loading products:', error);
+      setError(error); // ✅ GUARDAR EL ERROR
       setProducts([]);
     } finally {
       setLoading(false);
@@ -33,10 +38,9 @@ export function ProductProvider({ children }) {
   const createProduct = async (productData) => {
     console.log('=== 🚨 CREATE PRODUCT INICIADO 🚨 ===');
     console.log('📦 Datos recibidos:', productData);
-    console.log('🖼️ Imágenes recibidas:', productData.images);
-    console.log('📊 Número de imágenes:', productData.images?.length || 0);
     
     try {
+      setError(null); // ✅ LIMPIAR ERRORES
       const formData = new FormData();
       
       console.log('📤 Creando FormData...');
@@ -58,9 +62,6 @@ export function ProductProvider({ children }) {
         
         productData.images.forEach((imageItem, index) => {
           console.log(`📸 Imagen ${index}:`, imageItem);
-          console.log(`🔍 Tipo:`, typeof imageItem);
-          console.log(`🔍 Es File?:`, imageItem instanceof File);
-          console.log(`🔍 Tamaño:`, imageItem.size);
           
           let fileToUpload;
 
@@ -98,7 +99,7 @@ export function ProductProvider({ children }) {
       
       const res = await fetch('http://localhost:5000/api/products', {
         method: 'POST',
-        body: formData, // ✅ Sin headers - importante!
+        body: formData,
       });
 
       console.log('=== 🔍 RESPUESTA DEL SERVIDOR ===');
@@ -121,6 +122,7 @@ export function ProductProvider({ children }) {
 
     } catch (error) {
       console.error('❌ Error en createProduct:', error);
+      setError(error); // ✅ GUARDAR EL ERROR
       throw error;
     }
   };
@@ -129,6 +131,7 @@ export function ProductProvider({ children }) {
   const updateProduct = async (id, productData) => {
     try {
       console.log('🔄 Actualizando producto:', id);
+      setError(null); // ✅ LIMPIAR ERRORES
       
       const res = await fetch(`http://localhost:5000/api/products/${id}`, {
         method: 'PUT',
@@ -152,6 +155,7 @@ export function ProductProvider({ children }) {
       return updatedProduct;
     } catch (error) {
       console.error('❌ Error updating product:', error);
+      setError(error); // ✅ GUARDAR EL ERROR
       throw error;
     }
   };
@@ -160,6 +164,7 @@ export function ProductProvider({ children }) {
   const uploadProductImage = async (productId, formData) => {
     try {
       console.log('🔄 Subiendo imagen para producto:', productId);
+      setError(null); // ✅ LIMPIAR ERRORES
       
       const res = await fetch(`http://localhost:5000/api/products/${productId}/image`, {
         method: 'POST',
@@ -190,6 +195,7 @@ export function ProductProvider({ children }) {
       return data;
     } catch (error) {
       console.error('❌ Error uploading image:', error);
+      setError(error); // ✅ GUARDAR EL ERROR
       throw error;
     }
   };
@@ -198,6 +204,7 @@ export function ProductProvider({ children }) {
   const deleteProductImage = async (productId, imageUrl) => {
     try {
       console.log('🔄 Eliminando imagen:', imageUrl);
+      setError(null); // ✅ LIMPIAR ERRORES
       
       const res = await fetch(`http://localhost:5000/api/products/${productId}/delete-image`, {
         method: 'DELETE',
@@ -230,6 +237,7 @@ export function ProductProvider({ children }) {
       return data;
     } catch (error) {
       console.error('❌ Error deleting image:', error);
+      setError(error); // ✅ GUARDAR EL ERROR
       throw error;
     }
   };
@@ -238,6 +246,7 @@ export function ProductProvider({ children }) {
   const setMainImage = async (productId, imageUrl) => {
     try {
       console.log('🔄 Estableciendo imagen principal:', imageUrl);
+      setError(null); // ✅ LIMPIAR ERRORES
       
       const res = await fetch(`http://localhost:5000/api/products/${productId}/set-main-image`, {
         method: 'PUT',
@@ -270,6 +279,7 @@ export function ProductProvider({ children }) {
       return data;
     } catch (error) {
       console.error('❌ Error setting main image:', error);
+      setError(error); // ✅ GUARDAR EL ERROR
       throw error;
     }
   };
@@ -278,6 +288,7 @@ export function ProductProvider({ children }) {
   const deleteProduct = async (id) => {
     try {
       console.log('🔄 Eliminando producto:', id);
+      setError(null); // ✅ LIMPIAR ERRORES
       
       const res = await fetch(`http://localhost:5000/api/products/${id}`, {
         method: 'DELETE',
@@ -295,6 +306,7 @@ export function ProductProvider({ children }) {
       
     } catch (error) {
       console.error('❌ Error deleting product:', error);
+      setError(error); // ✅ GUARDAR EL ERROR
       throw error;
     }
   };
@@ -303,6 +315,7 @@ export function ProductProvider({ children }) {
   const getProductById = async (id) => {
     try {
       console.log('🔄 Obteniendo producto:', id);
+      setError(null); // ✅ LIMPIAR ERRORES
       
       const res = await fetch(`http://localhost:5000/api/products/${id}`);
       
@@ -314,8 +327,14 @@ export function ProductProvider({ children }) {
       return product;
     } catch (error) {
       console.error('❌ Error getting product:', error);
+      setError(error); // ✅ GUARDAR EL ERROR
       throw error;
     }
+  };
+
+  // Función para limpiar errores manualmente
+  const clearError = () => {
+    setError(null);
   };
 
   // Cargar productos al iniciar
@@ -327,6 +346,7 @@ export function ProductProvider({ children }) {
   const contextValue = {
     products,
     loading,
+    error, // ✅ EXPORTAR EL ERROR
     loadProducts,
     createProduct,
     updateProduct,
@@ -334,7 +354,8 @@ export function ProductProvider({ children }) {
     uploadProductImage,
     deleteProductImage,
     setMainImage,
-    getProductById
+    getProductById,
+    clearError // ✅ EXPORTAR FUNCIÓN PARA LIMPIAR ERRORES
   };
 
   return (
@@ -355,5 +376,4 @@ export const useProducts = () => {
   return context;
 };
 
-// ✅ Exportación por defecto del contexto para acceso directo si es necesario
 export default ProductContext;

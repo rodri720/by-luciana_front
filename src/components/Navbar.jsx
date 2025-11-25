@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import './Navbar.css'
 import logo from '../assets/imagenes/logolu.png'
-import { useCart } from '../context/CartContext' // ← Agregar esta importación
-import CartWidget from './CartWidget' // ← Agregar esta importación
+import { useCart } from '../context/CartContext'
+import CartWidget from './CartWidget'
 
 function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -16,12 +16,21 @@ function Navbar() {
     password: ''
   })
   const [darkMode, setDarkMode] = useState(false)
+  const [user, setUser] = useState(null) // Estado para el usuario logueado
 
   // Cargar el modo oscuro desde localStorage al iniciar
   useEffect(() => {
     const savedDarkMode = localStorage.getItem('darkMode') === 'true'
     setDarkMode(savedDarkMode)
     document.body.classList.toggle('dark-mode', savedDarkMode)
+  }, [])
+
+  // Cargar usuario desde localStorage al iniciar
+  useEffect(() => {
+    const savedUser = localStorage.getItem('user')
+    if (savedUser) {
+      setUser(JSON.parse(savedUser))
+    }
   }, [])
 
   // Función para alternar modo oscuro/claro
@@ -66,17 +75,99 @@ function Navbar() {
   const handleLogin = (e) => {
     e.preventDefault()
     console.log('Login data:', loginData)
+    // Aquí iría la lógica real de login con email/password
+    // Por ahora simulamos un login exitoso
+    const mockUser = {
+      name: 'Usuario Demo',
+      email: loginData.email,
+      avatar: '👤'
+    }
+    setUser(mockUser)
+    localStorage.setItem('user', JSON.stringify(mockUser))
     setIsLoginOpen(false)
     setLoginData({ email: '', password: '' })
+    alert(`¡Bienvenido ${mockUser.name}!`)
   }
 
+  // ✅ IMPLEMENTACIÓN REAL DE LOGIN CON GOOGLE
   const handleGoogleLogin = () => {
-    console.log('Login con Google')
+    console.log('Iniciando login con Google...')
+    
+    // Configuración de Google OAuth
+    const clientId = 'TU_CLIENT_ID_DE_GOOGLE' // Reemplaza con tu Client ID real
+    const redirectUri = encodeURIComponent(`${window.location.origin}/auth/google/callback`)
+    const scope = encodeURIComponent('profile email')
+    const state = encodeURIComponent('google_login')
+    
+    // URL de autenticación de Google
+    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}&state=${state}`
+    
+    // Abrir ventana de login de Google
+    const width = 500
+    const height = 600
+    const left = (window.screen.width - width) / 2
+    const top = (window.screen.height - height) / 2
+    
+    const authWindow = window.open(
+      authUrl,
+      'Google Login',
+      `width=${width},height=${height},left=${left},top=${top}`
+    )
+    
+    // Escuchar mensajes desde la ventana de autenticación
+    const receiveMessage = (event) => {
+      if (event.origin !== window.location.origin) return
+      
+      if (event.data.type === 'GOOGLE_AUTH_SUCCESS') {
+        const userData = event.data.user
+        console.log('✅ Usuario autenticado con Google:', userData)
+        
+        setUser(userData)
+        localStorage.setItem('user', JSON.stringify(userData))
+        setIsLoginOpen(false)
+        alert(`¡Bienvenido ${userData.name}!`)
+        
+        // Limpiar el event listener
+        window.removeEventListener('message', receiveMessage)
+      }
+    }
+    
+    window.addEventListener('message', receiveMessage)
+    
+    // Verificar si la ventana se cerró
+    const checkWindow = setInterval(() => {
+      if (authWindow.closed) {
+        clearInterval(checkWindow)
+        window.removeEventListener('message', receiveMessage)
+        console.log('Ventana de Google cerrada')
+      }
+    }, 500)
+  }
+
+  // ✅ ALTERNATIVA SIMPLE - Login con Google simulado (para desarrollo)
+  const handleGoogleLoginSimple = () => {
+    console.log('🔐 Login con Google (simulado)')
+    
+    // Simular datos de usuario de Google
+    const googleUser = {
+      name: 'Usuario Google',
+      email: 'usuario@gmail.com',
+      avatar: '🅖',
+      provider: 'google'
+    }
+    
+    setUser(googleUser)
+    localStorage.setItem('user', JSON.stringify(googleUser))
+    setIsLoginOpen(false)
+    alert(`¡Bienvenido ${googleUser.name}!`)
   }
 
   const handleLogout = () => {
     console.log('Cerrando sesión')
+    setUser(null)
+    localStorage.removeItem('user')
     setIsLoginOpen(false)
+    alert('¡Sesión cerrada!')
   }
 
   // Categorías disponibles
@@ -90,7 +181,6 @@ function Navbar() {
     { name: 'Vestidos', path: '/categoria/vestidos' },
     { name: 'Calzados', path: '/categoria/calzados' },
     { name: 'accesorios', path: '/categoria/accesorios' }
-
   ]
 
   return (
@@ -161,76 +251,78 @@ function Navbar() {
             </span>
           </button>
 
-          {/* Search Button & Panel */}
-          <div className="search-container">
-            <button className="nav-icon" onClick={toggleSearch}>
-              <span className="icon">🔍</span>
-            </button>
-            {isSearchOpen && (
-              <div className="search-panel">
-                <input
-                  type="text"
-                  placeholder="Buscar productos..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  onKeyPress={handleSearch}
-                  autoFocus
-                  className="search-input"
-                />
-                <button 
-                  className="search-close"
-                  onClick={() => setIsSearchOpen(false)}
-                >
-                  ✕
-                </button>
-              </div>
-            )}
-          </div>
-
           {/* Login Button & Panel */}
           <div className="login-container">
             <button className="nav-icon" onClick={toggleLogin}>
-              <span className="icon">👤</span>
+              {user ? (
+                <span className="user-avatar" title={user.name}>
+                  {user.avatar}
+                </span>
+              ) : (
+                <span className="icon">👤</span>
+              )}
             </button>
             {isLoginOpen && (
               <div className="login-panel">
-                <h4>Iniciar Sesión</h4>
-                
-                {/* Botón de Google */}
-                <button className="google-login-btn" onClick={handleGoogleLogin}>
-                  <span className="google-icon">G</span>
-                  Continuar con Google
-                </button>
-                
-                <div className="login-divider">
-                  <span>o ingresa con tu email</span>
-                </div>
-                
-                <form onSubmit={handleLogin} className="login-form">
-                  <input
-                    type="email"
-                    placeholder="Email"
-                    value={loginData.email}
-                    onChange={(e) => setLoginData({...loginData, email: e.target.value})}
-                    required
-                    className="login-input"
-                  />
-                  <input
-                    type="password"
-                    placeholder="Contraseña"
-                    value={loginData.password}
-                    onChange={(e) => setLoginData({...loginData, password: e.target.value})}
-                    required
-                    className="login-input"
-                  />
-                  <button type="submit" className="login-btn">
-                    Ingresar
-                  </button>
-                </form>
-                <div className="login-links">
-                  <a href="#registro">Crear cuenta</a>
-                  <a href="#olvide">¿Olvidé mi contraseña?</a>
-                </div>
+                {user ? (
+                  // Panel cuando el usuario está logueado
+                  <div className="user-panel">
+                    <h4>¡Hola, {user.name}!</h4>
+                    <p>{user.email}</p>
+                    <div className="user-actions">
+                      <Link to="/perfil" className="profile-btn" onClick={() => setIsLoginOpen(false)}>
+                        Mi Perfil
+                      </Link>
+                      <Link to="/pedidos" className="orders-btn" onClick={() => setIsLoginOpen(false)}>
+                        Mis Pedidos
+                      </Link>
+                      <button onClick={handleLogout} className="logout-btn">
+                        Cerrar Sesión
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  // Panel de login cuando no hay usuario
+                  <>
+                    <h4>Iniciar Sesión</h4>
+                    
+                    {/* Botón de Google - USANDO LA VERSIÓN SIMPLE */}
+                    <button className="google-login-btn" onClick={handleGoogleLoginSimple}>
+                      <span className="google-icon">G</span>
+                      Continuar con Google
+                    </button>
+                    
+                    <div className="login-divider">
+                      <span>o ingresa con tu email</span>
+                    </div>
+                    
+                    <form onSubmit={handleLogin} className="login-form">
+                      <input
+                        type="email"
+                        placeholder="Email"
+                        value={loginData.email}
+                        onChange={(e) => setLoginData({...loginData, email: e.target.value})}
+                        required
+                        className="login-input"
+                      />
+                      <input
+                        type="password"
+                        placeholder="Contraseña"
+                        value={loginData.password}
+                        onChange={(e) => setLoginData({...loginData, password: e.target.value})}
+                        required
+                        className="login-input"
+                      />
+                      <button type="submit" className="login-btn">
+                        Ingresar
+                      </button>
+                    </form>
+                    <div className="login-links">
+                      <a href="#registro">Crear cuenta</a>
+                      <a href="#olvide">¿Olvidé mi contraseña?</a>
+                    </div>
+                  </>
+                )}
                 <button 
                   className="login-close"
                   onClick={() => setIsLoginOpen(false)}
@@ -241,7 +333,7 @@ function Navbar() {
             )}
           </div>
 
-          {/* CARRITO REAL - Reemplazar el botón falso por CartWidget */}
+          {/* CARRITO REAL */}
           <CartWidget />
 
           <Link to="/admin" className="btn btn-admin">Panel Admin</Link>

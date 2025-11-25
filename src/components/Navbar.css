@@ -820,6 +820,120 @@ body.dark-mode .modal-info {
   color: #ffffff;
 }
 
+/* Estilos para el login con Google */
+.google-login-btn {
+  width: 100%;
+  padding: 12px;
+  background: white;
+  color: #333;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.3s ease;
+  margin-bottom: 1rem;
+}
+
+.google-login-btn:hover {
+  background: #f8f9fa;
+  border-color: #4285f4;
+  transform: translateY(-1px);
+}
+
+.google-icon {
+  background: #4285f4;
+  color: white;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.login-divider {
+  text-align: center;
+  margin: 1.5rem 0;
+  position: relative;
+  color: #666;
+}
+
+.login-divider::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: #ddd;
+}
+
+.login-divider span {
+  background: white;
+  padding: 0 1rem;
+  position: relative;
+}
+
+/* Estilos para el panel de usuario */
+.user-panel {
+  text-align: center;
+}
+
+.user-panel h4 {
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.user-panel p {
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+
+.user-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.profile-btn, .orders-btn {
+  padding: 10px;
+  background: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  text-decoration: none;
+  color: #333;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.profile-btn:hover, .orders-btn:hover {
+  background: #e9ecef;
+}
+
+.logout-btn {
+  padding: 10px;
+  background: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.logout-btn:hover {
+  background: #c82333;
+}
+
+.user-avatar {
+  font-size: 1.2rem;
+}
+
 /* Transición suave para el cambio de modo */
 body, .navbar, .categoria-page, .categoria-product-card,
 .nav-link, .logo-text, .search-panel, .login-panel {

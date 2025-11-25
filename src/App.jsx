@@ -1,6 +1,7 @@
 ﻿﻿import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { ProductProvider } from './context/ProductContext';
 import { CartProvider } from './context/CartContext';
+import { DashboardProvider } from './context/DashboardContext'; // ✅ AGREGAR ESTA IMPORTACIÓN
 import './App.css'
 import Navbar from './components/Navbar';
 import Landing from './components/Landing';
@@ -33,51 +34,55 @@ function App() {
     <AuthProvider>
       <ProductProvider>
         <CartProvider>
-          <Router>
-            <div className="App">
-              <Navbar />
-              
-              {/* DEBUG TEMPORAL - eliminar cuando funcione */}
-              <div style={{
-                background: '#e3f2fd', 
-                padding: '10px', 
-                textAlign: 'center',
-                borderBottom: '2px solid #2196f3',
-                fontSize: '14px'
-              }}>
-                <strong>🛒 DEBUG CARRO:</strong> El carrito funciona - prueba agregar productos en Outlet
+          {/* ✅ AGREGAR DashboardProvider AQUÍ */}
+          <DashboardProvider>
+            <Router>
+              <div className="App">
+                <Navbar />
+                
+                {/* DEBUG TEMPORAL - eliminar cuando funcione */}
+                <div style={{
+                  background: '#e3f2fd', 
+                  padding: '10px', 
+                  textAlign: 'center',
+                  borderBottom: '2px solid #2196f3',
+                  fontSize: '14px'
+                }}>
+                  <strong>🛒 DEBUG CARRO:</strong> El carrito funciona - prueba agregar productos en Outlet
+                </div>
+
+                <ErrorBoundary>
+                  <Routes>
+                    <Route path="/" element={<Landing />} />
+                    <Route path="/outlet" element={<OutletPage />} />
+                    <Route path="/admin" element={<PanelAdmin />} />
+                    <Route path="/admin-login" element={<AdminLogin />} />
+                    <Route path="/nosotros" element={<Nosotros />} />
+                    <Route path="/mujer" element={<Ubicacion />} />
+                    <Route path="/mayorista" element={<Mayorista />} />
+                    <Route path="/admin-auth" element={<AdminAuth />} />
+                    <Route path="/novedades" element={<Novedades />} />
+                    <Route path="/bodys" element={<Bodys />} />
+                    <Route path="/accesorios" element={<Accesorios />} />
+                    <Route path="/calzados" element={<Calzados />} />
+                    <Route path="/productos" element={<Productos />} />
+                    <Route path="/ventasalpormayor" element={<VentaSalPorMayor />} />
+                    <Route path="/categoria/:categoria" element={<Categoria />} />
+                    <Route path="/cart" element={<CartPage />} />
+                    <Route path="/about" element={<AboutPage />} />
+                    <Route path="/preguntas-frecuentes" element={<PreguntasFrecuentes />} />
+                    <Route path="/contacto" element={<Contacto />} />
+                  </Routes>
+                </ErrorBoundary>
+
+                {/* BOTÓN FLOTANTE DE WHATSAPP */}
+                <WhatsAppFloat />
+                
+                <Footer />
               </div>
-
-              <ErrorBoundary>
-                <Routes>
-                  <Route path="/" element={<Landing />} />
-                  <Route path="/outlet" element={<OutletPage />} />
-                  <Route path="/admin" element={<PanelAdmin />} />
-                  <Route path="/admin-login" element={<AdminLogin />} />
-                  <Route path="/nosotros" element={<Nosotros />} />
-                  <Route path="/mujer" element={<Ubicacion />} />
-                  <Route path="/mayorista" element={<Mayorista />} />
-                  <Route path="/admin-auth" element={<AdminAuth />} />
-                  <Route path="/novedades" element={<Novedades />} />
-                  <Route path="/bodys" element={<Bodys />} />
-                  <Route path="/accesorios" element={<Accesorios />} />
-                  <Route path="/calzados" element={<Calzados />} />
-                  <Route path="/productos" element={<Productos />} />
-                  <Route path="/ventasalpormayor" element={<VentaSalPorMayor />} />
-                  <Route path="/categoria/:categoria" element={<Categoria />} />
-                  <Route path="/cart" element={<CartPage />} />
-                  <Route path="/about" element={<AboutPage />} />
-                  <Route path="/preguntas-frecuentes" element={<PreguntasFrecuentes />} />
-                  <Route path="/contacto" element={<Contacto />} />
-                </Routes>
-              </ErrorBoundary>
-
-              {/* BOTÓN FLOTANTE DE WHATSAPP */}
-              <WhatsAppFloat />
-              
-              <Footer />
-            </div>
-          </Router>
+            </Router>
+          </DashboardProvider>
+          {/* ✅ FIN DE DashboardProvider */}
         </CartProvider>
       </ProductProvider>
     </AuthProvider>

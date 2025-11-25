@@ -39,6 +39,11 @@ function PanelAdmin() {
     }
   };
 
+  // En tu PanelAdmin.jsx, en la sección del dashboard:
+{activeSection === 'dashboard' && (
+  <DashboardStats />
+)}
+
   const handleEditProduct = (product) => {
     setEditingProduct(product);
     setActiveSection('edit-product');

@@ -1,43 +1,10 @@
 // src/context/AuthContext.jsx
-import { createContext, useState, useContext, useEffect } from 'react';
+import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 
+// Crear el contexto
 const AuthContext = createContext();
 
-export function AuthProvider({ children }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    // Verificar si ya está autenticado al cargar la página
-    const authStatus = localStorage.getItem('adminAuthenticated');
-    if (authStatus === 'true') {
-      setIsAuthenticated(true);
-    }
-    setIsLoading(false);
-  }, []);
-
-  const login = (password) => {
-    // Contraseña simple - puedes cambiarla por lo que necesites
-    if (password === 'admin123') {
-      setIsAuthenticated(true);
-      localStorage.setItem('adminAuthenticated', 'true');
-      return true;
-    }
-    return false;
-  };
-
-  const logout = () => {
-    setIsAuthenticated(false);
-    localStorage.removeItem('adminAuthenticated');
-  };
-
-  return (
-    <AuthContext.Provider value={{ isAuthenticated, isLoading, login, logout }}>
-      {children}
-    </AuthContext.Provider>
-  );
-}
-
+// Hook personalizado
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
@@ -45,3 +12,54 @@ export const useAuth = () => {
   }
   return context;
 };
+
+// Provider component
+export const AuthProvider = ({ children }) => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Verificar autenticación al cargar
+  useEffect(() => {
+    const checkAuth = async () => {
+      // Aquí podrías verificar un token en localStorage, etc.
+      setIsLoading(false);
+    };
+    checkAuth();
+  }, []);
+
+  const login = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      // Simular verificación
+      await new Promise(resolve => setTimeout(resolve, 100));
+      setIsAuthenticated(true);
+      console.log('🔓 Sesión de administrador iniciada');
+    } catch (error) {
+      console.error('Error en login:', error);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  const logout = useCallback(() => {
+    setIsAuthenticated(false);
+    console.log('🔒 Sesión de administrador cerrada');
+  }, []);
+
+  const value = {
+    isAuthenticated,
+    isLoading,
+    login,
+    logout
+  };
+
+  return (
+    <AuthContext.Provider value={value}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+// Exportación por defecto del contexto (opcional)
+export default AuthContext;

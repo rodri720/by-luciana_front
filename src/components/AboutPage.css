@@ -1,8 +1,8 @@
 /* components/AboutPage.css */
 .about-page {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #1a1a1a; /* Fondo gris oscuro */
-  color: #e0e0e0; /* Texto blanco */
+  background-color: #f5f5f5; /* Fondo gris claro */
+  color: #666666; /* Texto gris oscuro */
   line-height: 1.6;
   min-height: 100vh;
 }
@@ -19,7 +19,7 @@
   padding: 60px 20px;
   text-align: center;
   border-radius: 0 0 20px 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   margin-bottom: 40px;
 }
 
@@ -28,6 +28,7 @@
   font-weight: 700;
   margin-bottom: 10px;
   letter-spacing: 2px;
+  color: #000000; /* Título negro */
 }
 
 .about-header .tagline {
@@ -35,14 +36,15 @@
   opacity: 0.9;
   max-width: 600px;
   margin: 0 auto;
+  color: #ffffff; /* Mantener blanco para contraste en el header */
 }
 
 .content-section {
-  background: #2d2d2d; /* Fondo gris oscuro */
+  background: #ffffff; /* Fondo blanco */
   border-radius: 12px;
   padding: 30px;
   margin-bottom: 30px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
 }
 
@@ -51,28 +53,30 @@
 }
 
 .about-page h2 {
-  color: #d4a5ad; /* Rosa viejo más claro */
+  color: #000000; /* Título negro */
   margin-bottom: 20px;
   padding-bottom: 10px;
-  border-bottom: 2px solid #404040; /* Borde gris */
+  border-bottom: 2px solid #dddddd; /* Borde gris claro */
 }
 
 .about-page h3 {
-  color: #d4a5ad; /* Rosa viejo */
+  color: #000000; /* Título negro */
   margin: 25px 0 15px;
 }
 
 .about-page p {
   margin-bottom: 15px;
   font-size: 1.05rem;
+  color: #666666; /* Texto gris oscuro */
 }
 
 .highlight {
-  background-color: #2a1f23; /* Fondo rosa oscuro/marrón */
+  background-color: #f9f9f9; /* Fondo gris muy claro */
   padding: 20px;
-  border-left: 4px solid #d4a5ad; /* Borde rosa viejo */
+  border-left: 4px solid #b87d8c; /* Borde rosa viejo */
   margin: 20px 0;
   border-radius: 0 8px 8px 0;
+  color: #666666; /* Texto gris oscuro */
 }
 
 .values-grid {
@@ -83,14 +87,15 @@
 }
 
 .value-card {
-  background: #2a1f23; /* Fondo rosa oscuro/marrón */
+  background: #f9f9f9; /* Fondo gris muy claro */
   padding: 20px;
   border-radius: 8px;
-  border-top: 4px solid #d4a5ad; /* Borde superior rosa viejo */
+  border-top: 4px solid #b87d8c; /* Borde superior rosa viejo */
+  color: #666666; /* Texto gris oscuro */
 }
 
 .value-card h4 {
-  color: #d4a5ad; /* Rosa viejo */
+  color: #000000; /* Título negro */
   margin-bottom: 10px;
 }
 

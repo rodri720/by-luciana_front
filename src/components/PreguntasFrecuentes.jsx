@@ -71,7 +71,7 @@ const PreguntasFrecuentes = () => {
               <h3>1. ¿Qué es by_lu_Aliendo?</h3>
               <div className="faq-answer">
                 <p>by_lu_Aliendo es una plataforma mayorista, orientada a revendedores y negocios.</p>
-                <p>Cuenta con más de 300 fabricantes mayoristas de indumentaria de la Zona de Flores (CABA), actuando como la vidriera digital más grande para tu negocio.</p>
+                <p>Cuenta con más de 300 fabricantes mayoristas de indumentaria de la Provincia de Cordoba, actuando como la vidriera digital más grande para tu negocio.</p>
               </div>
             </div>
 
