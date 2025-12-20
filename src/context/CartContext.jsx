@@ -1,15 +1,20 @@
-// src/context/CartContext.jsx
 import React, { createContext, useState, useContext, useEffect } from 'react';
 
 const CartContext = createContext();
 
-// Hook personalizado - debe estar dentro del archivo pero no como export directo
+// Hook personalizado
 const useCart = () => {
   const context = useContext(CartContext);
   if (!context) {
     throw new Error('useCart must be used within a CartProvider');
   }
   return context;
+};
+
+// Función auxiliar para IDs seguros
+const safeGetId = (item, fallback = '') => {
+  if (!item) return fallback;
+  return item.product?._id || item._id || item.id || fallback;
 };
 
 // Provider component
@@ -24,66 +29,111 @@ const CartProvider = ({ children }) => {
         console.log('🔄 Cargando carrito desde localStorage...');
         setLoading(true);
         const savedCart = localStorage.getItem('byLuciana_cart');
-        console.log('📦 Carrito guardado encontrado:', savedCart);
         
         if (savedCart) {
           const parsedCart = JSON.parse(savedCart);
-          console.log('✅ Carrito parseado:', parsedCart);
-          setCart(parsedCart);
+          // Filtrar items null/undefined al cargar
+          const filteredCart = parsedCart.filter(item => item != null);
+          console.log('✅ Carrito cargado y filtrado:', filteredCart);
+          setCart(filteredCart);
         } else {
-          console.log('❌ No hay carrito guardado en localStorage');
+          console.log('❌ No hay carrito guardado');
         }
       } catch (error) {
-        console.log('🚨 Error loading cart from storage:', error);
+        console.log('🚨 Error loading cart:', error);
         setCart([]);
       } finally {
         setLoading(false);
-        console.log('🏁 Carga del carrito completada');
       }
     };
 
     loadCartFromStorage();
   }, []);
 
+  // Guardar carrito en localStorage cuando cambie
+  useEffect(() => {
+    if (cart.length > 0) {
+      localStorage.setItem('byLuciana_cart', JSON.stringify(cart));
+    }
+  }, [cart]);
+
+  // Validar y limpiar carrito periódicamente
+  useEffect(() => {
+    const validateCart = () => {
+      const hasInvalidItems = cart.some(item => {
+        if (!item) return true;
+        if (!safeGetId(item)) return true;
+        const price = item.product?.precio || item.product?.price || item.precio;
+        return !price || price <= 0;
+      });
+      
+      if (hasInvalidItems) {
+        console.log('⚠️ Carrito contiene items inválidos, limpiando...');
+        const cleanedCart = cart.filter(item => {
+          if (!item) return false;
+          if (!safeGetId(item)) return false;
+          const price = item.product?.precio || item.product?.price || item.precio;
+          return price && price > 0;
+        });
+        setCart(cleanedCart);
+      }
+    };
+    
+    if (cart.length > 0) {
+      validateCart();
+    }
+  }, [cart]);
+
   const addToCart = (product, quantity = 1) => {
     console.log('🛒 Intentando agregar al carrito:', { 
-      product: product?.name || 'Sin nombre', 
+      product: product?.name || product?.nombre || 'Sin nombre', 
       productId: product?._id,
       quantity 
     });
 
+    // ✅ VALIDACIÓN CRÍTICA
+    if (!product) {
+      console.error('❌ ERROR: addToCart recibió product null');
+      alert('❌ Error: El producto no es válido');
+      return;
+    }
+
+    const productId = product._id || product.id;
+    if (!productId) {
+      console.error('❌ ERROR: Producto sin ID:', product);
+      alert('❌ Error: El producto no tiene ID válido');
+      return;
+    }
+
     try {
       setCart(prevCart => {
-        console.log('📋 Carrito actual:', prevCart);
-        
-        const existingItem = prevCart.find(item => item.product?._id === product._id);
-        console.log('🔍 Item existente encontrado:', existingItem);
+        const existingItemIndex = prevCart.findIndex(item => {
+          if (!item) return false;
+          return safeGetId(item) === productId;
+        });
 
         let updatedCart;
 
-        if (existingItem) {
-          console.log('📝 Actualizando cantidad del item existente');
-          updatedCart = prevCart.map(item =>
-            item.product?._id === product._id
-              ? { ...item, quantity: item.quantity + quantity }
-              : item
-          );
+        if (existingItemIndex !== -1) {
+          const existingItem = prevCart[existingItemIndex];
+          updatedCart = [...prevCart];
+          updatedCart[existingItemIndex] = {
+            ...existingItem,
+            quantity: (existingItem.quantity || 0) + quantity
+          };
         } else {
-          console.log('➕ Agregando nuevo item al carrito');
-          updatedCart = [...prevCart, { 
-            _id: Date.now().toString(),
-            product, 
-            quantity,
-            addedAt: new Date().toISOString()
-          }];
+          const cartItem = {
+            _id: productId,
+            product: product,
+            quantity: Math.max(1, quantity),
+            addedAt: new Date().toISOString(),
+            nombre: product.nombre || product.name || 'Producto',
+            precio: product.precio || product.price || 0,
+            imagen: product.imagen || product.images?.[0] || product.image || ''
+          };
+          updatedCart = [...prevCart, cartItem];
         }
 
-        console.log('🔄 Carrito actualizado:', updatedCart);
-
-        // Guardar en localStorage
-        localStorage.setItem('byLuciana_cart', JSON.stringify(updatedCart));
-        console.log('💾 Carrito guardado en localStorage');
-        
         return updatedCart;
       });
     } catch (error) {
@@ -92,16 +142,18 @@ const CartProvider = ({ children }) => {
   };
 
   const removeFromCart = (productId) => {
-    console.log('🗑️ Intentando eliminar del carrito, productId:', productId);
+    console.log('🗑️ Eliminando del carrito, productId:', productId);
     
     try {
       setCart(prevCart => {
-        console.log('📋 Carrito antes de eliminar:', prevCart);
-        const updatedCart = prevCart.filter(item => item.product?._id !== productId);
-        console.log('📋 Carrito después de eliminar:', updatedCart);
+        const updatedCart = prevCart.filter(item => {
+          if (!item) return false;
+          return safeGetId(item) !== productId;
+        });
         
-        localStorage.setItem('byLuciana_cart', JSON.stringify(updatedCart));
-        console.log('💾 Carrito actualizado guardado en localStorage');
+        if (updatedCart.length === 0) {
+          localStorage.removeItem('byLuciana_cart');
+        }
         
         return updatedCart;
       });
@@ -110,27 +162,20 @@ const CartProvider = ({ children }) => {
     }
   };
 
-  const updateQuantity = (productId, quantity) => {
-    console.log('🔢 Actualizando cantidad, productId:', productId, 'cantidad:', quantity);
+  const updateQuantity = (productId, newQuantity) => {
+    console.log('🔢 Actualizando cantidad:', productId, 'cantidad:', newQuantity);
     
-    if (quantity < 1) {
-      console.log('❌ Cantidad menor a 1, eliminando producto');
-      removeFromCart(productId);
-      return;
-    }
-
+    const safeQuantity = Math.max(1, newQuantity);
+    
     try {
       setCart(prevCart => {
-        console.log('📋 Carrito antes de actualizar cantidad:', prevCart);
-        const updatedCart = prevCart.map(item =>
-          item.product?._id === productId
-            ? { ...item, quantity }
-            : item
-        );
-        console.log('📋 Carrito después de actualizar cantidad:', updatedCart);
-        
-        localStorage.setItem('byLuciana_cart', JSON.stringify(updatedCart));
-        console.log('💾 Carrito con cantidad actualizada guardado');
+        const updatedCart = prevCart.map(item => {
+          if (!item) return item;
+          if (safeGetId(item) === productId) {
+            return { ...item, quantity: safeQuantity };
+          }
+          return item;
+        });
         
         return updatedCart;
       });
@@ -143,8 +188,7 @@ const CartProvider = ({ children }) => {
     console.log('🧹 Limpiando carrito completo');
     try {
       setCart([]);
-      localStorage.setItem('byLuciana_cart', JSON.stringify([]));
-      console.log('✅ Carrito limpiado correctamente');
+      localStorage.removeItem('byLuciana_cart');
     } catch (error) {
       console.error('🚨 Error clearing cart:', error);
     }
@@ -152,16 +196,75 @@ const CartProvider = ({ children }) => {
 
   const getCartTotal = () => {
     const total = cart.reduce((total, item) => {
-      return total + (item.product?.price || 0) * item.quantity;
+      if (!item) return total;
+      const price = item.product?.price || item.product?.precio || item.precio || 0;
+      const quantity = item.quantity || 1;
+      return total + (price * quantity);
     }, 0);
-    console.log('💰 Calculando total del carrito:', total);
+    
     return total;
   };
 
   const getCartItemsCount = () => {
-    const count = cart.reduce((total, item) => total + item.quantity, 0);
-    console.log('🔢 Cantidad total de items en carrito:', count);
+    const count = cart.reduce((total, item) => {
+      return total + (item?.quantity || 1);
+    }, 0);
+    
     return count;
+  };
+
+  const getCartItemsForCheckout = () => {
+    console.log('🛍️ Preparando items para checkout...');
+    
+    return cart
+      .filter(item => item != null)
+      .map((item, index) => {
+        const itemId = safeGetId(item);
+        
+        if (!itemId) {
+          const tempId = `temp-${Date.now()}-${index}`;
+          console.log(`⚠️ Item sin ID, usando temporal: ${tempId}`);
+          
+          return {
+            id: tempId,
+            title: item.product?.nombre || item.product?.name || item.nombre || `Producto ${index + 1}`,
+            description: item.product?.descripcion || item.product?.description || '',
+            quantity: Math.max(1, item.quantity || 1),
+            unit_price: item.product?.precio || item.product?.price || item.precio || 0,
+            picture_url: item.product?.imagen?.[0] || item.product?.images?.[0] || item.imagen?.[0] || '',
+            category: item.product?.categoria || 'fashion',
+            is_temp: true
+          };
+        }
+        
+        return {
+          id: itemId,
+          title: item.product?.nombre || item.product?.name || item.nombre || 'Producto',
+          description: item.product?.descripcion || item.product?.description || '',
+          quantity: Math.max(1, item.quantity || 1),
+          unit_price: item.product?.precio || item.product?.price || item.precio || 0,
+          picture_url: item.product?.imagen?.[0] || item.product?.images?.[0] || item.imagen?.[0] || '',
+          category: item.product?.categoria || 'fashion',
+          is_temp: false
+        };
+      })
+      .filter(item => item.unit_price > 0);
+  };
+
+  const isInCart = (productId) => {
+    return cart.some(item => {
+      if (!item) return false;
+      return safeGetId(item) === productId;
+    });
+  };
+
+  const getProductQuantity = (productId) => {
+    const item = cart.find(item => {
+      if (!item) return false;
+      return safeGetId(item) === productId;
+    });
+    
+    return item ? item.quantity : 0;
   };
 
   const value = {
@@ -172,10 +275,11 @@ const CartProvider = ({ children }) => {
     updateQuantity,
     clearCart,
     getCartTotal,
-    getCartItemsCount
+    getCartItemsCount,
+    getCartItemsForCheckout,
+    isInCart,
+    getProductQuantity
   };
-
-  console.log('🎯 CartContext value actual:', value);
 
   return (
     <CartContext.Provider value={value}>
@@ -184,6 +288,4 @@ const CartProvider = ({ children }) => {
   );
 };
 
-// SOLO exportaciones nombradas para Fast Refresh
 export { CartProvider, useCart };
-// NO export default - esto causa el problema

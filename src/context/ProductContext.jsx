@@ -1,49 +1,115 @@
 // src/context/ProductContext.jsx
 import { createContext, useContext, useState, useEffect } from 'react';
 
-// ✅ Crear el contexto y exportarlo
 export const ProductContext = createContext();
 
 export function ProductProvider({ children }) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null); // ✅ AGREGAR ESTADO DE ERROR
+  const [error, setError] = useState(null);
+  const [backendStatus, setBackendStatus] = useState('checking');
 
-  // Cargar productos
+  // ✅ FUNCIÓN OPTIMIZADA PARA CARGAR PRODUCTOS
   const loadProducts = async () => {
     try {
-      console.log('🔄 Cargando productos...');
-      setError(null); // ✅ LIMPIAR ERRORES ANTERIORES
       setLoading(true);
+      setError(null);
+      setBackendStatus('connecting');
       
-      const res = await fetch('http://localhost:5000/api/products/all');
+      const backendUrl = 'http://localhost:5000';
+      const response = await fetch(`${backendUrl}/api/products/all`);
       
-      if (!res.ok) {
-        throw new Error(`Error ${res.status}: ${res.statusText}`);
+      if (!response.ok) {
+        throw new Error(`Error ${response.status}: ${response.statusText}`);
       }
       
-      const data = await res.json();
-      console.log('✅ Productos cargados:', data.length);
-      setProducts(data);
+      const data = await response.json();
+      
+      // ✅ CORREGIR LAS URLS DE LAS IMÁGENES
+      let productsToSet = [];
+      
+      if (Array.isArray(data)) {
+        productsToSet = data.map(product => ({
+          ...product,
+          images: product.images?.map(image => 
+            image.startsWith('http') ? image : `${backendUrl}${image}`
+          ) || ['/placeholder-product.jpg']
+        }));
+      } else if (data.success && Array.isArray(data.products)) {
+        productsToSet = data.products.map(product => ({
+          ...product,
+          images: product.images?.map(image => 
+            image.startsWith('http') ? image : `${backendUrl}${image}`
+          ) || ['/placeholder-product.jpg']
+        }));
+      } else {
+        throw new Error('Estructura de datos inválida del backend');
+      }
+      
+      setProducts(productsToSet);
+      setBackendStatus('connected');
+      
     } catch (error) {
-      console.error('❌ Error loading products:', error);
-      setError(error); // ✅ GUARDAR EL ERROR
-      setProducts([]);
+      console.error('Error cargando productos:', error);
+      setError(error.message);
+      setBackendStatus('error');
+      
+      // ✅ Datos de ejemplo como fallback
+      setProducts(getSampleProducts());
+      setBackendStatus('fallback');
     } finally {
       setLoading(false);
     }
   };
 
-  // 🚀 CREATE PRODUCT - VERSIÓN CORREGIDA DEFINITIVA
+  // ✅ DATOS DE EJEMPLO MEJORADOS
+  const getSampleProducts = () => [
+    {
+      _id: '1',
+      name: 'Remera Básica Negra',
+      price: 15990,
+      description: 'Remera de algodón 100% premium, perfecta para uso diario.',
+      images: ['/placeholder-product.jpg'],
+      category: 'ropa',
+      sizes: ['S', 'M', 'L', 'XL'],
+      colors: ['Negro'],
+      stock: 15,
+      featured: true,
+      createdAt: new Date()
+    },
+    {
+      _id: '2',
+      name: 'Jean Slim Fit',
+      price: 29990,
+      description: 'Jean de corte slim fit, cómodo y moderno.',
+      images: ['/placeholder-product.jpg'],
+      category: 'ropa',
+      sizes: ['28', '30', '32', '34'],
+      colors: ['Azul', 'Negro'],
+      stock: 8,
+      featured: true,
+      createdAt: new Date()
+    },
+    {
+      _id: '3',
+      name: 'Camisa de Lino',
+      price: 22990,
+      description: 'Camisa de lino natural, ideal para verano.',
+      images: ['/placeholder-product.jpg'],
+      category: 'ropa',
+      sizes: ['S', 'M', 'L'],
+      colors: ['Blanco', 'Beige'],
+      stock: 12,
+      featured: false,
+      createdAt: new Date()
+    }
+  ];
+
+  // ✅ CREATE PRODUCT - VERSIÓN OPTIMIZADA
   const createProduct = async (productData) => {
-    console.log('=== 🚨 CREATE PRODUCT INICIADO 🚨 ===');
-    console.log('📦 Datos recibidos:', productData);
-    
     try {
-      setError(null); // ✅ LIMPIAR ERRORES
+      setError(null);
       const formData = new FormData();
-      
-      console.log('📤 Creando FormData...');
       
       // ✅ AGREGAR CAMPOS NORMALES
       Object.keys(productData).forEach(key => {
@@ -52,88 +118,69 @@ export function ProductProvider({ children }) {
             ? productData[key].toString() 
             : productData[key];
           formData.append(key, value);
-          console.log(`📝 Agregando campo: ${key} = ${value}`);
         }
       });
 
       // ✅ AGREGAR IMÁGENES - LÓGICA MEJORADA
       if (productData.images && productData.images.length > 0) {
-        console.log(`🖼️ Procesando ${productData.images.length} imágenes...`);
-        
-        productData.images.forEach((imageItem, index) => {
-          console.log(`📸 Imagen ${index}:`, imageItem);
-          
+        productData.images.forEach((imageItem) => {
           let fileToUpload;
 
-          // Diferentes formas en que puede venir la imagen
           if (imageItem instanceof File) {
             fileToUpload = imageItem;
-            console.log(`✅ Caso 1 - Es File directo`);
           } 
           else if (imageItem && imageItem.file instanceof File) {
             fileToUpload = imageItem.file;
-            console.log(`✅ Caso 2 - Tiene propiedad file`);
           }
           else if (imageItem && typeof imageItem === 'object' && imageItem.size) {
             fileToUpload = imageItem;
-            console.log(`✅ Caso 3 - Es objeto con size`);
-          }
-          else {
-            console.log(`❌ Imagen ${index} en formato no reconocido:`, imageItem);
-            return;
           }
           
-          // Verificación final
           if (fileToUpload && fileToUpload.size > 0) {
             formData.append('images', fileToUpload);
-            console.log(`✅✅ IMAGEN ${index} AGREGADA: ${fileToUpload.name} (${fileToUpload.size} bytes)`);
-          } else {
-            console.log(`❌ Imagen ${index} sin tamaño válido`);
           }
         });
-      } else {
-        console.log('ℹ️ No hay imágenes para enviar');
       }
 
-      console.log('🚀 Enviando request...');
-      
-      const res = await fetch('http://localhost:5000/api/products', {
+      const backendUrl = 'http://localhost:5000';
+      const res = await fetch(`${backendUrl}/api/products`, {
         method: 'POST',
         body: formData,
       });
 
-      console.log('=== 🔍 RESPUESTA DEL SERVIDOR ===');
-      console.log('📨 Status:', res.status);
-      console.log('📨 OK:', res.ok);
-      
-      const responseText = await res.text();
-      console.log('📨 Body:', responseText);
-
       if (!res.ok) {
-        throw new Error(`Error ${res.status}: ${responseText}`);
+        const errorText = await res.text();
+        throw new Error(`Error ${res.status}: ${errorText}`);
       }
 
-      const newProduct = JSON.parse(responseText);
-      console.log('✅ PRODUCTO CREADO EXITOSAMENTE:', newProduct);
+      const newProduct = await res.json();
+      
+      // ✅ CORREGIR URLS DE IMÁGENES DEL NUEVO PRODUCTO
+      const productWithCorrectUrls = {
+        ...newProduct,
+        images: newProduct.images?.map(image => 
+          image.startsWith('http') ? image : `${backendUrl}${image}`
+        ) || ['/placeholder-product.jpg']
+      };
       
       // Actualizar estado local
-      setProducts(prev => [...prev, newProduct]);
-      return newProduct;
+      setProducts(prev => [...prev, productWithCorrectUrls]);
+      return productWithCorrectUrls;
 
     } catch (error) {
-      console.error('❌ Error en createProduct:', error);
-      setError(error); // ✅ GUARDAR EL ERROR
+      console.error('Error creando producto:', error);
+      setError(error.message);
       throw error;
     }
   };
 
-  // Actualizar producto
+  // ✅ ACTUALIZAR PRODUCTO - OPTIMIZADO
   const updateProduct = async (id, productData) => {
     try {
-      console.log('🔄 Actualizando producto:', id);
-      setError(null); // ✅ LIMPIAR ERRORES
+      setError(null);
       
-      const res = await fetch(`http://localhost:5000/api/products/${id}`, {
+      const backendUrl = 'http://localhost:5000';
+      const res = await fetch(`${backendUrl}/api/products/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -147,26 +194,33 @@ export function ProductProvider({ children }) {
       }
 
       const updatedProduct = await res.json();
-      console.log('✅ Producto actualizado:', updatedProduct);
+      
+      // ✅ CORREGIR URLS DE IMÁGENES DEL PRODUCTO ACTUALIZADO
+      const productWithCorrectUrls = {
+        ...updatedProduct,
+        images: updatedProduct.images?.map(image => 
+          image.startsWith('http') ? image : `${backendUrl}${image}`
+        ) || ['/placeholder-product.jpg']
+      };
       
       setProducts(prev => 
-        prev.map(product => product._id === id ? updatedProduct : product)
+        prev.map(product => product._id === id ? productWithCorrectUrls : product)
       );
-      return updatedProduct;
+      return productWithCorrectUrls;
     } catch (error) {
-      console.error('❌ Error updating product:', error);
-      setError(error); // ✅ GUARDAR EL ERROR
+      console.error('Error actualizando producto:', error);
+      setError(error.message);
       throw error;
     }
   };
 
-  // Subir imagen a producto existente
+  // ✅ SUBIR IMAGEN A PRODUCTO EXISTENTE
   const uploadProductImage = async (productId, formData) => {
     try {
-      console.log('🔄 Subiendo imagen para producto:', productId);
-      setError(null); // ✅ LIMPIAR ERRORES
+      setError(null);
       
-      const res = await fetch(`http://localhost:5000/api/products/${productId}/image`, {
+      const backendUrl = 'http://localhost:5000';
+      const res = await fetch(`${backendUrl}/api/products/${productId}/image`, {
         method: 'POST',
         body: formData,
       });
@@ -177,7 +231,11 @@ export function ProductProvider({ children }) {
       }
 
       const data = await res.json();
-      console.log('✅ Imagen subida:', data);
+      
+      // ✅ CORREGIR URLS DE IMÁGENES
+      const correctedImages = data.images?.map(image => 
+        image.startsWith('http') ? image : `${backendUrl}${image}`
+      ) || ['/placeholder-product.jpg'];
       
       // Actualizar producto en el estado
       setProducts(prevProducts => 
@@ -185,28 +243,28 @@ export function ProductProvider({ children }) {
           product._id === productId 
             ? { 
                 ...product, 
-                images: data.images,
-                image: data.imageUrl || data.images?.[0] 
+                images: correctedImages,
+                image: correctedImages[0] 
               }
             : product
         )
       );
 
-      return data;
+      return { ...data, images: correctedImages };
     } catch (error) {
-      console.error('❌ Error uploading image:', error);
-      setError(error); // ✅ GUARDAR EL ERROR
+      console.error('Error subiendo imagen:', error);
+      setError(error.message);
       throw error;
     }
   };
 
-  // Eliminar imagen de producto
+  // ✅ ELIMINAR IMAGEN DE PRODUCTO
   const deleteProductImage = async (productId, imageUrl) => {
     try {
-      console.log('🔄 Eliminando imagen:', imageUrl);
-      setError(null); // ✅ LIMPIAR ERRORES
+      setError(null);
       
-      const res = await fetch(`http://localhost:5000/api/products/${productId}/delete-image`, {
+      const backendUrl = 'http://localhost:5000';
+      const res = await fetch(`${backendUrl}/api/products/${productId}/delete-image`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -220,7 +278,11 @@ export function ProductProvider({ children }) {
       }
 
       const data = await res.json();
-      console.log('✅ Imagen eliminada:', data);
+      
+      // ✅ CORREGIR URLS DE IMÁGENES RESTANTES
+      const correctedImages = data.images?.map(image => 
+        image.startsWith('http') ? image : `${backendUrl}${image}`
+      ) || ['/placeholder-product.jpg'];
       
       // Actualizar producto en el estado
       setProducts(prevProducts => 
@@ -228,27 +290,27 @@ export function ProductProvider({ children }) {
           product._id === productId 
             ? { 
                 ...product, 
-                images: data.images 
+                images: correctedImages 
               }
             : product
         )
       );
 
-      return data;
+      return { ...data, images: correctedImages };
     } catch (error) {
-      console.error('❌ Error deleting image:', error);
-      setError(error); // ✅ GUARDAR EL ERROR
+      console.error('Error eliminando imagen:', error);
+      setError(error.message);
       throw error;
     }
   };
 
-  // Establecer imagen principal
+  // ✅ ESTABLECER IMAGEN PRINCIPAL
   const setMainImage = async (productId, imageUrl) => {
     try {
-      console.log('🔄 Estableciendo imagen principal:', imageUrl);
-      setError(null); // ✅ LIMPIAR ERRORES
+      setError(null);
       
-      const res = await fetch(`http://localhost:5000/api/products/${productId}/set-main-image`, {
+      const backendUrl = 'http://localhost:5000';
+      const res = await fetch(`${backendUrl}/api/products/${productId}/set-main-image`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -262,7 +324,11 @@ export function ProductProvider({ children }) {
       }
 
       const data = await res.json();
-      console.log('✅ Imagen principal establecida:', data);
+      
+      // ✅ CORREGIR URLS DE IMÁGENES
+      const correctedImages = data.images?.map(image => 
+        image.startsWith('http') ? image : `${backendUrl}${image}`
+      ) || ['/placeholder-product.jpg'];
       
       // Actualizar producto en el estado
       setProducts(prevProducts => 
@@ -270,27 +336,27 @@ export function ProductProvider({ children }) {
           product._id === productId 
             ? { 
                 ...product, 
-                images: data.images 
+                images: correctedImages 
               }
             : product
         )
       );
 
-      return data;
+      return { ...data, images: correctedImages };
     } catch (error) {
-      console.error('❌ Error setting main image:', error);
-      setError(error); // ✅ GUARDAR EL ERROR
+      console.error('Error estableciendo imagen principal:', error);
+      setError(error.message);
       throw error;
     }
   };
 
-  // Eliminar producto (soft delete)
+  // ✅ ELIMINAR PRODUCTO (SOFT DELETE)
   const deleteProduct = async (id) => {
     try {
-      console.log('🔄 Eliminando producto:', id);
-      setError(null); // ✅ LIMPIAR ERRORES
+      setError(null);
       
-      const res = await fetch(`http://localhost:5000/api/products/${id}`, {
+      const backendUrl = 'http://localhost:5000';
+      const res = await fetch(`${backendUrl}/api/products/${id}`, {
         method: 'DELETE',
       });
 
@@ -299,63 +365,97 @@ export function ProductProvider({ children }) {
         throw new Error(`Error ${res.status}: ${errorText}`);
       }
 
-      console.log('✅ Producto eliminado');
-      
       // Actualizar estado local
       setProducts(prev => prev.filter(product => product._id !== id));
       
     } catch (error) {
-      console.error('❌ Error deleting product:', error);
-      setError(error); // ✅ GUARDAR EL ERROR
+      console.error('Error eliminando producto:', error);
+      setError(error.message);
       throw error;
     }
   };
 
-  // Obtener producto por ID
-  const getProductById = async (id) => {
+  // ✅ OBTENER PRODUCTO POR ID (CON FETCH)
+  const fetchProductById = async (id) => {
     try {
-      console.log('🔄 Obteniendo producto:', id);
-      setError(null); // ✅ LIMPIAR ERRORES
+      setError(null);
       
-      const res = await fetch(`http://localhost:5000/api/products/${id}`);
+      const backendUrl = 'http://localhost:5000';
+      const res = await fetch(`${backendUrl}/api/products/${id}`);
       
       if (!res.ok) {
         throw new Error(`Error ${res.status}: ${res.statusText}`);
       }
       
       const product = await res.json();
-      return product;
+      
+      // ✅ CORREGIR URLS DE IMÁGENES
+      const productWithCorrectUrls = {
+        ...product,
+        images: product.images?.map(image => 
+          image.startsWith('http') ? image : `${backendUrl}${image}`
+        ) || ['/placeholder-product.jpg']
+      };
+      
+      return productWithCorrectUrls;
     } catch (error) {
-      console.error('❌ Error getting product:', error);
-      setError(error); // ✅ GUARDAR EL ERROR
+      console.error('Error obteniendo producto:', error);
+      setError(error.message);
       throw error;
     }
   };
 
-  // Función para limpiar errores manualmente
+  // ✅ FUNCIONES DE CONSULTA LOCALES
+  const getProductById = (id) => {
+    return products.find(product => product._id === id);
+  };
+
+  const getFeaturedProducts = () => {
+    return products.filter(product => product.featured);
+  };
+
+  const getProductsByCategory = (category) => {
+    return products.filter(product => product.category === category);
+  };
+
+  // ✅ FUNCIÓN PARA LIMPIAR ERRORES MANUALMENTE
   const clearError = () => {
     setError(null);
   };
 
-  // Cargar productos al iniciar
+  // ✅ CARGAR PRODUCTOS AL INICIAR
   useEffect(() => {
     loadProducts();
   }, []);
 
-  // Valor del contexto
+  // ✅ VALOR DEL CONTEXTO COMPLETO Y OPTIMIZADO
   const contextValue = {
+    // Estados
     products,
     loading,
-    error, // ✅ EXPORTAR EL ERROR
+    error,
+    backendStatus,
+    
+    // Funciones de carga y gestión
     loadProducts,
+    refetchProducts: loadProducts,
+    clearError,
+    
+    // Funciones de consulta local
+    getProductById,
+    getFeaturedProducts,
+    getProductsByCategory,
+    
+    // Funciones CRUD completas
     createProduct,
     updateProduct,
     deleteProduct,
     uploadProductImage,
     deleteProductImage,
     setMainImage,
-    getProductById,
-    clearError // ✅ EXPORTAR FUNCIÓN PARA LIMPIAR ERRORES
+    
+    // Función para obtener producto individual (con fetch)
+    fetchProductById
   };
 
   return (
@@ -365,7 +465,7 @@ export function ProductProvider({ children }) {
   );
 }
 
-// ✅ Hook para usar el contexto - CORREGIDO
+// ✅ HOOK PARA USAR EL CONTEXTO
 export const useProducts = () => {
   const context = useContext(ProductContext);
   

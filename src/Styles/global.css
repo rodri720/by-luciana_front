@@ -275,3 +275,127 @@ body.dark-mode * {
   transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
+/* src/styles/global.css - Añadir al final */
+
+/* Estilos para páginas de estado de pago */
+.payment-pending-page,
+.not-found-page,
+.orders-page {
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.pending-content,
+.not-found-page,
+.orders-page {
+  max-width: 600px;
+  margin: 0 auto;
+  background: white;
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.payment-pending-page h1,
+.not-found-page h1,
+.orders-page h1 {
+  color: #ff9800;
+  margin-bottom: 20px;
+  font-size: 2.5rem;
+}
+
+.payment-pending-page p,
+.not-found-page p,
+.orders-page p {
+  color: #666;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.pending-info {
+  background: #fff8e1;
+  border: 1px solid #ffecb3;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 25px 0;
+  text-align: left;
+}
+
+.pending-info p {
+  font-weight: 600;
+  color: #ff9800;
+  margin-bottom: 10px;
+}
+
+.pending-info ul {
+  list-style: none;
+  padding-left: 20px;
+}
+
+.pending-info li {
+  margin: 8px 0;
+  color: #666;
+  position: relative;
+  padding-left: 25px;
+}
+
+.pending-info li:before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #ff9800;
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.payment-pending-page button,
+.not-found-page button,
+.orders-page button {
+  background: #ff9800;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 20px;
+}
+
+.payment-pending-page button:hover,
+.not-found-page button:hover,
+.orders-page button:hover {
+  background: #f57c00;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(255, 152, 0, 0.3);
+}
+
+.not-found-page h1 {
+  color: #f44336;
+}
+
+.not-found-page button {
+  background: #f44336;
+}
+
+.not-found-page button:hover {
+  background: #d32f2f;
+}
+
+.orders-page h1 {
+  color: #2196f3;
+}
+
+.orders-page button {
+  background: #2196f3;
+}
+
+.orders-page button:hover {
+  background: #1976d2;
+}
