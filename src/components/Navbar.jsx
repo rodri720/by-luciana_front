@@ -10,13 +10,14 @@ function Navbar() {
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [isLoginOpen, setIsLoginOpen] = useState(false)
   const [isCategoriesOpen, setIsCategoriesOpen] = useState(false)
+  const [isBrandsOpen, setIsBrandsOpen] = useState(false) // Nuevo estado para el dropdown de tiendas
   const [searchTerm, setSearchTerm] = useState('')
   const [loginData, setLoginData] = useState({
     email: '',
     password: ''
   })
   const [darkMode, setDarkMode] = useState(false)
-  const [user, setUser] = useState(null) // Estado para el usuario logueado
+  const [user, setUser] = useState(null)
 
   // Cargar el modo oscuro desde localStorage al iniciar
   useEffect(() => {
@@ -63,6 +64,19 @@ function Navbar() {
     setIsCategoriesOpen(!isCategoriesOpen)
   }
 
+  // Nuevas funciones para manejar el dropdown de tiendas
+  const toggleBrands = () => {
+    setIsBrandsOpen(!isBrandsOpen)
+  }
+
+  const handleMouseEnterBrands = () => {
+    setIsBrandsOpen(true)
+  }
+
+  const handleMouseLeaveBrands = () => {
+    setIsBrandsOpen(false)
+  }
+
   const handleSearch = (e) => {
     if (e.key === 'Enter' && searchTerm.trim()) {
       e.preventDefault()
@@ -89,62 +103,7 @@ function Navbar() {
     alert(`¡Bienvenido ${mockUser.name}!`)
   }
 
-  // ✅ IMPLEMENTACIÓN REAL DE LOGIN CON GOOGLE
-  const handleGoogleLogin = () => {
-    console.log('Iniciando login con Google...')
-    
-    // Configuración de Google OAuth
-    const clientId = 'TU_CLIENT_ID_DE_GOOGLE' // Reemplaza con tu Client ID real
-    const redirectUri = encodeURIComponent(`${window.location.origin}/auth/google/callback`)
-    const scope = encodeURIComponent('profile email')
-    const state = encodeURIComponent('google_login')
-    
-    // URL de autenticación de Google
-    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}&state=${state}`
-    
-    // Abrir ventana de login de Google
-    const width = 500
-    const height = 600
-    const left = (window.screen.width - width) / 2
-    const top = (window.screen.height - height) / 2
-    
-    const authWindow = window.open(
-      authUrl,
-      'Google Login',
-      `width=${width},height=${height},left=${left},top=${top}`
-    )
-    
-    // Escuchar mensajes desde la ventana de autenticación
-    const receiveMessage = (event) => {
-      if (event.origin !== window.location.origin) return
-      
-      if (event.data.type === 'GOOGLE_AUTH_SUCCESS') {
-        const userData = event.data.user
-        console.log('✅ Usuario autenticado con Google:', userData)
-        
-        setUser(userData)
-        localStorage.setItem('user', JSON.stringify(userData))
-        setIsLoginOpen(false)
-        alert(`¡Bienvenido ${userData.name}!`)
-        
-        // Limpiar el event listener
-        window.removeEventListener('message', receiveMessage)
-      }
-    }
-    
-    window.addEventListener('message', receiveMessage)
-    
-    // Verificar si la ventana se cerró
-    const checkWindow = setInterval(() => {
-      if (authWindow.closed) {
-        clearInterval(checkWindow)
-        window.removeEventListener('message', receiveMessage)
-        console.log('Ventana de Google cerrada')
-      }
-    }, 500)
-  }
-
-  // ✅ ALTERNATIVA SIMPLE - Login con Google simulado (para desarrollo)
+  // Login con Google simulado
   const handleGoogleLoginSimple = () => {
     console.log('🔐 Login con Google (simulado)')
     
@@ -183,6 +142,21 @@ function Navbar() {
     { name: 'accesorios', path: '/categoria/accesorios' }
   ]
 
+  // Nuevo: Marcas/Tiendas disponibles
+  const brands = [
+    { 
+      name: 'By Lualiendo', 
+      path: '/marca/by-lualiendo',
+      description: 'Ropa urbana y casual'
+    },
+    { 
+      name: 'Bahia', 
+      path: '/marca/bahia',
+      description: 'Estilo playero y relajado'
+    }
+    // Puedes agregar más marcas aquí en el futuro
+  ]
+
   return (
     <nav className="navbar">
       <div className="nav-container">
@@ -193,7 +167,7 @@ function Navbar() {
             alt="By Luciana Logo" 
             className="logo-image"
           />
-          <span className="logo-text">by Luciana Aliendo</span>
+          <span className="logo-text">Ropa al por mayor en Cordoba</span>
         </Link>
 
         {/* Menu para desktop */}
@@ -209,6 +183,7 @@ function Navbar() {
             </Link>
           </li>
           
+          {/* Dropdown de Categorías */}
           <li 
             className="nav-item categories-item"
             onMouseEnter={() => setIsCategoriesOpen(true)}
@@ -230,6 +205,40 @@ function Navbar() {
                       }}
                     >
                       {category.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </li>
+
+          {/* NUEVO: Dropdown de Tiendas/Marcas */}
+          <li 
+            className="nav-item brands-item"
+            onMouseEnter={handleMouseEnterBrands}
+            onMouseLeave={handleMouseLeaveBrands}
+          >
+            <span className="nav-link brands-link">
+              Tiendas
+            </span>
+            {isBrandsOpen && (
+              <ul className="brands-dropdown">
+                {brands.map((brand, index) => (
+                  <li key={index} className="dropdown-item brand-item">
+                    <Link 
+                      to={brand.path} 
+                      className="dropdown-link brand-link"
+                      onClick={() => {
+                        closeMenu()
+                        setIsBrandsOpen(false)
+                      }}
+                    >
+                      <div className="brand-info">
+                        <span className="brand-name">{brand.name}</span>
+                        {brand.description && (
+                          <span className="brand-description">{brand.description}</span>
+                        )}
+                      </div>
                     </Link>
                   </li>
                 ))}
@@ -265,7 +274,6 @@ function Navbar() {
             {isLoginOpen && (
               <div className="login-panel">
                 {user ? (
-                  // Panel cuando el usuario está logueado
                   <div className="user-panel">
                     <h4>¡Hola, {user.name}!</h4>
                     <p>{user.email}</p>
@@ -282,20 +290,15 @@ function Navbar() {
                     </div>
                   </div>
                 ) : (
-                  // Panel de login cuando no hay usuario
                   <>
                     <h4>Iniciar Sesión</h4>
-                    
-                    {/* Botón de Google - USANDO LA VERSIÓN SIMPLE */}
                     <button className="google-login-btn" onClick={handleGoogleLoginSimple}>
                       <span className="google-icon">G</span>
                       Continuar con Google
                     </button>
-                    
                     <div className="login-divider">
                       <span>o ingresa con tu email</span>
                     </div>
-                    
                     <form onSubmit={handleLogin} className="login-form">
                       <input
                         type="email"

@@ -70,6 +70,198 @@
   color: #007bff;
 }
 
+/* ========================================================================== */
+/* ESTILOS DEL MENÚ DESPLEGABLE DE CATEGORÍAS */
+/* ========================================================================== */
+
+.categories-item {
+  position: relative;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.categories-link {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  color: #333;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.8rem 1rem;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.categories-link::after {
+  content: '▼';
+  font-size: 10px;
+  margin-left: 8px;
+  color: #666;
+}
+
+.categories-link:hover {
+  background: #f8f9fa;
+  color: #007bff;
+}
+
+.categories-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #ffffff;
+  min-width: 220px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  padding: 15px 0;
+  z-index: 1001;
+  list-style: none;
+  margin: 0;
+  border: 1px solid #ddd;
+}
+
+.dropdown-item {
+  margin: 0;
+}
+
+.dropdown-link {
+  display: block;
+  padding: 12px 20px;
+  color: #333 !important;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-size: 14px;
+  font-weight: 500;
+  background: #ffffff !important;
+}
+
+.dropdown-link:hover {
+  background-color: #f8f9fa !important;
+  color: #007bff !important;
+}
+
+/* Flecha triangular del dropdown */
+.categories-dropdown::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 20px;
+  width: 16px;
+  height: 16px;
+  background: white;
+  transform: rotate(45deg);
+  border-top: 1px solid #ddd;
+  border-left: 1px solid #ddd;
+  z-index: -1;
+}
+
+/* ========================================================================== */
+/* NUEVO: ESTILOS DEL MENÚ DESPLEGABLE DE TIENDAS/MARCAS */
+/* ========================================================================== */
+
+.brands-item {
+  position: relative;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.brands-link {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  color: #333;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.8rem 1rem;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.brands-link::after {
+  content: '▼';
+  font-size: 10px;
+  margin-left: 8px;
+  color: #666;
+}
+
+.brands-link:hover {
+  background: #f8f9fa;
+  color: #007bff;
+}
+
+.brands-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #ffffff;
+  min-width: 240px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  padding: 15px 0;
+  z-index: 1001;
+  list-style: none;
+  margin: 0;
+  border: 1px solid #ddd;
+}
+
+.brand-item {
+  margin: 0;
+}
+
+.brand-link {
+  display: block;
+  padding: 12px 20px;
+  color: #333 !important;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-size: 14px;
+  font-weight: 500;
+  background: #ffffff !important;
+  border-left: 3px solid transparent;
+}
+
+.brand-link:hover {
+  background-color: #f8f9fa !important;
+  color: #007bff !important;
+  border-left: 3px solid #007bff;
+  padding-left: 17px;
+}
+
+.brand-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-name {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 3px;
+}
+
+.brand-description {
+  font-size: 12px;
+  color: #666;
+  font-style: italic;
+}
+
+/* Flecha triangular del dropdown de tiendas */
+.brands-dropdown::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 20px;
+  width: 16px;
+  height: 16px;
+  background: white;
+  transform: rotate(45deg);
+  border-top: 1px solid #ddd;
+  border-left: 1px solid #ddd;
+  z-index: -1;
+}
+
 /* Search Panel más grande */
 .search-panel {
   position: absolute;
@@ -312,21 +504,17 @@
   justify-content: center;
 }
 
-/* MENÚ HAMBURGUESA - NUEVO */
-.hamburger {
+/* MENÚ HAMBURGUESA */
+.nav-toggle {
   display: none;
+  cursor: pointer;
   flex-direction: column;
   justify-content: space-between;
-  width: 25px;
-  height: 20px;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 0;
+  width: 30px;
+  height: 21px;
 }
 
-.hamburger span {
-  display: block;
+.hamburger {
   height: 3px;
   width: 100%;
   background: #333;
@@ -334,10 +522,37 @@
   transition: all 0.3s ease;
 }
 
-/* Responsive */
+.nav-toggle.active .hamburger:nth-child(1) {
+  transform: rotate(45deg) translate(6px, 6px);
+}
+
+.nav-toggle.active .hamburger:nth-child(2) {
+  opacity: 0;
+}
+
+.nav-toggle.active .hamburger:nth-child(3) {
+  transform: rotate(-45deg) translate(6px, -6px);
+}
+
+/* Overlay para mobile */
+.nav-overlay {
+  display: none;
+  position: fixed;
+  top: 90px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 999;
+}
+
+/* ========================================================================== */
+/* RESPONSIVE */
+/* ========================================================================== */
+
 @media (max-width: 768px) {
   .navbar {
-    height: 70px; /* Reducido ligeramente en móvil */
+    height: 70px;
   }
   
   .nav-container {
@@ -351,6 +566,7 @@
     top: 70px;
     left: -100%;
     width: 80%;
+    max-width: 300px;
     height: calc(100vh - 70px);
     background: white;
     flex-direction: column;
@@ -360,6 +576,7 @@
     box-shadow: 2px 0 10px rgba(0,0,0,0.1);
     transition: left 0.3s ease;
     z-index: 999;
+    overflow-y: auto;
   }
   
   .nav-menu.active {
@@ -370,6 +587,7 @@
     height: auto;
     width: 100%;
     border-bottom: 1px solid #eee;
+    position: static;
   }
   
   .nav-link {
@@ -379,7 +597,7 @@
   }
   
   /* Mostrar hamburguesa en móvil */
-  .hamburger {
+  .nav-toggle {
     display: flex;
   }
   
@@ -416,7 +634,7 @@
   .login-btn,
   .google-login-btn {
     height: 44px;
-    font-size: 16px; /* Mejor para iOS */
+    font-size: 16px;
   }
   
   /* Reducir espacio entre iconos en móvil */
@@ -427,6 +645,76 @@
   .nav-icon {
     padding: 8px;
     font-size: 1.1rem;
+  }
+  
+  /* Ajustes para dropdowns en móvil */
+  .categories-item, .brands-item {
+    flex-direction: column;
+    align-items: flex-start;
+    position: static;
+  }
+  
+  .categories-link, .brands-link {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .categories-link::after, .brands-link::after {
+    content: '▶';
+  }
+  
+  .categories-dropdown, .brands-dropdown {
+    position: static;
+    box-shadow: none;
+    background: transparent;
+    padding-left: 20px;
+    border: none;
+    border-radius: 0;
+    width: 100%;
+    min-width: auto;
+    margin-top: 0;
+    display: none;
+  }
+  
+  .categories-dropdown::before, .brands-dropdown::before {
+    display: none;
+  }
+  
+  .nav-menu.active .categories-dropdown,
+  .nav-menu.active .brands-dropdown {
+    display: block;
+    animation: slideDown 0.3s ease;
+  }
+  
+  .dropdown-link, .brand-link {
+    padding: 10px 0;
+    color: #666 !important;
+    background: transparent !important;
+    border-bottom: 1px solid #f0f0f0;
+    border-left: none !important;
+  }
+  
+  .dropdown-link:last-child, .brand-link:last-child {
+    border-bottom: none;
+  }
+  
+  .dropdown-link:hover, .brand-link:hover {
+    background: transparent !important;
+    color: #007bff !important;
+    padding-left: 0;
+  }
+  
+  .brand-info {
+    padding-left: 10px;
+  }
+  
+  .brand-description {
+    font-size: 11px;
+  }
+  
+  .nav-overlay {
+    display: block;
+    top: 70px;
   }
 }
 
@@ -445,183 +733,28 @@
     left: 5px;
     right: 5px;
   }
-}
-
-/* Overlay para cuando el menú está abierto */
-.menu-overlay {
-  display: none;
-  position: fixed;
-  top: 70px;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0,0,0,0.5);
-  z-index: 998;
-}
-
-.menu-overlay.active {
-  display: block;
+  
+  .nav-menu {
+    width: 85%;
+  }
 }
 
 /* Ajuste para el contenido principal */
 .admin-dashboard {
-  padding-top: 90px; /* Para desktop */
+  padding-top: 90px;
   min-height: calc(100vh - 90px);
 }
 
 @media (max-width: 768px) {
   .admin-dashboard {
-    padding-top: 70px; /* Para móvil */
+    padding-top: 70px;
     min-height: calc(100vh - 70px);
   }
 }
 
 /* ========================================================================== */
-/* ESTILOS DEL MENÚ DESPLEGABLE DE CATEGORÍAS - FUERA DEL MEDIA QUERY */
+/* MODO OSCURO */
 /* ========================================================================== */
-
-/* Estilos para el menú desplegable de categorías */
-.categories-item {
-  position: relative;
-  height: 100%;
-  display: flex;
-  align-items: center;
-}
-
-.categories-link {
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  height: 100%;
-  color: #333;
-  text-decoration: none;
-  font-weight: 500;
-  padding: 0.8rem 1rem;
-  border-radius: 6px;
-  transition: all 0.3s ease;
-}
-
-.categories-link::after {
-  content: '▼';
-  font-size: 10px;
-  margin-left: 8px;
-  color: #666;
-}
-
-.categories-link:hover {
-  background: #f8f9fa;
-  color: #007bff;
-}
-
-.categories-dropdown {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background: #ffffff; /* FONDO BLANCO SÓLIDO */
-  min-width: 220px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-  border-radius: 12px;
-  padding: 15px 0;
-  z-index: 1001; /* Alto z-index para que esté sobre el carousel */
-  list-style: none;
-  margin: 0;
-  border: 1px solid #ddd;
-}
-
-.dropdown-item {
-  margin: 0;
-}
-
-.dropdown-link {
-  display: block;
-  padding: 12px 20px;
-  color: #333 !important; /* LETRA NEGRA - importante para forzar el color */
-  text-decoration: none;
-  transition: all 0.3s ease;
-  font-size: 14px;
-  font-weight: 500;
-  background: #ffffff !important; /* FONDO BLANCO */
-}
-
-.dropdown-link:hover {
-  background-color: #f8f9fa !important;
-  color: #007bff !important;
-}
-
-/* Flecha triangular del dropdown */
-.categories-dropdown::before {
-  content: '';
-  position: absolute;
-  top: -8px;
-  left: 20px;
-  width: 16px;
-  height: 16px;
-  background: white;
-  transform: rotate(45deg);
-  border-top: 1px solid #ddd;
-  border-left: 1px solid #ddd;
-  z-index: -1;
-}
-
-/* Para mobile - esto SÍ va dentro del media query */
-@media (max-width: 768px) {
-  .categories-item {
-    position: static;
-    width: 100%;
-    border-bottom: 1px solid #eee;
-  }
-  
-  .categories-link {
-    width: 100%;
-    justify-content: space-between;
-  }
-  
-  .categories-link::after {
-    content: '▶';
-  }
-  
-  .categories-dropdown {
-    position: static;
-    box-shadow: none;
-    background: transparent;
-    padding-left: 20px;
-    border: none;
-    border-radius: 0;
-    width: 100%;
-    min-width: auto;
-  }
-  
-  .categories-dropdown::before {
-    display: none;
-  }
-  
-  .dropdown-link {
-    padding: 10px 0;
-    color: #666 !important;
-    background: transparent !important;
-    border-bottom: 1px solid #f0f0f0;
-  }
-  
-  .dropdown-link:last-child {
-    border-bottom: none;
-  }
-  
-  .dropdown-link:hover {
-    background: transparent !important;
-    color: #007bff !important;
-  }
-}
-
-/* Asegurar que el z-index sea mayor que otros elementos */
-.navbar {
-  z-index: 1000;
-}
-
-.categories-dropdown {
-  z-index: 1001; /* Mayor que el navbar */
-}
-
-/* src/components/Navbar/Navbar.css - AGREGA AL FINAL */
 
 /* Estilos para el botón de modo oscuro */
 .dark-mode-toggle {
@@ -659,18 +792,33 @@ body.dark-mode .nav-link:hover {
   color: #667eea;
 }
 
-body.dark-mode .categories-dropdown {
+/* Dropdowns en modo oscuro */
+body.dark-mode .categories-dropdown,
+body.dark-mode .brands-dropdown {
   background: #2d2d2d;
   border: 1px solid #444;
 }
 
-body.dark-mode .dropdown-link {
-  color: #ffffff;
+body.dark-mode .categories-dropdown::before,
+body.dark-mode .brands-dropdown::before {
+  background: #2d2d2d;
+  border-top: 1px solid #444;
+  border-left: 1px solid #444;
 }
 
-body.dark-mode .dropdown-link:hover {
-  background: #3d3d3d;
-  color: #667eea;
+body.dark-mode .dropdown-link,
+body.dark-mode .brand-link {
+  color: #ffffff !important;
+}
+
+body.dark-mode .dropdown-link:hover,
+body.dark-mode .brand-link:hover {
+  background: #3d3d3d !important;
+  color: #667eea !important;
+}
+
+body.dark-mode .brand-description {
+  color: #aaa;
 }
 
 body.dark-mode .search-panel,
@@ -720,104 +868,32 @@ body.dark-mode .login-btn:hover {
   background: #5a6fd8;
 }
 
-/* Estilos para modo oscuro en las páginas de categoría */
-body.dark-mode .categoria-page {
-  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-}
-
-body.dark-mode .categoria-header {
-  background: rgba(45, 45, 45, 0.95);
-  color: #ffffff;
-}
-
-body.dark-mode .categoria-title,
-body.dark-mode .categoria-subtitle {
-  color: #ffffff;
-}
-
-body.dark-mode .categoria-product-card {
-  background: #2d2d2d;
-  color: #ffffff;
-  border: 1px solid #444;
-}
-
-body.dark-mode .product-name,
-body.dark-mode .product-description,
-body.dark-mode .product-meta {
-  color: #ffffff;
-}
-
-body.dark-mode .image-placeholder {
-  background: #3d3d3d;
-  color: #888;
-}
-
-body.dark-mode .categoria-footer {
-  background: rgba(45, 45, 45, 0.95);
-  color: #ffffff;
-}
-
-body.dark-mode .debug-info {
-  background: rgba(45, 45, 45, 0.9);
-  color: #ffffff;
-}
-
-body.dark-mode .similar-products {
-  background: #3d3d3d;
-  border-left: 4px solid #ffc107;
-}
-
-body.dark-mode .similar-product {
-  background: #2d2d2d;
-  border: 1px solid #555;
-  color: #ffffff;
-}
-
-/* Asegurar que los botones se vean bien en modo oscuro */
-body.dark-mode .btn-primary {
-  background: #667eea;
-  color: white;
-}
-
-body.dark-mode .btn-secondary {
-  background: #555;
-  color: white;
-}
-
-body.dark-mode .btn-secondary:hover {
-  background: #666;
-}
-
-body.dark-mode .reload-btn {
-  background: #28a745;
-  color: white;
-}
-
-body.dark-mode .reload-btn:hover {
-  background: #218838;
-}
-
-body.dark-mode .btn-admin {
-  background: #6c757d;
-  color: white;
-}
-
-body.dark-mode .btn-admin:hover {
-  background: #5a6268;
-}
-
-/* Estilos para el modal en modo oscuro */
-body.dark-mode .image-modal {
-  background: rgba(0, 0, 0, 0.95);
-}
-
-body.dark-mode .modal-close,
-body.dark-mode .modal-nav {
-  color: #ffffff;
-}
-
-body.dark-mode .modal-info {
-  color: #ffffff;
+/* Estilos para modo oscuro en móvil */
+@media (max-width: 768px) {
+  body.dark-mode .nav-menu {
+    background: #2d2d2d;
+  }
+  
+  body.dark-mode .nav-item {
+    border-bottom: 1px solid #444;
+  }
+  
+  body.dark-mode .categories-dropdown,
+  body.dark-mode .brands-dropdown {
+    background: transparent;
+  }
+  
+  body.dark-mode .dropdown-link,
+  body.dark-mode .brand-link {
+    border-bottom: 1px solid #444;
+    color: #ddd !important;
+  }
+  
+  body.dark-mode .dropdown-link:hover,
+  body.dark-mode .brand-link:hover {
+    background: transparent !important;
+    color: #667eea !important;
+  }
 }
 
 /* Estilos para el login con Google */
@@ -935,8 +1011,8 @@ body.dark-mode .modal-info {
 }
 
 /* Transición suave para el cambio de modo */
-body, .navbar, .categoria-page, .categoria-product-card,
-.nav-link, .logo-text, .search-panel, .login-panel {
+body, .navbar, .nav-link, .logo-text, .search-panel, .login-panel,
+.categories-dropdown, .brands-dropdown, .dropdown-link, .brand-link {
   transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
@@ -946,4 +1022,39 @@ body, .navbar, .categoria-page, .categoria-product-card,
     padding: 6px;
     font-size: 1.1rem;
   }
+}
+
+/* Animaciones */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.btn-admin {
+  background: #007bff;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-admin:hover {
+  background: #0056b3;
+}
+
+body.dark-mode .btn-admin {
+  background: #667eea;
+}
+
+body.dark-mode .btn-admin:hover {
+  background: #5a6fd8;
 }

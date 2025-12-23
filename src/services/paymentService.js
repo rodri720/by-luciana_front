@@ -1,4 +1,4 @@
-// src/services/paymentService.js - CORRECCIÓN CRÍTICA
+// src/services/paymentService.js - VERSIÓN CORREGIDA DEFINITIVA
 
 const API_URL = 'http://localhost:5000/api';
 
@@ -117,20 +117,30 @@ export const processPayment = async (cartItems, customerInfo, shippingInfo) => {
     
     console.log('🎉 Resultado MercadoPago:', result);
     
-    if (result.success && (result.initPoint || result.sandboxInitPoint)) {
-      // Redirigir a MercadoPago - usar sandbox en desarrollo
-      const mpUrl = process.env.NODE_ENV === 'development' 
-        ? (result.sandboxInitPoint || result.initPoint)
-        : result.initPoint;
+    // ==== ÚNICA CORRECCIÓN NECESARIA (líneas 88-101) ====
+    if (result && (result.initPoint || result.sandboxInitPoint)) {
+      // Detectar si estamos en localhost (desarrollo)
+      const isLocalhost = window.location.hostname === 'localhost' || 
+                         window.location.hostname === '127.0.0.1' ||
+                         window.location.port === '5173' ||
+                         window.location.hostname.includes('ngrok');
       
-      console.log('🔗 Redirigiendo a:', mpUrl);
+      // Usar sandbox en localhost, producción en otros casos
+      const mpUrl = isLocalhost 
+        ? (result.sandboxInitPoint || result.initPoint)  // Fallback seguro
+        : (result.initPoint || result.sandboxInitPoint);
+      
+      console.log('🔗 Redirigiendo a MercadoPago:', mpUrl);
+      console.log('🎯 Entorno:', isLocalhost ? 'SANDBOX (pruebas)' : 'PRODUCCIÓN');
+      
       window.location.href = mpUrl;
+      return result;
     } else {
-      console.error('❌ No hay initPoint:', result);
-      throw new Error(result.message || 'No se pudo crear el enlace de pago');
+      console.error('❌ No hay initPoint o sandboxInitPoint:', result);
+      throw new Error(result?.message || 'No se pudo crear el enlace de pago');
     }
+    // ==== FIN DE LA CORRECCIÓN ====
 
-    return result;
   } catch (error) {
     console.error('❌ Error processing payment:', error);
     throw error;
