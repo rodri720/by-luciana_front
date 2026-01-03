@@ -1,11 +1,12 @@
+// src/pages/Jeans.jsx - VERSIÓN MEJORADA
 import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useProducts } from '../context/ProductContext'
-import './Accesorios.css'
+import './Jeans.css'
 import logo from '../assets/imagenes/logolu.png'
 import { useCart } from '../context/CartContext';
 
-function Accesorios() {
+function Jeans() {
   const { products, loading: productsLoading } = useProducts()
   const [filteredProducts, setFilteredProducts] = useState([])
   const { addToCart } = useCart();
@@ -21,16 +22,16 @@ function Accesorios() {
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedColor, setSelectedColor] = useState('');
 
-  // Filtrar solo productos de accesorios
+  // Filtrar solo productos de jeans
   useEffect(() => {
     if (!productsLoading && products.length > 0) {
-      const accesoriosProducts = products.filter(product => 
-        product.category && product.category.toLowerCase() === 'accesorios'
+      const jeansProducts = products.filter(product => 
+        product.category && product.category.toLowerCase() === 'jeans'
       );
       
-      console.log('💎 Productos de accesorios:', accesoriosProducts.length);
+      console.log('👖 Productos de jeans:', jeansProducts.length);
       
-      setFilteredProducts(accesoriosProducts);
+      setFilteredProducts(jeansProducts);
       setLoading(false);
     } else if (!productsLoading) {
       setLoading(false);
@@ -113,21 +114,21 @@ function Accesorios() {
 
   if (loading || productsLoading) {
     return (
-      <div className="accesorios-page">
-        <div className="loading">🔄 Cargando accesorios...</div>
+      <div className="jeans-page">
+        <div className="loading">🔄 Cargando jeans...</div>
       </div>
     )
   }
 
   return (
-    <div className="accesorios-page">
-      <header className="accesorios-header">
+    <div className="jeans-page">
+      <header className="jeans-header">
         <div className="container">
-          <img src={logo} alt="By Luciana" className="accesorios-logo" />
-          <h1 className="accesorios-title">
-            💎 Accesorios
+          <img src={logo} alt="By Luciana" className="jeans-logo" />
+          <h1 className="jeans-title">
+            👖 Jeans
           </h1>
-          <p className="accesorios-subtitle">
+          <p className="jeans-subtitle">
             {filteredProducts.length} producto(s) disponibles
           </p>
           
@@ -142,13 +143,13 @@ function Accesorios() {
         </div>
       </header>
 
-      <main className="accesorios-content">
+      <main className="jeans-content">
         <div className="container">
           {filteredProducts.length === 0 ? (
             <div className="no-products">
-              <div className="no-products-icon">💎</div>
-              <h3>No hay productos de accesorios</h3>
-              <p>Los productos que agregues en la categoría "accesorios" aparecerán aquí</p>
+              <div className="no-products-icon">👖</div>
+              <h3>No hay productos de jeans</h3>
+              <p>Los productos que agregues en la categoría "jeans" aparecerán aquí</p>
               
               <div className="info-box">
                 <h4>💡 Información:</h4>
@@ -164,13 +165,13 @@ function Accesorios() {
             </div>
           ) : (
             <>
-              <div className="accesorios-stats">
-                <p>📊 {filteredProducts.length} producto(s) de accesorios</p>
+              <div className="jeans-stats">
+                <p>📊 {filteredProducts.length} producto(s) de jeans</p>
               </div>
               
-              <div className="accesorios-products-grid">
+              <div className="jeans-products-grid">
                 {filteredProducts.map(product => (
-                  <div key={product._id} className="accesorios-product-card">
+                  <div key={product._id} className="jeans-product-card">
                     <div 
                       className="product-image"
                       onClick={() => openImageModal(product, 0)}
@@ -200,7 +201,7 @@ function Accesorios() {
                           <small>Sin imagen</small>
                         </div>
                       )}
-                      <div className="product-badge">💎 {product.category}</div>
+                      <div className="product-badge">{product.category}</div>
                       {product.featured && <div className="featured-badge">⭐ Destacado</div>}
                     </div>
                     
@@ -212,7 +213,7 @@ function Accesorios() {
                       <div className="product-options">
                         {product.sizes && product.sizes.length > 0 && (
                           <div className="option-item">
-                            <span className="option-label">📏 Tamaños:</span>
+                            <span className="option-label">📏 Talles:</span>
                             <span className="option-values">{product.sizes.join(', ')}</span>
                           </div>
                         )}
@@ -248,11 +249,6 @@ function Accesorios() {
                         <span className={`stock ${product.stock > 0 ? 'in-stock' : 'out-of-stock'}`}>
                           {product.stock > 0 ? `✅ ${product.stock} disponibles` : '❌ Sin stock'}
                         </span>
-                        {product.material && (
-                          <span className="product-material">
-                            {product.material}
-                          </span>
-                        )}
                       </div>
                     </div>
                     
@@ -322,10 +318,10 @@ function Accesorios() {
             <h2>Elegir Opciones</h2>
             <p className="options-product-name">{selectedProduct.name}</p>
             
-            {/* Selector de talla/tamaño - SIMPLE */}
+            {/* Selector de talla - SIMPLE */}
             {selectedProduct.sizes && selectedProduct.sizes.length > 0 && (
               <div className="options-section">
-                <h3>📏 Seleccionar Tamaño:</h3>
+                <h3>📏 Seleccionar Talle:</h3>
                 <div className="size-buttons">
                   {selectedProduct.sizes.map((size) => (
                     <button
@@ -367,7 +363,7 @@ function Accesorios() {
               </div>
               {selectedSize && (
                 <div className="summary-item">
-                  <span>Tamaño:</span>
+                  <span>Talle:</span>
                   <strong>{selectedSize}</strong>
                 </div>
               )}
@@ -380,11 +376,6 @@ function Accesorios() {
               <div className="summary-price">
                 <span>Precio:</span>
                 <strong>${selectedProduct.price?.toLocaleString()}</strong>
-                {selectedProduct.comparePrice && selectedProduct.comparePrice > selectedProduct.price && (
-                  <span className="summary-compare-price">
-                    (antes ${selectedProduct.comparePrice?.toLocaleString()})
-                  </span>
-                )}
               </div>
             </div>
             
@@ -406,7 +397,7 @@ function Accesorios() {
         </div>
       )}
 
-      <footer className="accesorios-footer">
+      <footer className="jeans-footer">
         <div className="container">
           <Link to="/" className="btn btn-secondary">
             ← Volver a la Página Principal
@@ -436,29 +427,13 @@ function getColorHex(colorName) {
     'Celeste': '#87CEEB',
     'Turquesa': '#40E0D0',
     'Bordó': '#800000',
-    'Azul Oscuro': '#00008B',
-    'Verde Oscuro': '#006400',
-    'Rojo Oscuro': '#8B0000',
-    'Gris Oscuro': '#A9A9A9',
-    'Gris Claro': '#D3D3D3',
-    'Azul Gris': '#708090',
-    'Verde Oliva': '#808000',
-    'Caqui': '#F0E68C',
-    'Mostaza': '#FFDB58',
-    'Terracota': '#E2725B',
-    'Borgoña': '#800020',
-    'Vino': '#722F37',
-    'Chocolate': '#7B3F00',
-    'Dorado': '#FFD700',
-    'Plateado': '#C0C0C0',
-    'Bronce': '#CD7F32',
-    'Cobre': '#B87333',
-    'Perla': '#F0EAD6',
-    'Nácar': '#FFFDD0',
-    'Transparente': 'rgba(255,255,255,0.3)',
-    'Multicolor': 'linear-gradient(45deg, #ff0000, #00ff00, #0000ff)'
+    'Denim': '#1560bd',
+    'Azul Denim': '#1560bd',
+    'Azul Jeans': '#5dade2',
+    'Jean Claro': '#5dade2',
+    'Jean Oscuro': '#1c2833'
   };
   return colorMap[colorName] || '#CCCCCC';
 }
 
-export default Accesorios;
+export default Jeans;

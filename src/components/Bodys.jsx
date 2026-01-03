@@ -8,130 +8,75 @@ import { useCart } from '../context/CartContext';
 
 function Bodys() {
   const { products, loading: productsLoading } = useProducts()
-  const [selectedCategory, setSelectedCategory] = useState(null)
-  const [categoryProducts, setCategoryProducts] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [bodysProducts, setBodysProducts] = useState([])
   const { addToCart } = useCart();
 
   // Estado para el modal de imagen
   const [selectedImage, setSelectedImage] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [loading, setLoading] = useState(true);
 
-  // Definir las subcategorías disponibles con imágenes LOCALES
-  const subcategories = [
-    { 
-      id: 'remeras', 
-      name: '👕 Remeras', 
-      icon: '👕', 
-      keywords: ['remeras', 'remera', 'camiseta', 'camisetas', 't-shirt', 'tshirt'],
-      image: '/src/assets/imagenes/remeras-category.jpg'
-    },
-    { 
-      id: 'buzos', 
-      name: '🧥 Buzos', 
-      icon: '🧥', 
-      keywords: ['buzos', 'buzo', 'sudadera', 'sweater', 'hoodie', 'capucha'],
-      image: '/src/assets/imagenes/buzos-category.jpg'
-    },
-    { 
-      id: 'bodys', 
-      name: '👚 Bodys', 
-      icon: '👚', 
-      keywords: ['bodys', 'body', 'enterizo', 'mono', 'jumpsuit'],
-      image: '/src/assets/imagenes/bodys-category.jpg'
-    },
-    { 
-      id: 'sueters', 
-      name: '🥼 Suéteres', 
-      icon: '🥼', 
-      keywords: ['sueters', 'suéter', 'sueter', 'pullover', 'chomba', 'polo'],
-      image: '/src/assets/imagenes/sueters-category.jpg'
-    }
-  ];
+  // Estado para el selector de opciones
+  const [showOptions, setShowOptions] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [selectedSize, setSelectedSize] = useState('');
+  const [selectedColor, setSelectedColor] = useState('');
 
-  // Imágenes de respaldo de Unsplash
-  const defaultImages = {
-    remeras: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=300&fit=crop',
-    buzos: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400&h=300&fit=crop',
-    bodys: 'https://images.unsplash.com/photo-1583496661160-fb5886a13d77?w=400&h=300&fit=crop',
-    sueters: 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=400&h=300&fit=crop'
-  };
-
-  // Función para obtener la imagen correcta
-  const getCategoryImage = (subcat) => {
-    try {
-      const localImage = new URL(subcat.image, window.location.origin);
-      return localImage.href;
-    } catch (error) {
-      return defaultImages[subcat.id];
-    }
-  };
-
+  // Filtrar productos de bodys y mallas
   useEffect(() => {
     if (!productsLoading && products.length > 0) {
-      console.log('📦 Products disponibles:', products);
-      console.log('🏷️ Todas las categorías en productos:', [...new Set(products.map(p => p?.category))]);
+      const bodysItems = products.filter(product => {
+        if (!product || !product.category) return false;
+        
+        const categoryLower = product.category.toLowerCase().trim();
+        const nameLower = product.name?.toLowerCase().trim() || '';
+        
+        // Buscar bodys y mallas por categoría o nombre
+        return categoryLower === 'bodys' || 
+               categoryLower === 'mallas' ||
+               nameLower.includes('body') ||
+               nameLower.includes('bodys') ||
+               nameLower.includes('malla') ||
+               nameLower.includes('mallas') ||
+               nameLower.includes('legging') ||
+               nameLower.includes('leggings');
+      });
+      
+      console.log('👚 Productos de bodys y mallas:', bodysItems.length);
+      
+      setBodysProducts(bodysItems);
       setLoading(false);
     } else if (!productsLoading) {
       setLoading(false);
     }
   }, [products, productsLoading]);
 
-  // Filtrar productos cuando se selecciona una categoría
-  useEffect(() => {
-    if (selectedCategory && products.length > 0) {
-      const subcategory = subcategories.find(sub => sub.id === selectedCategory);
-      
-      const filteredProducts = products.filter(product => {
-        if (!product || !product.category) return false;
-        
-        const categoryLower = product.category.toLowerCase().trim();
-        const nameLower = product.name?.toLowerCase().trim() || '';
-        
-        console.log(`🔍 Analizando producto: "${product.name}" (categoría: "${categoryLower}")`);
-
-        if (subcategory) {
-          const hasKeyword = subcategory.keywords.some(keyword => 
-            nameLower.includes(keyword) ||
-            categoryLower.includes(keyword)
-          );
-          
-          if (hasKeyword) {
-            console.log(`✅ Producto "${product.name}" coincide con ${selectedCategory} por keyword`);
-            return true;
-          }
-        }
-        
-        console.log(`❌ Producto "${product.name}" NO coincide con ${selectedCategory}`);
-        return false;
-      });
-      
-      console.log(`📦 Productos de ${selectedCategory}:`, filteredProducts);
-      setCategoryProducts(filteredProducts);
-    }
-  }, [selectedCategory, products]);
-
-  // Contar productos por categoría
-  const getProductCount = (subcategoryId) => {
-    if (!products.length) return 0;
-    
-    const subcategory = subcategories.find(sub => sub.id === subcategoryId);
-    if (!subcategory) return 0;
-    
-    return products.filter(product => {
-      if (!product || !product.category) return false;
-      
-      const categoryLower = product.category.toLowerCase().trim();
-      const nameLower = product.name?.toLowerCase().trim() || '';
-      
-      return subcategory.keywords.some(keyword => 
-        nameLower.includes(keyword) ||
-        categoryLower.includes(keyword)
-      );
-    }).length;
+  // Función para abrir selector de opciones
+  const openOptions = (product) => {
+    setSelectedProduct(product);
+    setSelectedSize(product.sizes?.[0] || '');
+    setSelectedColor(product.colors?.[0] || '');
+    setShowOptions(true);
   };
 
-  // Resto de las funciones del modal
+  // Función para agregar al carrito con opciones seleccionadas
+  const addToCartWithOptions = () => {
+    if (!selectedProduct) return;
+    
+    const productWithOptions = {
+      ...selectedProduct,
+      selectedSize: selectedSize || null,
+      selectedColor: selectedColor || null
+    };
+    
+    addToCart(productWithOptions);
+    
+    // Cerrar modal
+    setShowOptions(false);
+    setSelectedProduct(null);
+  };
+
+  // Funciones del modal de imágenes
   const openImageModal = (product, index = 0) => {
     setSelectedImage(product);
     setCurrentImageIndex(index);
@@ -161,12 +106,15 @@ function Bodys() {
   // Cerrar modal con ESC
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (e.key === 'Escape') closeImageModal();
-      if (e.key === 'ArrowRight') goToNextImage();
-      if (e.key === 'ArrowLeft') goToPrevImage();
+      if (e.key === 'Escape') {
+        closeImageModal();
+        setShowOptions(false);
+      }
+      if (selectedImage && e.key === 'ArrowRight') goToNextImage();
+      if (selectedImage && e.key === 'ArrowLeft') goToPrevImage();
     };
 
-    if (selectedImage) {
+    if (selectedImage || showOptions) {
       document.addEventListener('keydown', handleKeyDown);
       document.body.style.overflow = 'hidden';
     }
@@ -175,12 +123,12 @@ function Bodys() {
       document.removeEventListener('keydown', handleKeyDown);
       document.body.style.overflow = 'auto';
     };
-  }, [selectedImage]);
+  }, [selectedImage, showOptions]);
 
   if (loading || productsLoading) {
     return (
       <div className="bodys-page">
-        <div className="loading">🔄 Cargando...</div>
+        <div className="loading">🔄 Cargando bodys y mallas...</div>
       </div>
     )
   }
@@ -191,30 +139,13 @@ function Bodys() {
         <div className="container">
           <img src={logo} alt="By Luciana" className="bodys-logo" />
           <h1 className="bodys-title">
-            {selectedCategory 
-              ? `📁 ${subcategories.find(sub => sub.id === selectedCategory)?.name || selectedCategory}` 
-              : '👚 Parte Superior'
-            }
+            👚 Bodys & Mallas
           </h1>
           <p className="bodys-subtitle">
-            {selectedCategory 
-              ? `Productos de ${selectedCategory}` 
-              : 'Selecciona una categoría para ver los productos'
-            }
+            {bodysProducts.length} producto(s) disponibles
           </p>
           
           <div className="header-buttons">
-            {selectedCategory && (
-              <button 
-                onClick={() => {
-                  setSelectedCategory(null);
-                  setCategoryProducts([]);
-                }} 
-                className="btn btn-secondary"
-              >
-                ← Volver a Categorías
-              </button>
-            )}
             <button 
               onClick={() => window.location.reload()} 
               className="reload-btn"
@@ -227,132 +158,130 @@ function Bodys() {
 
       <main className="bodys-content">
         <div className="container">
-          {!selectedCategory ? (
-            <div className="categories-section">
-              <h2>📂 Categorías Disponibles</h2>
-              <div className="categories-grid">
-                {subcategories.map(subcat => {
-                  const productCount = getProductCount(subcat.id);
-
-                  return (
-                    <div 
-                      key={subcat.id}
-                      className="category-card"
-                      onClick={() => setSelectedCategory(subcat.id)}
-                    >
-                      <div className="category-image-container">
-                        <img 
-                          src={getCategoryImage(subcat)} 
-                          alt={subcat.name}
-                          className="category-image"
-                          onError={(e) => {
-                            console.log(`❌ Error cargando imagen local para ${subcat.name}, usando respaldo`);
-                            e.target.src = defaultImages[subcat.id];
-                          }}
-                        />
-                      </div>
-                      <div className="category-simple-info">
-                        <h3 className="category-name">{subcat.name}</h3>
-                        <p className="category-count">{productCount} producto(s)</p>
-                      </div>
-                    </div>
-                  );
-                })}
+          {bodysProducts.length === 0 ? (
+            <div className="no-products">
+              <div className="no-products-icon">👕</div>
+              <h3>No hay productos de bodys y mallas</h3>
+              <p>Los productos que agregues en las categorías "bodys" o "mallas" aparecerán aquí</p>
+              
+              <div className="info-box">
+                <h4>💡 Información:</h4>
+                <p><strong>Total productos:</strong> {products.length}</p>
+                <p>
+                  <strong>Categorías:</strong> {[...new Set(products.map(p => p?.category))].join(', ')}
+                </p>
               </div>
+              
+              <Link to="/admin" className="btn btn-primary">
+                Ir al Panel de Administración
+              </Link>
             </div>
           ) : (
             <>
-              {categoryProducts.length === 0 ? (
-                <div className="no-products">
-                  <div className="no-products-icon">📦</div>
-                  <h3>No hay productos en {selectedCategory}</h3>
-                  <p>Los productos que agregues en la categoría "{selectedCategory}" aparecerán aquí</p>
-                  
-                  <div style={{background: '#e7f3ff', padding: '15px', borderRadius: '8px', margin: '15px 0', border: '1px solid #b3d9ff'}}>
-                    <h4 style={{margin: '0 0 10px 0', color: '#0066cc'}}>💡 Información del Sistema:</h4>
-                    <p style={{margin: '5px 0', fontSize: '14px'}}><strong>Total productos:</strong> {products.length}</p>
-                    <p style={{margin: '5px 0', fontSize: '14px'}}>
-                      <strong>Categorías encontradas:</strong> {[...new Set(products.map(p => p?.category))].join(', ')}
-                    </p>
-                  </div>
-                  
-                  <Link to="/admin" className="btn btn-primary">
-                    Ir al Panel de Administración
-                  </Link>
-                </div>
-              ) : (
-                <>
-                  <div className="bodys-stats">
-                    <p>📊 {categoryProducts.length} producto(s) en {selectedCategory}</p>
-                  </div>
-                  
-                  <div className="bodys-products-grid">
-                    {categoryProducts.map(product => (
-                      <div key={product._id} className="bodys-product-card">
-                        <div 
-                          className="product-image"
-                          onClick={() => openImageModal(product, 0)}
-                        >
-                          {product.images && product.images.length > 0 && product.images[0] ? (
-                            <img 
-                              src={
-                                product.images[0].startsWith('http') 
-                                  ? product.images[0] 
-                                  : `http://localhost:5000${product.images[0]}`
-                              } 
-                              alt={product.name}
-                              onError={(e) => {
-                                console.log('❌ Error cargando imagen:', product.images[0]);
-                                e.target.style.display = 'none';
-                                const placeholder = e.target.parentElement.querySelector('.image-placeholder');
-                                if (placeholder) placeholder.style.display = 'block';
-                              }}
-                              onLoad={(e) => {
-                                const placeholder = e.target.parentElement.querySelector('.image-placeholder');
-                                if (placeholder) placeholder.style.display = 'none';
-                              }}
-                            />
-                          ) : (
-                            <div className="image-placeholder">
-                              📷<br/>
-                              <small>Sin imagen</small>
+              <div className="bodys-stats">
+                <p>📊 {bodysProducts.length} producto(s) de bodys y mallas</p>
+              </div>
+              
+              <div className="bodys-products-grid">
+                {bodysProducts.map(product => (
+                  <div key={product._id} className="bodys-product-card">
+                    <div 
+                      className="product-image"
+                      onClick={() => openImageModal(product, 0)}
+                    >
+                      {product.images && product.images.length > 0 && product.images[0] ? (
+                        <img 
+                          src={
+                            product.images[0].startsWith('http') 
+                              ? product.images[0] 
+                              : `http://localhost:5000${product.images[0]}`
+                          } 
+                          alt={product.name}
+                          onError={(e) => {
+                            console.log('❌ Error cargando imagen:', product.images[0]);
+                            e.target.style.display = 'none';
+                            const placeholder = e.target.parentElement.querySelector('.image-placeholder');
+                            if (placeholder) placeholder.style.display = 'block';
+                          }}
+                          onLoad={(e) => {
+                            const placeholder = e.target.parentElement.querySelector('.image-placeholder');
+                            if (placeholder) placeholder.style.display = 'none';
+                          }}
+                        />
+                      ) : (
+                        <div className="image-placeholder">
+                          📷<br/>
+                          <small>Sin imagen</small>
+                        </div>
+                      )}
+                      <div className="bodys-badge">{product.category}</div>
+                      {product.featured && <div className="featured-badge">⭐ Destacado</div>}
+                    </div>
+                    
+                    <div className="product-info">
+                      <h3 className="product-name">{product.name}</h3>
+                      <p className="product-description">{product.description || 'Sin descripción'}</p>
+                      
+                      {/* Mostrar opciones disponibles de forma simple */}
+                      <div className="product-options">
+                        {product.sizes && product.sizes.length > 0 && (
+                          <div className="option-item">
+                            <span className="option-label">📏 Talles:</span>
+                            <span className="option-values">{product.sizes.join(', ')}</span>
+                          </div>
+                        )}
+                        
+                        {product.colors && product.colors.length > 0 && (
+                          <div className="option-item">
+                            <span className="option-label">🎨 Colores:</span>
+                            <div className="color-dots">
+                              {product.colors.slice(0, 4).map((color, index) => (
+                                <span 
+                                  key={index}
+                                  className="color-dot"
+                                  style={{ backgroundColor: getColorHex(color) }}
+                                  title={color}
+                                />
+                              ))}
+                              {product.colors.length > 4 && (
+                                <span className="more-options">+{product.colors.length - 4}</span>
+                              )}
                             </div>
-                          )}
-                          <div className="bodys-badge">{product.category}</div>
-                          {product.featured && <div className="featured-badge">⭐ Destacado</div>}
-                        </div>
-                        
-                        <div className="product-info">
-                          <h3 className="product-name">{product.name}</h3>
-                          <p className="product-description">{product.description || 'Sin descripción'}</p>
-                          
-                          <div className="price-section">
-                            <span className="current-price">${product.price?.toLocaleString()}</span>
-                            {product.originalPrice && product.originalPrice > product.price && (
-                              <span className="original-price">${product.originalPrice.toLocaleString()}</span>
-                            )}
                           </div>
-                          
-                          <div className="product-meta">
-                            <span className="stock">Stock: {product.stock || 0}</span>
-                            <span className="category">Categoría: {product.category}</span>
-                          </div>
-                        </div>
-                        
-                        <div className="product-actions">
-                          <button 
-                            className="btn-add-cart"
-                            onClick={() => addToCart(product)}
-                            disabled={!product.stock || product.stock === 0}
-                          >
-                            {(!product.stock || product.stock === 0) ? '❌ Sin Stock' : '🛒 Agregar al Carrito'}
-                          </button>
-                        </div>
+                        )}
                       </div>
-                    ))}
+                      
+                      <div className="price-section">
+                        <span className="current-price">${product.price?.toLocaleString()}</span>
+                        {product.comparePrice && product.comparePrice > product.price && (
+                          <span className="compare-price">${product.comparePrice.toLocaleString()}</span>
+                        )}
+                      </div>
+                      
+                      <div className="product-meta">
+                        <span className={`stock ${product.stock > 0 ? 'in-stock' : 'out-of-stock'}`}>
+                          {product.stock > 0 ? `✅ ${product.stock} disponibles` : '❌ Sin stock'}
+                        </span>
+                      </div>
+                    </div>
+                    
+                    <div className="product-actions">
+                      <button 
+                        className="btn-choose-options"
+                        onClick={() => openOptions(product)}
+                        disabled={!product.stock || product.stock === 0}
+                      >
+                        {(!product.stock || product.stock === 0) 
+                          ? 'Sin Stock' 
+                          : (product.sizes?.length > 0 || product.colors?.length > 0)
+                            ? '🛍️ Elegir Opciones'
+                            : '🛒 Agregar al Carrito'
+                        }
+                      </button>
+                    </div>
                   </div>
-                </>
-              )}
+                ))}
+              </div>
             </>
           )}
         </div>
@@ -381,18 +310,101 @@ function Bodys() {
               className="modal-image"
             />
             
-            <div style={{
-              position: 'absolute',
-              bottom: '-50px',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              color: 'white',
-              textAlign: 'center'
-            }}>
+            <div className="modal-info">
               <p>{selectedImage.name}</p>
               {selectedImage.images.length > 1 && (
                 <p>Imagen {currentImageIndex + 1} de {selectedImage.images.length}</p>
               )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal para elegir opciones */}
+      {showOptions && selectedProduct && (
+        <div className="options-modal" onClick={() => setShowOptions(false)}>
+          <div className="options-content" onClick={(e) => e.stopPropagation()}>
+            <button className="options-close" onClick={() => setShowOptions(false)}>
+              ×
+            </button>
+            
+            <h2>Elegir Opciones</h2>
+            <p className="options-product-name">{selectedProduct.name}</p>
+            
+            {/* Selector de talla - SIMPLE */}
+            {selectedProduct.sizes && selectedProduct.sizes.length > 0 && (
+              <div className="options-section">
+                <h3>📏 Seleccionar Talle:</h3>
+                <div className="size-buttons">
+                  {selectedProduct.sizes.map((size) => (
+                    <button
+                      key={size}
+                      className={`size-btn ${selectedSize === size ? 'selected' : ''}`}
+                      onClick={() => setSelectedSize(size)}
+                    >
+                      {size}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+            
+            {/* Selector de color - SIMPLE */}
+            {selectedProduct.colors && selectedProduct.colors.length > 0 && (
+              <div className="options-section">
+                <h3>🎨 Seleccionar Color:</h3>
+                <div className="color-buttons">
+                  {selectedProduct.colors.map((color) => (
+                    <button
+                      key={color}
+                      className={`color-btn ${selectedColor === color ? 'selected' : ''}`}
+                      onClick={() => setSelectedColor(color)}
+                      title={color}
+                      style={{ backgroundColor: getColorHex(color) }}
+                    >
+                      <span className="color-text">{color}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+            
+            <div className="options-summary">
+              <div className="summary-item">
+                <span>Producto:</span>
+                <strong>{selectedProduct.name}</strong>
+              </div>
+              {selectedSize && (
+                <div className="summary-item">
+                  <span>Talle:</span>
+                  <strong>{selectedSize}</strong>
+                </div>
+              )}
+              {selectedColor && (
+                <div className="summary-item">
+                  <span>Color:</span>
+                  <strong>{selectedColor}</strong>
+                </div>
+              )}
+              <div className="summary-price">
+                <span>Precio:</span>
+                <strong>${selectedProduct.price?.toLocaleString()}</strong>
+              </div>
+            </div>
+            
+            <div className="options-actions">
+              <button 
+                className="btn-add-to-cart"
+                onClick={addToCartWithOptions}
+              >
+                🛒 Agregar al Carrito
+              </button>
+              <button 
+                className="btn-cancel"
+                onClick={() => setShowOptions(false)}
+              >
+                Cancelar
+              </button>
             </div>
           </div>
         </div>
@@ -407,6 +419,50 @@ function Bodys() {
       </footer>
     </div>
   )
+}
+
+// Función auxiliar para colores
+function getColorHex(colorName) {
+  const colorMap = {
+    'Negro': '#000000',
+    'Blanco': '#FFFFFF',
+    'Gris': '#808080',
+    'Azul Marino': '#000080',
+    'Azul Claro': '#87CEEB',
+    'Rojo': '#FF0000',
+    'Verde': '#008000',
+    'Amarillo': '#FFFF00',
+    'Rosa': '#FFC0CB',
+    'Beige': '#F5F5DC',
+    'Marrón': '#A52A2A',
+    'Naranja': '#FFA500',
+    'Violeta': '#EE82EE',
+    'Celeste': '#87CEEB',
+    'Turquesa': '#40E0D0',
+    'Bordó': '#800000',
+    'Dorado': '#FFD700',
+    'Plateado': '#C0C0C0',
+    'Coral': '#FF7F50',
+    'Lila': '#C8A2C8',
+    'Mostaza': '#FFDB58',
+    'Oliva': '#808000',
+    'Terracota': '#E2725B',
+    'Fucsia': '#FF00FF',
+    'Verde Ment': '#98FB98',
+    'Azul Turquesa': '#40E0D0',
+    'Champán': '#F7E7CE',
+    'Nude': '#F5DEB3',
+    'Marfil': '#FFFFF0',
+    'Crema': '#FFFDD0',
+    'Vino': '#722F37',
+    'Borgoña': '#800020',
+    'Esmeralda': '#50C878',
+    'Zafiro': '#0F52BA',
+    'Rubí': '#E0115F',
+    'Amatista': '#9966CC',
+    'Topacio': '#FFC87C'
+  };
+  return colorMap[colorName] || '#CCCCCC';
 }
 
 export default Bodys;

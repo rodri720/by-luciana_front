@@ -1,3 +1,4 @@
+// src/pages/Novedades.jsx - VERSIÓN MEJORADA
 import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useProducts } from '../context/ProductContext'
@@ -8,38 +9,62 @@ import { useCart } from '../context/CartContext';
 function Novedades() {
   const { products, loading: productsLoading } = useProducts()
   const [novedadesProducts, setNovedadesProducts] = useState([])
-  const [loading, setLoading] = useState(true)
   const { addToCart } = useCart();
 
   // Estado para el modal de imagen
   const [selectedImage, setSelectedImage] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [loading, setLoading] = useState(true);
 
+  // Estado para el selector de opciones
+  const [showOptions, setShowOptions] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [selectedSize, setSelectedSize] = useState('');
+  const [selectedColor, setSelectedColor] = useState('');
+
+  // Filtrar solo productos de novedades
   useEffect(() => {
     if (!productsLoading && products.length > 0) {
-      console.log('📦 Products disponibles:', products);
+      const novedadesItems = products.filter(product => 
+        product.category && product.category.toLowerCase() === 'novedades'
+      );
       
-      // ✅ FILTRO PARA NOVEDADES
-      const novedadesItems = products.filter(product => {
-        if (!product || !product.category) return false;
-        
-        const categoryLower = product.category.toLowerCase();
-        return categoryLower === 'novedades' || 
-               categoryLower.includes('nuevo') ||
-               categoryLower.includes('novedad');
-      });
+      console.log('🆕 Productos de novedades:', novedadesItems.length);
       
-      console.log('🆕 Productos novedades filtrados:', novedadesItems);
       setNovedadesProducts(novedadesItems);
       setLoading(false);
     } else if (!productsLoading) {
-      setNovedadesProducts([]);
       setLoading(false);
     }
   }, [products, productsLoading]);
 
-  // ✅ FUNCIONES PARA EL MODAL CON CONSOLE.LOG PARA DEBUG
-   const openImageModal = (product, index = 0) => {
+  // Función para abrir selector de opciones
+  const openOptions = (product) => {
+    setSelectedProduct(product);
+    setSelectedSize(product.sizes?.[0] || '');
+    setSelectedColor(product.colors?.[0] || '');
+    setShowOptions(true);
+  };
+
+  // Función para agregar al carrito con opciones seleccionadas
+  const addToCartWithOptions = () => {
+    if (!selectedProduct) return;
+    
+    const productWithOptions = {
+      ...selectedProduct,
+      selectedSize: selectedSize || null,
+      selectedColor: selectedColor || null
+    };
+    
+    addToCart(productWithOptions);
+    
+    // Cerrar modal
+    setShowOptions(false);
+    setSelectedProduct(null);
+  };
+
+  // Funciones del modal de imágenes
+  const openImageModal = (product, index = 0) => {
     setSelectedImage(product);
     setCurrentImageIndex(index);
   };
@@ -48,6 +73,7 @@ function Novedades() {
     setSelectedImage(null);
     setCurrentImageIndex(0);
   };
+
   const goToNextImage = () => {
     if (selectedImage && selectedImage.images) {
       setCurrentImageIndex((prev) => 
@@ -67,12 +93,15 @@ function Novedades() {
   // Cerrar modal con ESC
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (e.key === 'Escape') closeImageModal();
-      if (e.key === 'ArrowRight') goToNextImage();
-      if (e.key === 'ArrowLeft') goToPrevImage();
+      if (e.key === 'Escape') {
+        closeImageModal();
+        setShowOptions(false);
+      }
+      if (selectedImage && e.key === 'ArrowRight') goToNextImage();
+      if (selectedImage && e.key === 'ArrowLeft') goToPrevImage();
     };
 
-    if (selectedImage) {
+    if (selectedImage || showOptions) {
       document.addEventListener('keydown', handleKeyDown);
       document.body.style.overflow = 'hidden';
     }
@@ -81,7 +110,7 @@ function Novedades() {
       document.removeEventListener('keydown', handleKeyDown);
       document.body.style.overflow = 'auto';
     };
-  }, [selectedImage]);
+  }, [selectedImage, showOptions]);
 
   if (loading || productsLoading) {
     return (
@@ -96,15 +125,21 @@ function Novedades() {
       <header className="novedades-header">
         <div className="container">
           <img src={logo} alt="By Luciana" className="novedades-logo" />
-          <h1 className="novedades-title">🆕 Novedades</h1>
-          <p className="novedades-subtitle">Descubre nuestros últimos ingresos</p>
+          <h1 className="novedades-title">
+            🆕 Novedades
+          </h1>
+          <p className="novedades-subtitle">
+            {novedadesProducts.length} producto(s) disponibles
+          </p>
           
-          <button 
-            onClick={() => window.location.reload()} 
-            className="reload-btn"
-          >
-            🔄 Recargar
-          </button>
+          <div className="header-buttons">
+            <button 
+              onClick={() => window.location.reload()} 
+              className="reload-btn"
+            >
+              🔄 Recargar
+            </button>
+          </div>
         </div>
       </header>
 
@@ -113,17 +148,14 @@ function Novedades() {
           {novedadesProducts.length === 0 ? (
             <div className="no-products">
               <div className="no-products-icon">📦</div>
-              <h3>No hay novedades</h3>
-              <p>Los productos que agregues en la categoría "Novedades" aparecerán aquí</p>
+              <h3>No hay productos de novedades</h3>
+              <p>Los productos que agregues en la categoría "novedades" aparecerán aquí</p>
               
-              <div style={{background: '#e7f3ff', padding: '15px', borderRadius: '8px', margin: '15px 0', border: '1px solid #b3d9ff'}}>
-                <h4 style={{margin: '0 0 10px 0', color: '#0066cc'}}>💡 Información del Sistema:</h4>
-                <p style={{margin: '5px 0', fontSize: '14px'}}><strong>Total productos:</strong> {products.length}</p>
-                <p style={{margin: '5px 0', fontSize: '14px'}}>
-                  <strong>Categorías encontradas:</strong> {[...new Set(products.map(p => p?.category))].join(', ')}
-                </p>
-                <p style={{margin: '5px 0', fontSize: '12px', color: '#666'}}>
-                  <em>¿Falta algún producto? Revisa que la categoría sea "novedades"</em>
+              <div className="info-box">
+                <h4>💡 Información:</h4>
+                <p><strong>Total productos:</strong> {products.length}</p>
+                <p>
+                  <strong>Categorías:</strong> {[...new Set(products.map(p => p?.category))].join(', ')}
                 </p>
               </div>
               
@@ -134,9 +166,8 @@ function Novedades() {
           ) : (
             <>
               <div className="novedades-stats">
-                <p>📊 {novedadesProducts.length} producto(s) disponibles para mayorista</p>
+                <p>📊 {novedadesProducts.length} producto(s) de novedades</p>
               </div>
-              
               
               <div className="novedades-products-grid">
                 {novedadesProducts.map(product => (
@@ -152,7 +183,7 @@ function Novedades() {
                               ? product.images[0] 
                               : `http://localhost:5000${product.images[0]}`
                           } 
-                           alt={product.name}
+                          alt={product.name}
                           onError={(e) => {
                             console.log('❌ Error cargando imagen:', product.images[0]);
                             e.target.style.display = 'none';
@@ -170,7 +201,7 @@ function Novedades() {
                           <small>Sin imagen</small>
                         </div>
                       )}
-                      <div className="novedades-badge">NOVEDADES</div>
+                      <div className="product-badge">{product.category}</div>
                       {product.featured && <div className="featured-badge">⭐ Destacado</div>}
                     </div>
                     
@@ -178,24 +209,61 @@ function Novedades() {
                       <h3 className="product-name">{product.name}</h3>
                       <p className="product-description">{product.description || 'Sin descripción'}</p>
                       
+                      {/* Mostrar opciones disponibles de forma simple */}
+                      <div className="product-options">
+                        {product.sizes && product.sizes.length > 0 && (
+                          <div className="option-item">
+                            <span className="option-label">📏 Talles:</span>
+                            <span className="option-values">{product.sizes.join(', ')}</span>
+                          </div>
+                        )}
+                        
+                        {product.colors && product.colors.length > 0 && (
+                          <div className="option-item">
+                            <span className="option-label">🎨 Colores:</span>
+                            <div className="color-dots">
+                              {product.colors.slice(0, 4).map((color, index) => (
+                                <span 
+                                  key={index}
+                                  className="color-dot"
+                                  style={{ backgroundColor: getColorHex(color) }}
+                                  title={color}
+                                />
+                              ))}
+                              {product.colors.length > 4 && (
+                                <span className="more-options">+{product.colors.length - 4}</span>
+                              )}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                      
                       <div className="price-section">
                         <span className="current-price">${product.price?.toLocaleString()}</span>
-                        <span className="mayorista-price">Precio mayorista</span>
+                        {product.comparePrice && product.comparePrice > product.price && (
+                          <span className="compare-price">${product.comparePrice.toLocaleString()}</span>
+                        )}
                       </div>
                       
                       <div className="product-meta">
-                        <span className="stock">Stock: {product.stock || 0}</span>
-                        <span className="category">Categoría: {product.category}</span>
+                        <span className={`stock ${product.stock > 0 ? 'in-stock' : 'out-of-stock'}`}>
+                          {product.stock > 0 ? `✅ ${product.stock} disponibles` : '❌ Sin stock'}
+                        </span>
                       </div>
                     </div>
                     
                     <div className="product-actions">
                       <button 
-                        className="btn-add-cart"
-                        onClick={() => addToCart(product)}
+                        className="btn-choose-options"
+                        onClick={() => openOptions(product)}
                         disabled={!product.stock || product.stock === 0}
                       >
-                        {(!product.stock || product.stock === 0) ? '❌ Sin Stock' : '🛒 Agregar al Carrito'}
+                        {(!product.stock || product.stock === 0) 
+                          ? 'Sin Stock' 
+                          : (product.sizes?.length > 0 || product.colors?.length > 0)
+                            ? '🛍️ Elegir Opciones'
+                            : '🛒 Agregar al Carrito'
+                        }
                       </button>
                     </div>
                   </div>
@@ -229,18 +297,101 @@ function Novedades() {
               className="modal-image"
             />
             
-            <div style={{
-              position: 'absolute',
-              bottom: '-50px',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              color: 'white',
-              textAlign: 'center'
-            }}>
+            <div className="modal-info">
               <p>{selectedImage.name}</p>
               {selectedImage.images.length > 1 && (
                 <p>Imagen {currentImageIndex + 1} de {selectedImage.images.length}</p>
               )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal para elegir opciones */}
+      {showOptions && selectedProduct && (
+        <div className="options-modal" onClick={() => setShowOptions(false)}>
+          <div className="options-content" onClick={(e) => e.stopPropagation()}>
+            <button className="options-close" onClick={() => setShowOptions(false)}>
+              ×
+            </button>
+            
+            <h2>Elegir Opciones</h2>
+            <p className="options-product-name">{selectedProduct.name}</p>
+            
+            {/* Selector de talla - SIMPLE */}
+            {selectedProduct.sizes && selectedProduct.sizes.length > 0 && (
+              <div className="options-section">
+                <h3>📏 Seleccionar Talle:</h3>
+                <div className="size-buttons">
+                  {selectedProduct.sizes.map((size) => (
+                    <button
+                      key={size}
+                      className={`size-btn ${selectedSize === size ? 'selected' : ''}`}
+                      onClick={() => setSelectedSize(size)}
+                    >
+                      {size}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+            
+            {/* Selector de color - SIMPLE */}
+            {selectedProduct.colors && selectedProduct.colors.length > 0 && (
+              <div className="options-section">
+                <h3>🎨 Seleccionar Color:</h3>
+                <div className="color-buttons">
+                  {selectedProduct.colors.map((color) => (
+                    <button
+                      key={color}
+                      className={`color-btn ${selectedColor === color ? 'selected' : ''}`}
+                      onClick={() => setSelectedColor(color)}
+                      title={color}
+                      style={{ backgroundColor: getColorHex(color) }}
+                    >
+                      <span className="color-text">{color}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+            
+            <div className="options-summary">
+              <div className="summary-item">
+                <span>Producto:</span>
+                <strong>{selectedProduct.name}</strong>
+              </div>
+              {selectedSize && (
+                <div className="summary-item">
+                  <span>Talle:</span>
+                  <strong>{selectedSize}</strong>
+                </div>
+              )}
+              {selectedColor && (
+                <div className="summary-item">
+                  <span>Color:</span>
+                  <strong>{selectedColor}</strong>
+                </div>
+              )}
+              <div className="summary-price">
+                <span>Precio:</span>
+                <strong>${selectedProduct.price?.toLocaleString()}</strong>
+              </div>
+            </div>
+            
+            <div className="options-actions">
+              <button 
+                className="btn-add-to-cart"
+                onClick={addToCartWithOptions}
+              >
+                🛒 Agregar al Carrito
+              </button>
+              <button 
+                className="btn-cancel"
+                onClick={() => setShowOptions(false)}
+              >
+                Cancelar
+              </button>
             </div>
           </div>
         </div>
@@ -255,6 +406,29 @@ function Novedades() {
       </footer>
     </div>
   )
+}
+
+// Función auxiliar para colores
+function getColorHex(colorName) {
+  const colorMap = {
+    'Negro': '#000000',
+    'Blanco': '#FFFFFF',
+    'Gris': '#808080',
+    'Azul Marino': '#000080',
+    'Azul Claro': '#87CEEB',
+    'Rojo': '#FF0000',
+    'Verde': '#008000',
+    'Amarillo': '#FFFF00',
+    'Rosa': '#FFC0CB',
+    'Beige': '#F5F5DC',
+    'Marrón': '#A52A2A',
+    'Naranja': '#FFA500',
+    'Violeta': '#EE82EE',
+    'Celeste': '#87CEEB',
+    'Turquesa': '#40E0D0',
+    'Bordó': '#800000'
+  };
+  return colorMap[colorName] || '#CCCCCC';
 }
 
 export default Novedades;

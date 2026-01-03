@@ -11,7 +11,7 @@ import PanelAdmin from "./components/PanelAdmin/PanelAdmin"
 import AdminLogin from './components/AdminLogin';
 import Nosotros from './components/Nosotros';
 import Ubicacion from './components/Ubicacion'; 
-import Mayorista from './components/Mayorista';
+import Jeans from './components/Jeans';
 import ErrorBoundary from './components/ErrorBoundary';
 import { AuthProvider } from './context/AuthContext';
 import AdminAuth from './components/AdminAuth/AdminAuth';
@@ -27,7 +27,13 @@ import CartPage from './pages/CartPage';
 import PreguntasFrecuentes from './components/PreguntasFrecuentes';
 import WhatsAppFloat from './components/WhatsAppFloat';
 import Contacto from './components/Contacto';
-
+import Remeras from './components/Remeras';
+import RopaDeportiva from './components/RopaDeportiva';
+import Vestidos from './components/Vestidos';
+import Abrigos from './components/Abrigos';
+import RopaInterior from './components/RopaInterior';
+import Fiesta from './components/Fiesta';
+import ProductDetail from './components/ProductDetail/ProductDetail';
 // ✅ NUEVOS COMPONENTES DE PAGO
 import PaymentSuccess from './pages/PaymentSuccess';
 import PaymentFailure from './pages/PaymentFailure';
@@ -66,7 +72,7 @@ function App() {
                     <Route path="/admin-login" element={<AdminLogin />} />
                     <Route path="/nosotros" element={<Nosotros />} />
                     <Route path="/mujer" element={<Ubicacion />} />
-                    <Route path="/mayorista" element={<Mayorista />} />
+                    <Route path="/jeans" element={<Jeans />} />
                     <Route path="/admin-auth" element={<AdminAuth />} />
                     <Route path="/novedades" element={<Novedades />} />
                     <Route path="/bodys" element={<Bodys />} />
@@ -79,7 +85,13 @@ function App() {
                     <Route path="/about" element={<AboutPage />} />
                     <Route path="/preguntas-frecuentes" element={<PreguntasFrecuentes />} />
                     <Route path="/contacto" element={<Contacto />} />
-                    
+                    <Route path="/remeras" element={<Remeras />} />
+                    <Route path="/ropadeportiva" element={<RopaDeportiva />} />
+                    <Route path="/vestidos" element={<Vestidos />} />
+                    <Route path="/abrigos" element={<Abrigos />} />
+                    <Route path="/ropainterior" element={<RopaInterior />} />
+                    <Route path="/fiesta" element={<Fiesta />} />
+                     <Route path="/product/:id" element={<ProductDetail />} />
                     {/* ✅ NUEVAS RUTAS DE PAGOS */}
                     <Route path="/payment/success" element={<PaymentSuccess />} />
                     <Route path="/payment/failure" element={<PaymentFailure />} />

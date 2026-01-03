@@ -1,128 +1,218 @@
-// src/components/ImageUpload/ImageUpload.jsx
-import { useState } from 'react';
+// src/components/ImageUpload/ImageUpload.jsx - VERSIÓN CORREGIDA
+import { useState, useRef } from 'react';
 import './ImageUpload.css';
 
-function ImageUpload({ onImageUpload, existingImage, productId, isCreating }) {
-  const [preview, setPreview] = useState(existingImage || '');
+function ImageUpload({ onImageUpload, existingImages = [], productId, isCreating, multiple = false }) {
+  const [previews, setPreviews] = useState(existingImages || []);
   const [uploading, setUploading] = useState(false);
   const [message, setMessage] = useState('');
+  const fileInputRef = useRef(null);
 
   const handleFileSelect = async (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
+    const files = Array.from(event.target.files);
+    if (!files || files.length === 0) return;
 
-    // Validar tipo de archivo
-    if (!file.type.startsWith('image/')) {
-      setMessage('❌ Solo se permiten archivos de imagen');
-      return;
+    // Validar archivos
+    for (const file of files) {
+      if (!file.type.startsWith('image/')) {
+        setMessage('❌ Solo se permiten archivos de imagen');
+        return;
+      }
+
+      if (file.size > 5 * 1024 * 1024) {
+        setMessage('❌ La imagen no debe superar los 5MB');
+        return;
+      }
     }
 
-    // Validar tamaño (5MB)
-    if (file.size > 5 * 1024 * 1024) {
-      setMessage('❌ La imagen no debe superar los 5MB');
-      return;
+    // Crear previews inmediatos
+    const newPreviews = [];
+    for (const file of files) {
+      const reader = new FileReader();
+      const previewPromise = new Promise((resolve) => {
+        reader.onload = (e) => resolve(e.target.result);
+        reader.readAsDataURL(file);
+      });
+      newPreviews.push(await previewPromise);
     }
 
-    // Crear preview inmediato
-    const reader = new FileReader();
-    reader.onload = (e) => setPreview(e.target.result);
-    reader.readAsDataURL(file);
-
-    // Subir archivo usando FormData
+    // Agregar a las previews existentes
+    setPreviews(prev => [...prev, ...newPreviews]);
+    
     setUploading(true);
     setMessage('');
 
     try {
-      console.log('📤 ImageUpload - Archivo seleccionado:', file.name, file);
+      console.log('📤 ImageUpload - Archivos seleccionados:', files.length);
 
       if (isCreating) {
-        // ✅ CORREGIDO: Enviar directamente el array con el File
-        console.log('✅ ImageUpload - Enviando File para creación:', file);
+        // ✅ CORREGIDO: Enviar los files directamente sin subir
+        console.log('✅ ImageUpload - Enviando Files para creación:', files);
         
-        // Enviar array con el file directamente
-        onImageUpload([file]);
+        if (onImageUpload) {
+          onImageUpload(files);
+        }
         
-        setMessage('✅ Imagen lista para crear producto');
+        setMessage(`✅ ${files.length} imagen(es) lista(s) para crear producto`);
       } else {
-        // Para edición: subir al servidor
-        const formData = new FormData();
-        formData.append('image', file);
-        await onImageUpload(productId, formData);
-        setMessage('✅ Imagen subida correctamente');
+        // Para edición: intentar subir al servidor si hay endpoint
+        if (productId) {
+          setMessage('⚠️ Modo edición: Las imágenes se subirán al guardar el producto');
+        }
       }
 
       // Limpiar input
       event.target.value = '';
 
     } catch (error) {
-      console.error('❌ Error subiendo imagen:', error);
-      setMessage('❌ Error al subir imagen');
+      console.error('❌ Error procesando imágenes:', error);
+      setMessage('❌ Error al procesar imágenes');
     } finally {
       setUploading(false);
     }
   };
 
-  const triggerFileInput = () => {
-    document.getElementById(`file-${productId || 'new'}`).click();
+  const triggerFileInput = (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    fileInputRef.current?.click();
+  };
+
+  const removePreview = (index, e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    
+    setPreviews(prev => prev.filter((_, i) => i !== index));
+    
+    // Notificar al padre si hay imágenes eliminadas (solo para edición)
+    if (!isCreating && onImageUpload) {
+      onImageUpload([]); // Enviar array vacío para indicar eliminación
+    }
+    
+    setMessage(`🗑️ Imagen ${index + 1} eliminada`);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const files = Array.from(e.dataTransfer.files);
+    if (files.length > 0) {
+      const dataTransfer = new DataTransfer();
+      files.forEach(file => dataTransfer.items.add(file));
+      
+      if (fileInputRef.current) {
+        fileInputRef.current.files = dataTransfer.files;
+        const event = new Event('change', { bubbles: true });
+        fileInputRef.current.dispatchEvent(event);
+      }
+    }
   };
 
   return (
     <div className="image-upload">
       <div className="upload-header">
-        <h4>Subir Imagen</h4>
+        <h4>{multiple ? 'Subir Imágenes' : 'Subir Imagen'}</h4>
         {isCreating && (
           <span className="creating-badge">Modo Creación</span>
         )}
+        {multiple && (
+          <span className="multiple-badge">Múltiple</span>
+        )}
       </div>
 
-      <div className="image-preview-container">
-        <div className="image-preview" onClick={triggerFileInput}>
-          {preview ? (
-            <img src={preview} alt="Preview" className="preview-image" />
-          ) : (
+      <div 
+        className="image-preview-container"
+        onDragOver={handleDragOver}
+        onDrop={handleDrop}
+      >
+        {previews.length > 0 ? (
+          <div className="previews-grid">
+            {previews.map((preview, index) => (
+              <div key={index} className="preview-item">
+                <img src={preview} alt={`Preview ${index + 1}`} className="preview-image" />
+                <button 
+                  type="button"
+                  className="remove-preview-btn"
+                  onClick={(e) => removePreview(index, e)}
+                  title="Eliminar imagen"
+                >
+                  ×
+                </button>
+                <div className="preview-number">{index + 1}</div>
+              </div>
+            ))}
+            
+            {multiple && (
+              <div className="add-more-container" onClick={triggerFileInput}>
+                <div className="add-more-icon">+</div>
+                <p>Agregar más</p>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="image-preview" onClick={triggerFileInput}>
             <div className="placeholder">
               <div className="placeholder-icon">📷</div>
-              <p>Haz clic para seleccionar una imagen</p>
-              <small>Formatos: JPEG, PNG, WebP, GIF (max. 5MB)</small>
+              <p>Haz clic o arrastra imágenes aquí</p>
+              <small>
+                {multiple ? 'Puedes seleccionar múltiples imágenes' : 'Selecciona una imagen'}
+                <br />
+                Formatos: JPEG, PNG, WebP, GIF (max. 5MB)
+              </small>
             </div>
-          )}
-        </div>
-        
-        {preview && (
-          <button 
-            type="button"
-            className="change-image-btn"
-            onClick={triggerFileInput}
-            disabled={uploading}
-          >
-            🔄 Cambiar imagen
-          </button>
+          </div>
         )}
       </div>
       
       <div className="upload-controls">
         <input
+          ref={fileInputRef}
           type="file"
           id={`file-${productId || 'new'}`}
           accept="image/*"
           onChange={handleFileSelect}
           disabled={uploading}
           className="file-input"
+          multiple={multiple}
         />
         
-        {!preview && (
-          <button 
-            onClick={triggerFileInput}
-            disabled={uploading}
-            className={`upload-btn ${uploading ? 'uploading' : ''}`}
-          >
-            {uploading ? '📤 Subiendo...' : '📷 Seleccionar imagen'}
-          </button>
-        )}
+        <div className="upload-buttons">
+          {!isCreating && previews.length > 0 && (
+            <button 
+              type="button"
+              onClick={triggerFileInput}
+              disabled={uploading}
+              className="upload-btn add-more-btn"
+            >
+              ➕ Agregar más
+            </button>
+          )}
+          
+          {previews.length === 0 && (
+            <button 
+              type="button"
+              onClick={triggerFileInput}
+              disabled={uploading}
+              className={`upload-btn ${uploading ? 'uploading' : ''}`}
+            >
+              {uploading ? '📤 Procesando...' : '📷 Seleccionar imagen(es)'}
+            </button>
+          )}
+        </div>
       </div>
 
       {message && (
-        <div className={`message ${message.includes('❌') ? 'error' : 'success'}`}>
+        <div className={`message ${message.includes('❌') ? 'error' : message.includes('⚠️') ? 'warning' : 'success'}`}>
           {message}
         </div>
       )}
@@ -130,9 +220,20 @@ function ImageUpload({ onImageUpload, existingImage, productId, isCreating }) {
       {uploading && (
         <div className="upload-progress">
           <div className="progress-bar"></div>
-          <span>Procesando imagen...</span>
+          <span>Procesando imagen(es)...</span>
         </div>
       )}
+      
+      {/* Información para el usuario */}
+      <div className="upload-info">
+        <p><strong>📝 Instrucciones:</strong></p>
+        <ul>
+          <li>{isCreating ? '✅ Las imágenes se guardarán al crear el producto' : '✅ Las imágenes se subirán inmediatamente'}</li>
+          <li>🖼️ {multiple ? 'Puedes seleccionar varias imágenes a la vez' : 'Solo una imagen por producto'}</li>
+          <li>🗑️ Haz clic en la × para eliminar una imagen</li>
+          <li>📁 También puedes arrastrar y soltar imágenes</li>
+        </ul>
+      </div>
     </div>
   );
 }

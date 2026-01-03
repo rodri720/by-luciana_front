@@ -11,11 +11,16 @@ import imagen6 from '../assets/imagenes/carousel6.jpg'
 // Importa tus imágenes de categorías
 import ouletImage from '../assets/imagenes/oulet.jpg'
 import novedadesImage from '../assets/imagenes/novedades.jpg'
-import mayoristaImage from '../assets/imagenes/mayorista.jpg'
 import calzadosImage from '../assets/imagenes/calzados.jpg'
 import bodysImage from '../assets/imagenes/bodys.jpg'
 import accesoriosImage from '../assets/imagenes/accesorios.jpg' // Asegúrate de tener esta imagen
-
+import remerasImage from '../assets/imagenes/remeras.jpg'
+import ropadeportivaImage from '../assets/imagenes/ropadeportiva.jpg'
+import vestidosImage from '../assets/imagenes/vestidos.jpg'
+import jeansImage from '../assets/imagenes/jeans.jpg'
+import abrigosImage from '../assets/imagenes/abrigos.jpg'
+import ropainteriorImage from '../assets/imagenes/ropainterior.jpg'
+import fiestaImage from '../assets/imagenes/fiesta.jpg'
 function Landing() {
   const [currentSlide, setCurrentSlide] = useState(0)
   const { products, loading } = useProducts()
@@ -136,14 +141,14 @@ function Landing() {
               </Link>
             </div>
             
-            {/* Mayorista */}
+            {/* jeans */}
             <div className="category-card">
-              <Link to="/mayorista" className="category-link">
+              <Link to="/jeans" className="category-link">
                 <div 
                   className="category-image" 
-                  style={{ backgroundImage: `url(${mayoristaImage})` }}
+                  style={{ backgroundImage: `url(${jeansImage})` }}
                 >
-                  <span className="category-label">Mayorista</span>
+                  <span className="category-label">Jeans Shorts Pantalones</span>
                 </div>
               </Link>
             </div>
@@ -155,7 +160,44 @@ function Landing() {
                   className="category-image" 
                   style={{ backgroundImage: `url(${calzadosImage})` }}
                 >
-                  <span className="category-label">Parte Inferior</span>
+                  <span className="category-label">Calzados</span>
+                </div>
+              </Link>
+            </div>
+            
+            {/* remeras */}
+            <div className="category-card">
+              <Link to="/remeras" className="category-link">
+                <div 
+                  className="category-image" 
+                  style={{ backgroundImage: `url(${remerasImage})` }}
+                >
+                  <span className="category-label">Remeras y Musculosas</span>
+                </div>
+              </Link>
+            </div>
+            
+
+             {/* ropa deportiva */}
+            <div className="category-card">
+              <Link to="/ropadeportiva" className="category-link">
+                <div 
+                  className="category-image" 
+                  style={{ backgroundImage: `url(${ropadeportivaImage})` }}
+                >
+                  <span className="category-label">Ropa Deportiva</span>
+                </div>
+              </Link>
+            </div>
+            
+              {/* Vestidos */}
+            <div className="category-card">
+              <Link to="/vestidos" className="category-link">
+                <div 
+                  className="category-image" 
+                  style={{ backgroundImage: `url(${vestidosImage})` }}
+                >
+                  <span className="category-label">Vestidos y Polleras</span>
                 </div>
               </Link>
             </div>
@@ -167,10 +209,50 @@ function Landing() {
                   className="category-image" 
                   style={{ backgroundImage: `url(${bodysImage})` }}
                 >
-                  <span className="category-label">Parte Superior</span>
+                  <span className="category-label">Bodys y Mallas</span>
                 </div>
               </Link>
             </div>
+
+             {/* abrigos */}
+            <div className="category-card">
+              <Link to="/abrigos" className="category-link">
+                <div 
+                  className="category-image" 
+                  style={{ backgroundImage: `url(${abrigosImage})` }}
+                >
+                  <span className="category-label">Abrigos</span>
+                </div>
+              </Link>
+            </div>
+            
+          
+            
+  {/* fiesta */}
+            <div className="category-card">
+              <Link to="/fiesta" className="category-link">
+                <div 
+                  className="category-image" 
+                  style={{ backgroundImage: `url(${fiestaImage})` }}
+                >
+                  <span className="category-label">Ropa De Fiesta</span>
+                </div>
+              </Link>
+            </div>
+            
+
+             {/* ropainterior */}
+            <div className="category-card">
+              <Link to="/ropainterior" className="category-link">
+                <div 
+                  className="category-image" 
+                  style={{ backgroundImage: `url(${ropainteriorImage})` }}
+                >
+                  <span className="category-label">RopaInterior</span>
+                </div>
+              </Link>
+            </div>
+
 
             {/* Outlet */}
             <div className="category-card">

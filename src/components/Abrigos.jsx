@@ -1,13 +1,14 @@
+// src/pages/Abrigos.jsx
 import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useProducts } from '../context/ProductContext'
-import './Accesorios.css'
+import './Abrigos.css'
 import logo from '../assets/imagenes/logolu.png'
 import { useCart } from '../context/CartContext';
 
-function Accesorios() {
+function Abrigos() {
   const { products, loading: productsLoading } = useProducts()
-  const [filteredProducts, setFilteredProducts] = useState([])
+  const [abrigosProducts, setAbrigosProducts] = useState([])
   const { addToCart } = useCart();
 
   // Estado para el modal de imagen
@@ -21,16 +22,39 @@ function Accesorios() {
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedColor, setSelectedColor] = useState('');
 
-  // Filtrar solo productos de accesorios
+  // Filtrar productos de abrigos y chaquetas
   useEffect(() => {
     if (!productsLoading && products.length > 0) {
-      const accesoriosProducts = products.filter(product => 
-        product.category && product.category.toLowerCase() === 'accesorios'
-      );
+      const abrigosItems = products.filter(product => {
+        if (!product || !product.category) return false;
+        
+        const categoryLower = product.category.toLowerCase().trim();
+        const nameLower = product.name?.toLowerCase().trim() || '';
+        
+        // Buscar abrigos, chaquetas y similares
+        return categoryLower === 'abrigos' || 
+               categoryLower === 'chaquetas' ||
+             
+               categoryLower === 'chalecos' ||
+               categoryLower === 'impermeables' ||
+               categoryLower === 'cardigans' ||
+               nameLower.includes('abrigo') ||
+               nameLower.includes('chaqueta') ||
+              
+               nameLower.includes('hoodie') ||
+               nameLower.includes('sudadera') ||
+               nameLower.includes('chaleco') ||
+               nameLower.includes('impermeable') ||
+               nameLower.includes('cardigan') ||
+               nameLower.includes('blazer') ||
+               nameLower.includes('americana') ||
+               nameLower.includes('tapado') ||
+               nameLower.includes('gabardina');
+      });
       
-      console.log('💎 Productos de accesorios:', accesoriosProducts.length);
+      console.log('🧥 Productos de abrigos y chaquetas:', abrigosItems.length);
       
-      setFilteredProducts(accesoriosProducts);
+      setAbrigosProducts(abrigosItems);
       setLoading(false);
     } else if (!productsLoading) {
       setLoading(false);
@@ -113,22 +137,22 @@ function Accesorios() {
 
   if (loading || productsLoading) {
     return (
-      <div className="accesorios-page">
-        <div className="loading">🔄 Cargando accesorios...</div>
+      <div className="abrigos-page">
+        <div className="loading">🔄 Cargando abrigos y chaquetas...</div>
       </div>
     )
   }
 
   return (
-    <div className="accesorios-page">
-      <header className="accesorios-header">
+    <div className="abrigos-page">
+      <header className="abrigos-header">
         <div className="container">
-          <img src={logo} alt="By Luciana" className="accesorios-logo" />
-          <h1 className="accesorios-title">
-            💎 Accesorios
+          <img src={logo} alt="By Luciana" className="abrigos-logo" />
+          <h1 className="abrigos-title">
+            🧥 Abrigos & Chaquetas
           </h1>
-          <p className="accesorios-subtitle">
-            {filteredProducts.length} producto(s) disponibles
+          <p className="abrigos-subtitle">
+            {abrigosProducts.length} producto(s) disponibles
           </p>
           
           <div className="header-buttons">
@@ -142,13 +166,13 @@ function Accesorios() {
         </div>
       </header>
 
-      <main className="accesorios-content">
+      <main className="abrigos-content">
         <div className="container">
-          {filteredProducts.length === 0 ? (
+          {abrigosProducts.length === 0 ? (
             <div className="no-products">
-              <div className="no-products-icon">💎</div>
-              <h3>No hay productos de accesorios</h3>
-              <p>Los productos que agregues en la categoría "accesorios" aparecerán aquí</p>
+              <div className="no-products-icon">🧥</div>
+              <h3>No hay productos de abrigos y chaquetas</h3>
+              <p>Los productos que agregues en las categorías "abrigos" o "chaquetas" aparecerán aquí</p>
               
               <div className="info-box">
                 <h4>💡 Información:</h4>
@@ -164,13 +188,13 @@ function Accesorios() {
             </div>
           ) : (
             <>
-              <div className="accesorios-stats">
-                <p>📊 {filteredProducts.length} producto(s) de accesorios</p>
+              <div className="abrigos-stats">
+                <p>📊 {abrigosProducts.length} producto(s) de abrigos y chaquetas</p>
               </div>
               
-              <div className="accesorios-products-grid">
-                {filteredProducts.map(product => (
-                  <div key={product._id} className="accesorios-product-card">
+              <div className="abrigos-products-grid">
+                {abrigosProducts.map(product => (
+                  <div key={product._id} className="abrigos-product-card">
                     <div 
                       className="product-image"
                       onClick={() => openImageModal(product, 0)}
@@ -200,7 +224,7 @@ function Accesorios() {
                           <small>Sin imagen</small>
                         </div>
                       )}
-                      <div className="product-badge">💎 {product.category}</div>
+                      <div className="abrigos-badge">{product.category}</div>
                       {product.featured && <div className="featured-badge">⭐ Destacado</div>}
                     </div>
                     
@@ -212,7 +236,7 @@ function Accesorios() {
                       <div className="product-options">
                         {product.sizes && product.sizes.length > 0 && (
                           <div className="option-item">
-                            <span className="option-label">📏 Tamaños:</span>
+                            <span className="option-label">📏 Talles:</span>
                             <span className="option-values">{product.sizes.join(', ')}</span>
                           </div>
                         )}
@@ -248,11 +272,6 @@ function Accesorios() {
                         <span className={`stock ${product.stock > 0 ? 'in-stock' : 'out-of-stock'}`}>
                           {product.stock > 0 ? `✅ ${product.stock} disponibles` : '❌ Sin stock'}
                         </span>
-                        {product.material && (
-                          <span className="product-material">
-                            {product.material}
-                          </span>
-                        )}
                       </div>
                     </div>
                     
@@ -322,10 +341,10 @@ function Accesorios() {
             <h2>Elegir Opciones</h2>
             <p className="options-product-name">{selectedProduct.name}</p>
             
-            {/* Selector de talla/tamaño - SIMPLE */}
+            {/* Selector de talla - SIMPLE */}
             {selectedProduct.sizes && selectedProduct.sizes.length > 0 && (
               <div className="options-section">
-                <h3>📏 Seleccionar Tamaño:</h3>
+                <h3>📏 Seleccionar Talle:</h3>
                 <div className="size-buttons">
                   {selectedProduct.sizes.map((size) => (
                     <button
@@ -367,7 +386,7 @@ function Accesorios() {
               </div>
               {selectedSize && (
                 <div className="summary-item">
-                  <span>Tamaño:</span>
+                  <span>Talle:</span>
                   <strong>{selectedSize}</strong>
                 </div>
               )}
@@ -380,11 +399,6 @@ function Accesorios() {
               <div className="summary-price">
                 <span>Precio:</span>
                 <strong>${selectedProduct.price?.toLocaleString()}</strong>
-                {selectedProduct.comparePrice && selectedProduct.comparePrice > selectedProduct.price && (
-                  <span className="summary-compare-price">
-                    (antes ${selectedProduct.comparePrice?.toLocaleString()})
-                  </span>
-                )}
               </div>
             </div>
             
@@ -406,7 +420,7 @@ function Accesorios() {
         </div>
       )}
 
-      <footer className="accesorios-footer">
+      <footer className="abrigos-footer">
         <div className="container">
           <Link to="/" className="btn btn-secondary">
             ← Volver a la Página Principal
@@ -436,29 +450,29 @@ function getColorHex(colorName) {
     'Celeste': '#87CEEB',
     'Turquesa': '#40E0D0',
     'Bordó': '#800000',
-    'Azul Oscuro': '#00008B',
-    'Verde Oscuro': '#006400',
-    'Rojo Oscuro': '#8B0000',
-    'Gris Oscuro': '#A9A9A9',
-    'Gris Claro': '#D3D3D3',
-    'Azul Gris': '#708090',
-    'Verde Oliva': '#808000',
-    'Caqui': '#F0E68C',
-    'Mostaza': '#FFDB58',
-    'Terracota': '#E2725B',
-    'Borgoña': '#800020',
-    'Vino': '#722F37',
-    'Chocolate': '#7B3F00',
     'Dorado': '#FFD700',
     'Plateado': '#C0C0C0',
-    'Bronce': '#CD7F32',
-    'Cobre': '#B87333',
-    'Perla': '#F0EAD6',
-    'Nácar': '#FFFDD0',
-    'Transparente': 'rgba(255,255,255,0.3)',
-    'Multicolor': 'linear-gradient(45deg, #ff0000, #00ff00, #0000ff)'
+    'Coral': '#FF7F50',
+    'Lila': '#C8A2C8',
+    'Mostaza': '#FFDB58',
+    'Oliva': '#808000',
+    'Terracota': '#E2725B',
+    'Fucsia': '#FF00FF',
+    'Verde Ment': '#98FB98',
+    'Azul Turquesa': '#40E0D0',
+    'Champán': '#F7E7CE',
+    'Nude': '#F5DEB3',
+    'Marfil': '#FFFFF0',
+    'Crema': '#FFFDD0',
+    'Vino': '#722F37',
+    'Borgoña': '#800020',
+    'Esmeralda': '#50C878',
+    'Zafiro': '#0F52BA',
+    'Rubí': '#E0115F',
+    'Amatista': '#9966CC',
+    'Topacio': '#FFC87C'
   };
   return colorMap[colorName] || '#CCCCCC';
 }
 
-export default Accesorios;
+export default Abrigos;
